@@ -1,0 +1,341 @@
+<%= javascript_include_tag 'new_order' %>
+<%= javascript_include_tag 'ajax' %>
+
+<% blue_box 'HealthyPrice Procedure / Service Order' do -%>
+
+<% @States = "<option value=''>Select State</option><option value='Alabama'>Alabama</option><option value='Alaska'>Alaska</option><option value='American Samoa'>American Samoa</option><option value='Arizona'>Arizona</option><option value='Arkansas'>Arkansas</option><option value='California'>California</option><option value='Colorado'>Colorado</option><option value='Connecticut'>Connecticut</option><option value='Delaware'>Delaware</option><option value='District of Columbia'>District of Columbia</option><option value='Florida'>Florida</option><option value='Georgia'>Georgia</option><option value='Guam'>Guam</option><option value='Hawaii'>Hawaii</option><option value='Idaho'>Idaho</option><option value='Illinois'>Illinois</option><option value='Indiana'>Indiana</option><option value='Iowa'>Iowa</option><option value='Kansas'>Kansas</option><option value='Kentucky'>Kentucky</option><option value='Louisiana'>Louisiana</option><option value='Maine'>Maine</option><option value='Maryland'>Maryland</option><option value='Massachusetts'>Massachusetts</option><option value='Michigan'>Michigan</option><option value='Minnesota'>Minnesota</option><option value='Mississippi'>Mississippi</option><option value='Missouri'>Missouri</option><option value='Montana'>Montana</option><option value='Nebraska'>Nebraska</option><option value='Nevada'>Nevada</option><option value='New Hampshire'>New Hampshire</option><option value='New Jersey'>New Jersey</option><option value='New Mexico'>New Mexico</option><option value='New York'>New York</option><option value='North Carolina'>North Carolina</option><option value='North Dakota'>North Dakota</option><option value='Northern Mariana Islands'>Northern Mariana Islands</option><option value='Ohio'>Ohio</option><option value='Oklahoma'>Oklahoma</option><option value='Oregon'>Oregon</option><option value='Pennsylvania'>Pennsylvania</option><option value='Puerto Rico'>Puerto Rico</option><option value='Rhode Island'>Rhode Island</option><option value='South Carolina'>South Carolina</option><option value='South Dakota'>South Dakota</option><option value='Tennessee'>Tennessee</option><option value='Texas'>Texas</option><option value='US Virgin Islands'>US Virgin Islands</option><option value='Utah'>Utah</option><option value='Vermont'>Vermont</option><option value='Virginia'>Virginia</option><option value='Washington'>Washington</option><option value='West Virginia'>West Virginia</option><option value='Wisconsin'>Wisconsin</option><option value='Wyoming'>Wyoming</option>"
+
+def mask_number(number)
+	if number == nil || number == ""
+		""
+	else
+		"XXXX-XXXX-XXXX-" + number[number.size-4, number.size-1]
+	end
+end
+
+def states(sel)
+	if sel == nil || sel == ""
+		return @States
+	else
+		return @States.gsub(sel + "'>", sel + "' selected>")
+	end
+end %>
+
+<div style="text-align:justify; width:880px; color:#666666; font-size:10pt;">
+
+You can feel secure ordering a procedure or service from HealthyPrice.  All of our doctors and providers have undergone an extensive application and screening process before becoming a provider within the HealthyPrice family.  We strongly believe in high-quality healthcare and want you to have access to only the best doctors and providers.
+<br/><br/>
+
+<div id="order_info">
+	<table border="0" cellpadding="0" cellspacing="0">
+		<tr>
+			<td width="407">
+				<div id="procedure_hold" style="text-align:left;">
+					<strong>Procedure / Service: </strong><br/>
+					<%= @doctor_service.specialty_service.service_name %> (<%= @doctor_service.specialty_service.specialty.name %>)<br/>
+					<div style="height:10px;"></div>
+					<strong>HealthyPrice: </strong><%= number_to_currency(@doctor_service.specialty_service.customer_price, :precision => 2) %>
+				</div>
+			</td>
+			<td width="70">&nbsp;</td>
+			<td>
+				<div id="provider_hold" style="text-align:left;">
+					<strong>Doctor / Provider:</strong><br/>
+					<%= @doctor_service.doctor.name %><br/>
+					<%= @doctor_service.doctor.company %>
+				</div>
+			</td>
+		</tr>
+	</table>
+	<div style="height:15px;"></div>
+</div>
+
+</div>
+
+<div id="customer_details">
+<style>
+	label, h4{
+		color:#666666;
+		font-size:10pt;
+	}
+	label.input_label{
+		width:105px;
+		display:block;
+		float:left;
+	}
+	ul{
+		margin-left:5px;
+		margin-right:10px;
+		list-style-type:none;
+		padding-left:40px;
+		_padding-left:20px;
+		*padding-left:20px;
+	}
+	li{
+		margin-bottom:15px;
+		margin-left:0px;
+		*margin-left:39px;
+	}
+</style>
+
+	<%= form_tag({ :action => "create" }, :method => "post", :name => "order_form") %>
+		<div id="order_form_fields">
+		<% if @Error != nil && @Error != "" %>
+			<div class="errorExplanation" id="errorExplanation"><%= @Error %></div><br style="clear:both;" />
+		<% end %>
+		<% if current_user_session != nil && current_user.user_type == "Admin" %>
+			<h4>Payment Options:</h4>
+			<ul style="float:left; width:650px;">
+				<li><label><input type="radio" name="pay_cc" value="previous" onclick="RetrieveODat();" <% if session[:pay_cc] == "previous" %>checked="true"<% end %> />Pay with a credit card from a past order</label></li>
+				<li style="margin-top:-4px;">
+					<table border="0" cellpadding="2" cellspacing="0">
+						<tr>
+							<td><label for="previous_order_number" class="input_label" style="margin-left:25px;">Previous Order #:</label></td>
+							<td><input id="previous_order_number" name="previous_order_number" size="30" type="text" /></td>
+							<td><input type="button" onclick="RetrieveOrderData(document.order_form.previous_order_number.value);" style="background-image:url('/images/Retrieve-Details.jpg'); height:22px; width:137px; border:0px;" /></td>
+						</tr><tr>
+							<td></td>
+							<td><span id="OrderData" style="display:inline;"></span></td>
+						</tr>
+					</table>
+				</li>
+				<li><label><input type="radio" name="pay_cc" value="new_cc" onclick="EnableCCFields();" <% if session[:pay_cc] == "new_cc" %>checked="true"<% end %> />Pay with a new credit card</label></li>
+			</ul>
+<script>
+	function RetrieveODat(){
+		if (document.order_form.previous_order_number.value != ""){
+			RetrieveOrderData(document.order_form.previous_order_number.value);
+		}
+	}
+	function RetrieveOrderData(order_id){
+		AjaxLoad('/orders/retrive_details/' + order_id, 'OrderData');
+		document.order_form.pay_cc[0].checked = true;
+		//==================================================================
+		/*document.order_form.elements['order[patient_name]'].readOnly = true;
+		document.order_form.elements['order[first_name]'].readOnly = true;
+		document.order_form.elements['order[last_name]'].readOnly = true;
+		document.order_form.elements['order[address]'].readOnly = true;
+		document.order_form.elements['order[address2]'].readOnly = true;
+		document.order_form.elements['order[city]'].readOnly = true;
+		document.order_form.elements['order[state]'].readOnly = true;
+		document.order_form.elements['order[zipcode]'].readOnly = true;
+		document.order_form.elements['order[phone]'].readOnly = true;
+		document.order_form.elements['order[email]'].readOnly = true;*/
+		document.getElementById('ExpiryDateSelect').style.display = 'none';
+		document.order_form.elements['order[credit_card]'].readOnly = true;
+		document.order_form.elements['order[ccv]'].readOnly = true;
+		document.order_form.elements['order[expiration_month]'].readOnly = true;
+		document.order_form.elements['order[expiration_year]'].readOnly = true;
+		//==================================================================
+		//document.order_form.elements['order[terms_and_conditions]'].checked = true;
+	}
+	function SetVal(elem_name, val){
+		document.order_form.elements['order['+elem_name+']'].value = val;
+	}
+	function EnableCCFields(){
+		document.order_form.elements['order[credit_card]'].value = "";
+		document.order_form.elements['order[ccv]'].value = "";
+		document.order_form.elements['order[expiration_month]'].value = "";
+		document.order_form.elements['order[expiration_year]'].value = "";
+		//==================================================================
+		/*document.order_form.elements['order[patient_name]'].readOnly = false;
+		document.order_form.elements['order[first_name]'].readOnly = false;
+		document.order_form.elements['order[last_name]'].readOnly = false;
+		document.order_form.elements['order[address]'].readOnly = false;
+		document.order_form.elements['order[address2]'].readOnly = false;
+		document.order_form.elements['order[city]'].readOnly = false;
+		document.order_form.elements['order[state]'].readOnly = false;
+		document.order_form.elements['order[zipcode]'].readOnly = false;
+		document.order_form.elements['order[phone]'].readOnly = false;
+		document.order_form.elements['order[email]'].readOnly = false;*/
+		document.getElementById('ExpiryDateSelect').style.display = '';
+		document.getElementById('OrderData').innerHTML = "";
+		document.order_form.elements['order[credit_card]'].readOnly = false;
+		document.order_form.elements['order[ccv]'].readOnly = false;
+		document.order_form.elements['order[expiration_month]'].readOnly = false;
+		document.order_form.elements['order[expiration_year]'].readOnly = false;
+		//==================================================================
+		//document.order_form.elements['order[terms_and_conditions]'].checked = true;
+	}
+</script>
+			<input name="order[placed_by]" value="Admin" type="hidden" />
+		<% else %>
+			<input name="order[placed_by]" value="User" type="hidden" />
+		<% end %>
+			<h4 style="clear:both;">Patient Information:<!--/strong--></h4>
+			<ul style="float:left; width:375px;">
+				<li><label for="patient_name" class="input_label">Patient Name:</label>	<input id="order_patient_name" name="order[patient_name]" value="<%= @order.patient_name %>" size="30" type="text" />	</li>
+			</ul>
+
+			<h4 style="clear:both;">Billing Information:<!--/strong--></h4>
+			<ul style="float:left; width:375px;">
+				<li><label for="first_name" class="input_label">First Name:</label>		<input id="order_first_name" name="order[first_name]" value="<%= @order.first_name %>" size="30" type="text" /></li>
+				<li><label for="last_name" class="input_label">Last Name:</label>		<input id="order_last_name" name="order[last_name]" value="<%= @order.last_name %>" size="30" type="text" /></li>
+				<li><label for="address" class="input_label">Address Line 1:</label>		<input id="order_address" name="order[address]" value="<%= @order.address %>" size="30" type="text" /></li>
+				<li><label for="address" class="input_label">Address Line 2:</label>		<input id="order_address2" name="order[address2]" value="<%= @order.address2 %>" size="30" type="text" /></li>
+				<li><label for="city" class="input_label">City:</label>				<input id="order_city" name="order[city]" value="<%= @order.city %>" size="30" type="text" /></li>
+				<li><label for="state" class="input_label">State:</label>				<select name="order[state]"><%= states(@order.state) %></select></li>
+				<li><label for="zipcode" class="input_label">Zip Code:</label>			<input id="order_zipcode" name="order[zipcode]" value="<%= @order.zipcode %>" size="30" type="text" /></li>
+			</ul>
+			<ul style="float:left; width:375px;">
+				<li><label for="phone" class="input_label">Phone:</label>				<input id="order_phone" name="order[phone]" value="<%= @order.phone %>" size="30" type="text" /></li>
+				<li><label for="email" class="input_label">Email:</label>				<input id="order_email" name="order[email]" value="<%= @order.email %>" size="30" type="text" /></li>
+				<li><label for="creditcard" class="input_label">Credit Card #:</label>		<input id="order_credit_card" name="order[credit_card]" value="<% if session[:order_credit_card_override] == nil || params[:pay_cc] == "new_cc" %><%= @order.credit_card %><% elsif @order.credit_card == nil %>""<% else %><%= mask_number(@order.credit_card) %>" readonly="true<% end %>" size="30" type="text" /></li>
+				<li><label for="ccsv" class="input_label">CVV/CVC:</label>			<input id="order_ccv" name="order[ccv]" value="<% if session[:order_cvv_override] == nil || params[:pay_cc] == "new_cc" %><%= @order.ccv %><% elsif @order.ccv == nil %>""<% else %>XXX" readonly="true<% end %>"size="15" type="text" /> &nbsp; <%= link_to 'What is this?', {}, {:id => 'ccv'} %></li>
+				<li id="ExpiryDateSelect" <% if session[:order_credit_card_override] != nil && params[:pay_cc] == "previous" %>style="display:none;"<% end %>>
+					<label for="expiration" class="input_label">Expiration:</label>
+					<select name="order[expiration_month]" id="order_expiration_2i">
+						<option value="">Select Month</option>
+					<% (1..12).each do |i| %>
+						<option value="<%= i %>"<% if @order.expiration != nil && @order.expiration.month == i %> selected="true"<% end %>><%= i %></option><% end %>
+					</select>
+					<select name="order[expiration_year]" id="order_expiration_1i">
+						<option value="">Select Year</option>
+					<% (0..10).each do |i| %>
+						<option value="<%= i + Time.now.year %>"<% if @order.expiration != nil && @order.expiration.year == i + Time.now.year %> selected="true"<% end %>><%= i + Time.now.year %></option><% end %>
+					</select>
+				</li>
+			</ul>
+			<br style="clear:both;" />
+			<ul style="float:left; width:420px;">
+				<li>
+					<label for="patient_name" class="input_label" style="width:185px;">How Did You Hear About Us?</label>
+					<select name="order[market_survey]" xstyle="width:192px;">
+						<option value="-"> - select - </option>
+					<% @survey_options = get_config("market_survey_options")
+						@survey_options.split(",").each do |option| %>
+						<option value="<%= option %>"<% if option == @order.market_survey %> selected<% end %>><%= option %></option>
+					<% 	end %>
+					</select>
+				</li>
+				<li>
+					<p class="checkbox" ><label>
+						<!--input name="order[terms_and_conditions]" type="hidden" value="0" /-->
+						<input id="order_terms_and_conditions" name="order[terms_and_conditions]" type="checkbox" value="1" />
+						I agree to the HealthyPrice terms and conditions.</label>
+					<br/><span class="large_box_link"><%=link_to 'View Terms &amp; Conditions', {}, {:id => 'terms'} %></span></p>
+				</li>
+			</ul>
+			<div style="float:left; width:400px; color:red; margin-top:-80px;">
+			Disclaimer: HealthyPrice, Inc. does not provide medical or other healthcare services and it is not an insurance company or prepaid healthcare service plan.
+			HealthyPrice, Inc. also does not make recommendations or referrals to particular doctors or other healthcare professionals.
+			Rather, the decision to select a doctor or healthcare provider and order a service is entirely yours to make.
+			HealthyPrice, Inc. and its affiliates are not liable for the acts, errors, omissions, representations, warranties, breaches or negligence
+			of any doctors or healthcare providers or for any personal injuries, death, property damage, or other damages or expenses resulting therefrom.
+			</div>
+		</div>
+		<br style="clear:both;" />
+
+		<div class="clear"></div>
+		<!--input type="hidden" name="order[doctor_price]" value="<%= @doctor_service.specialty_service.doctor_price %>" />
+		<input type="hidden" name="order[customer_price]" value="<%= @doctor_service.specialty_service.customer_price %>" /-->
+		<input type="hidden" name="doctor_service_id" value="<% if params[:doctor_service_id] == nil %><%= @order.doctor_service_id %><% else %><%= params[:doctor_service_id] %><% end %>" />
+		<input type="hidden" name="order[submitted]" value="0" />
+		<table border="0" cellspacing="0" cellpadding="0" style="margin-left:19px; *padding-top:15px;">
+			<tr>
+				<td>
+					<input style="background-image:url('/images/btn_continue.jpg'); height:22px; width:99px; border:0px; margin-left:25px;" id="submit" name="submit" type="submit" value="" />
+				</td><td>
+					 &nbsp; (Your credit card will not be charged)
+				</td>
+			</tr>
+		</table>
+		<br/>&nbsp;
+	</form>
+	<script>
+	function ValidateForm(){
+		//	alert("This card number is not valid.");
+		//	alert("This card number appears to be valid.");
+		var CardNumber = document.new_order.elements["order[credit_card]"].value;
+		var ExpYear = document.new_order.elements["order[expiration(2i)]"].value;
+		var ExpMon = document.new_order.elements["order[expiration(1i)]"].value;
+		<% if current_user_session != nil && current_user.user_type == "Admin" %>
+			return true;
+		<% else %>
+			var CardValid = CheckCCNum(CardNumber, ExpMon, ExpYear);
+			if(!CardValid){
+				alert('Please enter a valid Credit Card Number.');
+				document.new_order.elements["order[credit_card]"].focus();
+				return false;
+			}
+			else{
+				return true;
+			}
+		<% end %>
+	}
+
+	function CheckCCNum(ccnum, month, year){
+	   var checksum = 0;
+	   var factor = 0;
+
+	   // do checksum validation on credit card number and
+	   // reformat so it is easy to read by a human
+	   ccnum = ccnum.replace(/[^0-9]/gi,"");
+	   if(ccnum.length < 16){
+	      return false;
+	   }
+	   if(ccnum.length %2 ){
+	      factor = 1;
+	   }
+	   else{
+	      factor = 2;
+	   }
+	   for(x=0; x< ccnum.length; x++){
+	      digit = ccnum.charAt(x);
+
+	      if(digit * factor > 9){
+		 checksum += (digit * factor) - 9;
+	      }
+	      else{
+		 checksum += digit * factor;
+	      }
+	      factor = (factor%2)+1;
+	   }
+	   if(checksum % 10){
+	      return false;
+	   }
+	   else{
+	      return true;
+	   }
+	}
+
+	function CheckCardNumber(CardNumber, ExpYear, ExpMon) {
+		var tmpyear = ExpYear;
+		var tmpmonth = ExpMon;
+		if (!(new CardType()).isExpiryDate(tmpyear, tmpmonth)) {
+			alert("This card has already expired.");
+			return;
+		}
+
+		var argv = isCardNumber.arguments;
+		var argc = isCardNumber.arguments.length;
+		var cardnumber = CardNumber;
+		for (var n = 0; n < cardnumber.len.size; n++)
+			if (cardnumber.length == this.len[n]) {
+				for (var m = 0; m < this.rules.size; m++) {
+					var headdigit = cardnumber.substring(0, this.rules[m].toString().length);
+					if (headdigit == this.rules[m])
+						return true;
+				}
+				return false;
+			}
+		return false;
+
+		/*var card = "MasterCard";
+		var retval = eval(card + ".checkCardNumber(\"" + CardNumber +
+		"\", " + tmpyear + ", " + tmpmonth + ");");
+		//cardname = "";
+		if (retval)
+			return true;
+		else {
+			if (cardname.length > 0) {
+				return true;
+			}
+			else{
+				return false;
+			}
+		}*/
+	}
+	</script>
+</div>
+<% end -%>

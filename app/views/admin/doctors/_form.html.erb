@@ -1,0 +1,28 @@
+<ol class="form" <%= 'style="display: none;"' if columns.collapsed -%>>
+
+  <% @orders = Doctor.find_by_id(params[:id]) %>
+ 
+  <% columns.each :for => @record do |column| -%>
+  <% if is_subsection? column -%>
+  <li class="sub-section">
+    <h5><%= column.label %>(<%= link_to_visibility_toggle(:default_visible => !column.collapsed) -%>)</h5>
+    <% if column.label == 'Account Status' %><br>
+      <% if !@orders['enabled_note'].nil? %>
+    <b> <%= " (" << @orders['enabled_note'] << "  On " << @orders['enabled_date'].strftime("%m/%d/%Y") << " )" %> </b><br>
+    <% end %>
+        <% if !@orders['onhold_note'].nil? %>
+    <b> <%= " (" << @orders['onhold_note'] << "  On " << @orders['onhold_date'].strftime("%m/%d/%Y") << " )" %> </b><br>
+    <% end %><% end %>
+    <%= render :partial => 'form', :locals => { :columns => column } %>
+  </li>
+  <% elsif is_subform? column and !override_form_field?(column) -%>
+  <li class="sub-form <%= active_scaffold_config_for(column.association.klass).subform.layout %>-sub-form" id="<%= sub_form_id(:association => column.name) %>">
+    <%= render :partial => form_partial_for_column(column), :locals => { :column => column } -%>
+  </li>
+  <% else -%>
+  <li class="form-element <%= 'required' if column.required? %>">
+    <%= render :partial => form_partial_for_column(column), :locals => { :column => column } -%>
+  </li>
+  <% end -%>
+  <% end -%>
+</ol>

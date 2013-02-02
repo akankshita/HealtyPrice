@@ -1,0 +1,123 @@
+<% content_for :head do %>
+	<%= javascript_include_tag 'specialty_service' %>
+	<title>HealthyPrice, Inc. - <%=h @specialty_service.service_name %> (<%=h @specialty_service.specialty.name %>)</title>
+	<meta name="description" content="<%=h @specialty_service.service_description %>" />
+<% end %>
+
+    <div class="mid_container_inner">
+		<div class="mid_content_left_box">
+        	<div class="mid_content_left_box_head" xstyle="cursor:pointer;" xonclick="document.location='/specialty_service_details/<%= @specialty_service.service_id %>';">
+		<%=h @specialty_service.service_name %> (<%=h @specialty_service.specialty.name %>)
+		<br /><br />
+		HealthyPrice: <%=number_to_currency(@specialty_service.customer_price) %>
+		<br />&nbsp;
+	</div>
+            <div class="mid_content_left_search">
+                <small><%=h @specialty_service.service_description %></small>
+                <!--br/><br/-->
+                <!--table width="200" border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td class="left_search_head">Search Again:</td>
+                  </tr>
+                  <tr>
+                    <td height="15"></td>
+                  </tr>
+                  <tr>
+                    <td><span class="left_search_text">Zip Code:</span><br />
+                    <input type="text" name="textfield" id="textfield" class="left_search_fields" /></td>
+                  </tr>
+                  <tr>
+                    <td height="10"></td>
+                  </tr>
+                  <tr>
+                    <td><span class="left_search_text">City:</span><br />
+                    <input type="text" name="textfield2" id="textfield2" class="left_search_fields" /></td>
+                  </tr>
+                  <tr>
+                    <td height="10"></td>
+                  </tr>
+                  <tr>
+                    <td><span class="left_search_text">Doctor:</span><br />
+                    <input type="text" name="textfield3" id="textfield3" class="left_search_fields" /></td>
+                  </tr>
+                </table-->
+            </div>
+        </div>
+
+<style>
+div#results li {
+  list-style: none;
+  padding: 4px;
+  font-size:10pt;
+}
+
+div#results li.odd_row {
+  background-color:#F0F8FF;
+  border-bottom:1px solid #D0D8FF;
+}
+
+div#results li.even_row {
+  background-color:#FFFFFF;
+  border-bottom:1px solid #D0D8FF;
+}
+
+div#results ul {
+  margin: 0px;
+  padding:0px;
+}
+</style>
+
+<script>
+var T1;
+var url;
+function GetMap(Address, LblName){
+	clearTimeout(T1);
+	showMap(Address, LblName);
+}
+
+function selectService(doctor_service_id){
+	T1 = setTimeout("document.location='/doctor_services/"+doctor_service_id+"';", 200);
+}
+
+function showMoreInfop(doctor_id){
+	clearTimeout(T1);
+	url = Routing.doctor_path({id: doctor_id, format: 'js'});
+	$.fn.healthybox({href: url, open:true});
+}
+</script>
+
+        <div class="content_large_box_right">
+		<small><a href="/specialty_services/<%= @specialty_service.id %>" style="text-decoration:none; color:#000000;"><img src="/images/chkbox1.gif" style="margin-bottom:-3px" /> Limit search results to providers that speak Spanish.<br/>[Limitar los resultados de b&uacute;squeda a los proveedores que hablan espa&ntilde;ol.]</a></small>
+		<br/>
+				<div class="content_large_box" id="results">
+<% @RowsFound = 0
+if @specialty_service.doctor_services.size > 0 %>
+					<ul>
+<% 
+@RowClass = "odd_row"
+@specialty_service.doctor_services.each do |doctor_service|
+	if doctor_service.doctor != nil && doctor_service.doctor.enabled == 1 && doctor_service.doctor.onhold == 0 && doctor_service.doctor.spanish == 1 %>
+						<li class="<%= @RowClass %>" style="cursor:pointer;" onclick="selectService('<%= doctor_service.id %>');">
+							<strong class="dr_name"><%= doctor_service.doctor.name %></strong>, &nbsp;
+							<%=doctor_service.doctor.company%><br/>
+							<%= doctor_service.doctor.city %>, <%= doctor_service.doctor.state_code %> <%= doctor_service.doctor.zip %>
+							<span class="large_box_link">(<a href="javascript:showMoreInfop('<%= doctor_service.doctor.id %>');">more info</a>)</span>
+							<span class="large_box_link">(<a href="javascript:GetMap('<%= doctor_service.doctor.address+", "+doctor_service.doctor.city+", "+doctor_service.doctor.state+" "+doctor_service.doctor.zipcode %>', '<%= doctor_service.doctor.name %>');" class="dr_map">map</a>)</span>
+							<span class="large_box_link">(<%=link_to 'select this doctor/provider', doctor_service_path(:id => doctor_service.id), {:rel => doctor_service.id, :class => 'select_doctor'} %>)</span>
+						</li>
+	<%	if @RowClass == "odd_row"
+			@RowClass = "even_row"
+		else
+			@RowClass = "odd_row"
+		end
+		@RowsFound += 1
+	end
+end %>
+					</ul>
+<% end
+ if @RowsFound < 1 %>
+<p align="center" style="font-size:10pt; margin-top:20px;">HealthyPrice is working on securing providers for this service. Please check back soon.</p>
+<% end %>
+			  </div>
+			</div>
+		</div>

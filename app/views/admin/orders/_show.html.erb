@@ -1,0 +1,114 @@
+<div id="special_ajax_container">
+  <% @ordervalue = Order.find(params[:id]) %>
+
+  <%       @doctor_details=Doctor.find_by_sql("SELECT *
+    FROM doctors
+    JOIN doctor_services
+    ON doctors.id = doctor_services.doctor_id AND doctor_services.id = " + "#{@ordervalue['doctor_service_id']}")
+%>
+
+  <%       @doctor_price=Doctor.find_by_sql("SELECT *
+    FROM specialty_services
+    JOIN doctor_services
+    ON specialty_services.id = doctor_services.specialty_service_id AND doctor_services.id = " + "#{@ordervalue['doctor_service_id']}")
+%>
+
+  <%  @doctor_price.each do |drprice|
+    #@services = Service.find(drprice.service_id)
+    @practices = Specialty.find(drprice.specialty_id)
+  %>
+  <% end %>
+
+  <% #form_for :doctor, @doctor, :url => { :action => "create" ,:id=> params[:id] } do |f| %>
+<h3 style="margin-top:10px;">View Order # <%= params[:id] %></h3><br>
+    <%  @doctor_details.each do |drdetail| %>
+	<% @doctor = drdetail %>
+
+
+      <h4> Procedure :  <%= @practices.name %> (<%= @doctor_price[0].service_name %>  ) </h4>
+      <table border="0" cellspacing="0" cellpadding="0">
+	<tr><td width="370" valign="top">
+      &nbsp;&nbsp;Provider : <%= drdetail.name  %> (<%= drdetail.doctor_id %>) <br>
+      &nbsp;&nbsp;Price : <%= number_to_currency(@ordervalue['customer_price'],{:precision => 2}) %> (Customer) | <%= number_to_currency(@ordervalue['doctor_price'],{:precision => 2}) %> (Provider)<br>
+	</td><td valign="top">
+      &nbsp;&nbsp;Billing Code : <%= @ordervalue['billing_code'] %> <br>
+      &nbsp;&nbsp;PIN : <%= @ordervalue['pin'] %><br>
+	</td></tr>
+      </table>
+      &nbsp;&nbsp;Ordered On : <%= @ordervalue.str_date %>
+
+      <br><br>
+    <% end %>
+      &nbsp;&nbsp;<b>Order Status :  &nbsp;&nbsp; <%= @ordervalue['orderstatus'] %> </b>
+    <%#=  select_tag("doctor[orderstatus]", options_for_select({ :new => "new",:pending => "pending" ,:Unresolved => "Unresolved" ,:closed => "closed" }, @ordervalue['orderstatus'])) %>
+      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <b>Payment Reference  : <% if @ordervalue['doctor_payments_id']==-1 %>None<% else %><%= @ordervalue['doctor_payments_id'] %><% end %></b>
+      <br/><br/>
+      &nbsp;&nbsp;<b>Order Notes</b><br />
+      <div style="margin-left:6px;">
+	<% if @ordervalue['order_notes'] != nil %><%= @ordervalue['order_notes'].gsub(/\n/, '<br/>') %><% end %>
+      </div>
+      <br/><br/>
+    <%
+    @patient_name=""
+    if @ordervalue['patient_name']!=nil
+      @patient_name = @ordervalue['patient_name']
+    end
+  %>
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+	<tr>
+		<td width="50%" style="vertical-align:top;">
+
+<h4>Patient Information</h4>
+ &nbsp;&nbsp;Patient Name : <%= @patient_name   %> <br>
+ &nbsp;&nbsp;Name : <%= @ordervalue['first_name'] << " " << @ordervalue['last_name'] %> <br>
+ &nbsp;&nbsp;Phone : <%= @ordervalue['phone']  %> <br>
+ &nbsp;&nbsp;Email : <a href="mailto:<%= @ordervalue['email'] %>"><%= @ordervalue['email']  %></a> <br>
+ &nbsp;&nbsp;Address : <%= @ordervalue['address'] << 
+     if @ordervalue['address2'] !=nil
+     " , " << @ordervalue['address2']
+     else
+       " "
+     end %>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<%= @ordervalue['city'] %>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<%= @ordervalue['state'] %>, <%= @ordervalue['zipcode'] %>
+
+		</td><td width="50%" style="vertical-align:top;">
+
+<h4>Payee Information</h4>
+		 &nbsp;&nbsp;Payment Method: <%= @doctor.payment_method %><br/>
+	   <% if @doctor.payment_method == "PayPal" %>
+		 &nbsp;&nbsp;PayPal Email: <%= @doctor.paypal_email %><br/>
+	   <% end %>
+		 &nbsp;&nbsp;Payee Name: <%= @doctor.payee_name %><br/>
+		 &nbsp;&nbsp;Payee Phone Number: <%= @doctor.payee_phone_number %><br/>
+		 &nbsp;&nbsp;Payee Email Address: <a href="mailto:<%= @doctor.payee_email_address %>"><%= @doctor.payee_email_address %></a><br/>
+		 &nbsp;&nbsp;Payee Address: <%= @doctor.payee_address1 %><br/>
+	   <% if @doctor.payee_address2 != nil && @doctor.payee_address2 != "" %>
+		 &nbsp;&nbsp; &nbsp; &nbsp; <%= @doctor.payee_address2 %><br/>
+	   <% end %>
+		 &nbsp;&nbsp;City: <%= @doctor.payee_city %><br/>
+		 &nbsp;&nbsp;State: <%= @doctor.payee_state %><br/>
+		 &nbsp;&nbsp;Zip: <%= @doctor.payee_zip %><br/>
+		 &nbsp;&nbsp;Payee Tax ID: <%= @doctor.payee_tax_id_type %> <%= @doctor.payee_tax_id %>
+
+		</td>
+	</tr>
+</table>
+
+<br>
+&nbsp;&nbsp;How did the customer hear about us : <%= @ordervalue['market_survey'] %>
+<br>
+    <p id="policy" align="right">
+      <br /><br/>
+
+<%#= render :partial => 'show_columns', :locals => {:columns => active_scaffold_config.show.columns} -%>
+
+<p class="form-footer" <% if params[:_method] == "get" && params[:adapter] == "_list_inline_adapter" %>style="display:none;"<% end %>>
+  <%= link_to as_(:close), params_for(:controller => params[:parent_controller] ? params[:parent_controller] : params[:controller], :action => 'list'), :class => 'cancel' %>
+  <%= loading_indicator_tag(:action => :create, :id => params[:id]) %>
+</p>
+
+</div>

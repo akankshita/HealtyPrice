@@ -1,0 +1,51 @@
+p {
+  margin: 0px;
+}
+
+p#provider_label {
+  margin-top: 30px;
+}
+
+div#doctor_details {
+  float: left;
+}
+
+div#doctor_photos img {
+  border: 1px black solid;
+  margin: 30px;
+}
+
+div#price_info {
+  float: left;
+  margin-right: 40px;
+}
+
+div#payment_methods {
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+div#payment_methods img {
+  border: 1px black solid;
+}
+
+#order_service {
+  padding: 10px;
+  border: outset;
+}
+
+div#order_info {
+}
+
+div#keep_searching {
+  float:right;
+  margin-top: 100px;
+}
+
+img.headshot{
+	height:150px;
+}
+
+img.clinic_photo{
+	height:150px;
+}

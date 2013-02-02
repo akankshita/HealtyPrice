@@ -1,0 +1,50 @@
+div.form_section{
+	/*background-color:#FFEFE7;*/
+	/*background-color:#E0F0FD;*/
+	background-color:#dceefa;
+	border:2px solid #CcDeEa;
+	font-size:11pt;
+	padding:8px;
+	width:850px;
+	/*margin-left:8pt;*/
+}
+
+div.form_section table tr td{
+	vertical-align:middle;
+	padding:4px;
+	/*border:1px solid #888888;*/
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:10pt;
+}
+
+div.form_section table tr td.right_align_120{
+	text-align:right;
+	width:125px;
+}
+
+textarea.Description{
+	width:650px;
+	height:160px;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:10pt;
+}
+
+#error{
+	clear:both;
+	float:left;
+	/*padding:6px;*/
+	width:866px;
+	border:1px solid #FF0000;
+	background-color:#FFCCCC;
+	margin-top:-18px;
+	margin-bottom:18px;
+	text-align:left;
+	margin-left:0px;
+}
+
+#error ul{
+	margin-top:8px;
+	margin-bottom:8px;
+	margin-left:8px;
+}
+

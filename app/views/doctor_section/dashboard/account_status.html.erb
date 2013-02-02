@@ -1,0 +1,63 @@
+			<div id="page_header_box">
+				<div id="headerX">Place Account on Hold or Close Account</div>
+				<div id="help"><span class="help"><a href="javascript:ShowPopUp();">Help</a></span></div>                        
+			</div>
+
+<br style="clear:both;" /><br/>
+<% if @error != nil && @error != "" -%>
+	<% if @show_error_as_javascript == true -%>
+<script>alert('<%= @error %>');</script>
+	<% else -%>
+<div id="error" style="clear:both; margin-bottom:-15px;"><!--img src="/images/provider_signup/error.gif" style="float:left;" /--><%= @error %></div>
+	<% end -%>
+<% end -%>
+
+<div id="details_2">
+
+	<span class="subheat_text_style">Account Hold</span>
+	<div style="margin-bottom:10px; clear:both;"></div>
+
+	<% if session[:doctor].onhold == 1 %>
+
+		<% if session[:doctor].onhold_note.index('Provider') != nil %>This account was placed on-hold by Provider<% else %>This account was placed on-hold by HealthyPrice<% end %> on <%= session[:doctor].onhold_date.strftime("%a, %b %d, %Y at %I:%M%p") %>
+		<br/><br/>Reinstate your account to receive new orders.
+
+		<%= form_tag({ :action => "account_status" }, :method => "post", :onsubmit => "return confirm('Are you sure you wish to release the hold on your account?')") %>
+			<input type="hidden" name="doctor[onhold]" value="0">
+			<input name="back" type="submit" value="" style="background-image:url('/images/doctor_section/reinstate_account.jpg'); margin-top:5px; width:192px; height:26px; border:0px; vertical-align:middle;" />
+		</form>
+
+	<% else %>
+
+		If the account is placed on-hold, your profile will no longer be visible to new HealthyPrice customers.<br/>
+		You will not receive new orders. You will continue to have access to your provider dashboard and must<br/>
+		continue to service orders that have already been placed. You can reinstate your account at any time.
+		<%= form_tag({ :action => "account_status" }, :method => "post", :onsubmit => "return confirm('Are you sure you wish to place your account on hold?')") %>
+			<input type="hidden" name="doctor[onhold]" value="1">
+			<input name="back" type="submit" value="" style="background-image:url('/images/doctor_section/place_account_on_hold.jpg'); margin-top:5px; width:192px; height:26px; border:0px; vertical-align:middle;" />
+		</form>
+
+	<% end %>
+
+	<br/><br/>
+
+	<span class="subheat_text_style">Close Account</span>
+	<div style="margin-bottom:10px; clear:both;"></div>
+
+	All outstanding orders must be resolved before you can close your account. Once your account is closed<br/>
+	you will no longer have access to your provider dashboard.<br/>
+	<br/>
+	If you wish to close your account, please do the following:
+	<ol style="margin-top:2px; margin-bottom:12px;">
+		<li>Place your account on hold. This will prevent new orders.</li>
+		<li>Resolve all outstanding orders (all orders must be in "Closed" status).</li>
+		<li>Click the Close Account button below.</li>
+	</ol>
+	We are always working to improve HealthyPrice. Please take a moment to tell us why you have decided<br/>
+	to close your account with us. Write to us at <a href="mailto:providersupport@healthyprice.com">providersupport@healthyprice.com</a>.
+	<%= form_tag({ :action => "account_status" }, :multipart => true, :method => "post", :onsubmit => "return confirm('Are you sure you wish to close your account?')") %>
+		<input type="hidden" name="doctor[closed]" value="1">
+		<input name="back" type="submit" value="" style="background-image:url('/images/doctor_section/close_account.jpg'); margin-top:5px; width:192px; height:26px; border:0px; vertical-align:middle;" />
+	</form>
+
+</div>

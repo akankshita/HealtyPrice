@@ -1,0 +1,1 @@
+<% @file = File.open(Dir.pwd + "/public/mail_templates/admin_account_status.html.erb") %><% @template = @file.read %><%	@template = @template.gsub("{message}", @message) %><%= @template %>

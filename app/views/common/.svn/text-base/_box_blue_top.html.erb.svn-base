@@ -1,0 +1,5 @@
+<div class="box_blue_top">
+  <div class="rounded_corner_top"> </div>
+    <div class="rounded_corner_content"><%= yield %></div>
+  <div class="rounded_corner_bottom"> </div>
+</div>

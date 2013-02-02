@@ -1,0 +1,43 @@
+<div class="signup_header_text">
+	<span class="subheat_text_style">
+		Terms and Conditions
+	</span>
+</div><br style="clear:both;"/>&nbsp;<br/>
+
+<% if @error != nil && @error != "" %>
+	<% if @show_error_as_javascript == true -%>
+<script>alert('<%= @error %>');</script>
+	<% else -%>
+<div id="error" style="width:640px;"><!--img src="/images/provider_signup/error.gif" style="float:left;" /--><%= @error %></div>
+	<% end -%>
+<% else %>
+<div id="error" style="display:none; width:640px;"></div>
+<% end %>
+
+<div style="float:left; text-align:justify; width:850px; margin-left:40px;">
+<div style="height:350px; overflow:auto; padding-right:10px;">
+<%= @agreement %>
+</div>
+
+<br/><br/>
+
+<%= form_tag({ :action => "index" }, :method => "post") %>
+
+	<label>
+		<input type="checkbox" name="agree_to_terms" />
+		I agree to the HealthyPrice terms and conditions.
+	</label>
+	<br/><br/>
+	<input type="hidden" name="doctor[id]" value="<%= session[:doctor].id.inspect %>">
+	<input name="continue" type="submit" value="" style="width:0px; height:0px; background-color:white; border:0px;" />
+	<table width="100%" style="clear:both;margin-left:0px;"><tr>
+		<td valign="top" width="670">
+			<input name="back" type="submit" value="" style="background-image:url('/images/provider_signup/back_6.jpg');height:26px;width:177px;border:0px;" />
+		</td><td valign = "top" align="right">
+			<input name="continue" type="submit" value="" style="background-image:url('/images/provider_signup/submit_appli.jpg');height:26px;width:206px;border:0px;" />
+		</td>
+	</tr></table>
+
+</form>
+
+</div>

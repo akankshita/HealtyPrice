@@ -1,0 +1,361 @@
+<% if current_user == nil %>
+	<html><body>
+		<h2>Access Unauthorized</h2>
+		You have no access to this section of the website. Please <a href="/user_session/new">Login</a>.
+	</body></html>
+<% elsif current_user.user_type == "Admin" %>
+	<html><body onload="document.location='/admin';">
+		<h2>Please Wait..</h2>
+		You will be redirected soon, or else please click here to go to <a href="/admin">Admin Section</a>.
+	</body></html>
+<% else %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <link href="/favicon.ico" rel="shortcut icon" />
+  <title>HealthyPrice: <%= controller.controller_name.titleize + ' ' + controller.action_name.titleize %></title>
+
+	<%= javascript_include_tag '/js_routes','jquery-1.3.2.min','jquery.equalheights','jquery.hint','jquery.dimensions.min','jquery.bgiframe.min','jquery.tooltip.min','jquery.glow','jquery.colorbox-min','application', :cache => true %>
+
+  	<%#= javascript_include_tag 'prototype','effects','dragdrop','controls' %>
+	<%#= stylesheet_link_tag 'blueprint/screen', 'jquery.tooltip', 'site', :media => 'screen, projection' %>
+	<%#= stylesheet_link_tag 'blueprint/print',:media => 'print' %>
+	<%#= stylesheet_link_tag 'dashboard',:media => 'screen, projection' %>
+	<!--[if lt IE 8]><%#= stylesheet_link_tag 'blueprint/ie',:media => 'screen, projection' %><![endif]-->
+
+	<%#= active_scaffold_includes %>
+	<%#= stylesheet_link_tag 'admin', :media => 'screen, projection' %>
+
+	<%#= stylesheet_link_tag 'doctor_orders' %>
+	<%= stylesheet_link_tag 'hl' %>
+	<%= stylesheet_link_tag 'popup' %>
+	<%= javascript_include_tag 'fader' %>
+	<%= stylesheet_link_tag 'colorbox' %>
+	<%#= stylesheet_link_tag 'hp_styles' %>
+	<link href="/stylesheets/blue_box.css" rel="stylesheet" type="text/css" />
+
+</head>
+<body>
+<style>
+a:hover{
+  background-color:#e66615;
+  color:#e3e3e3;
+  text-decoration:none;
+}
+</style>
+
+	<div id="middle_content">
+
+		<div class="container"><!-- style="border:1px solid black;"-->
+			<div id="header_header">
+				<div id="logo"><a href="/" style="background-color:#FFFFFF;"><img src="/images/provider_signup/healthyprice_logo.png" border="0" /></a></div>
+				<div id="header_small">&nbsp;</div>
+				<div id="home" class="header_menu_link_hover">
+					<img src="/images/provider_signup/blue_bullet.png" width="5" height="5" /> &nbsp;<a href="/">Home</a>
+				</div>
+				<div id="Procedures" class="header_menu_link_hover">
+					<img src="/images/provider_signup/blue_bullet.png" width="5" height="5" /> &nbsp;<a href="/search/services">Procedures &amp; Services</a>
+				</div>
+				<div id="faq" class="header_menu_link_hover">
+					<img src="/images/provider_signup/blue_bullet.png" width="5" height="5" /> &nbsp;<a href="/page/faq">FAQ</a>
+				</div>
+				<div id="aboutus" class="header_menu_link_hover">
+					<img src="/images/provider_signup/blue_bullet.png" width="5" height="5" /> &nbsp;<a href="/page/about_us">About Us</a>
+				</div>
+				<div id="contact" class="header_menu_link_hover">
+					<img src="/images/provider_signup/blue_bullet.png" width="5" height="5" /> &nbsp;<a href="/page/contact_us">Contact</a>
+				</div>
+			</div>
+		</div>
+
+		<!--h2 style="float:left;">HealthyPrice Doctors Section</h2-->
+		<div class="welcome_message">
+		<% if current_user -%>
+			Welcome <b><%=current_user.title %> <%=current_user.first_name %> <%=current_user.last_name %></b>
+			<a href="/user_session/destroy">Log Out</a>
+		<% else -%>
+			<%=link_to 'Log In',new_user_session_path %>
+		<% end -%>
+		</div><br style="clear:both;"/>
+
+		<%= flash[:notice] %>
+
+<% if @currentTab == "Dashboard" %>
+		<div id="middle_tabs"> 
+			<div id="tab_text"><a href="/doctor_section">Dashboard</a></div>
+			<div id="tab_text_2"><a href="/doctor_section/orders/context/all/page1">Manage Orders</a></div>
+			<div id="tab_text_2" style="width:141px;padding-left:22px;"><a href="/doctor_section/procedures">Manage Procedures</a></div>
+			<div id="tab_text_2" style="width:107px; padding-left:28px;"><a href="/doctor_section/profile">Manage Profile</a></div>
+		</div>
+<% elsif @currentTab == "Orders" %>
+		<div id="middle_tabs_manageorders"> 
+			<div id="tab_text_2" style="width:100px; padding-left:66px; text-align:left"><a href="/doctor_section">Dashboard</a></div>
+			<div id="tab_text" style="width:108px;; padding-left:18px;"><a href="/doctor_section/orders/context/all/page1">Manage Orders</a></div>
+			<div id="tab_text_2" style="width:141px;padding-left:22px;"><a href="/doctor_section/procedures">Manage Procedures</a></div>
+			<div id="tab_text_2" style="width:107px; padding-left:28px;"><a href="/doctor_section/profile">Manage Profile</a></div>
+		</div>
+<% elsif @currentTab == "Procedures" %>
+		<div id="middle_tabs_manageprocedures"> 
+			<div id="tab_text_2" style="width:100px; padding-left:66px; text-align:left"><a href="/doctor_section">Dashboard</a></div>
+			<div id="tab_text_2" style="width:108px;; padding-left:18px;"><a href="/doctor_section/orders/context/all/page1">Manage Orders</a></div>
+			<div id="tab_text" style="width:141px;padding-left:22px;"><a href="/doctor_section/procedures">Manage Procedures</a></div>
+			<div id="tab_text_2" style="width:107px; padding-left:28px;"><a href="/doctor_section/profile">Manage Profile</a></div>
+		</div>
+<% elsif @currentTab == "Profile" %>
+		<div id="middle_tabs_manageprofile"> 
+			<div id="tab_text_2" style="width:100px; padding-left:66px; text-align:left"><a href="/doctor_section">Dashboard</a></div>
+			<div id="tab_text_2" style="width:108px;; padding-left:18px;"><a href="/doctor_section/orders/context/all/page1">Manage Orders</a></div>
+			<div id="tab_text_2" style="width:141px;padding-left:22px;"><a href="/doctor_section/procedures">Manage Procedures</a></div>
+			<div id="tab_text" style="width:107px; padding-left:28px;"><a href="/doctor_section/profile">Manage Profile</a></div>
+		</div>
+<% end %>
+		<div id="dashboard">
+			<div class="container">
+				<div id="body">
+					<%= yield %>
+				</div>
+			</div>
+		</div>
+<script>
+$(function(){
+	$('#footer_terms').healthybox({width: '750px', href: Routing.page_path({slug: 'terms__conditions', format: 'js'})})
+})
+</script>
+		<!--div style="clear:both; margin-top:15px; vertical-align:text-top;">
+			<table width="100%">
+				<tr>
+					<td width="36px"><%=image_tag 'apple_icon.png' %></td>
+					<td>2010 &copy; HealthyPrice, Inc.</td>
+					<td align="right"><a href="/page/terms__conditions" id="footer_terms">Terms &amp; Conditions</a></td>
+				</tr>
+			</table>
+		</div-->
+		    <div class="inner_footer">
+			<div class="footer_logo">
+			    <table width="200" border="0" cellspacing="0" cellpadding="0">
+			      <tr>
+				<td width="53"><img src="/images/footer_logo.jpg" width="46" height="46" /></td>
+				<td width="147">&copy; 2010 HealthyPrice, Inc.</td>
+			      </tr>
+			    </table>
+			</div>
+			<div class="inner_footer_right"><span class="inner_footer_link"><a href="/page/terms__conditions" id="footer_terms">Privacy Policy and<br/>Terms &amp; Conditions</a></span></div>
+		  </div>
+	</div>
+
+	<div style="width:290px; margin:auto; margin-top:50px;">
+		<div style="float:left;">
+			<!--img src="/HP.PNG"-->
+			<!-- GeoTrust True Site [tm] Smart Icon tag. Do not edit. -->
+			<!--SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript" 
+			SRC="//smarticon.geotrust.com/si.js"></SCRIPT-->
+			<img src="/images/geo_trust.jpg" style="cursor:pointer;" onclick="window.open('https://smarticon.geotrust.com/smarticonprofile?Referer=https://www.healthyprice.com','GeoTrust','width=383,height=600,toolbar=0,resizable=0,location=0,status=0');" />
+			<!-- end GeoTrust Smart Icon tag -->
+		</div>
+		<div style="float:left; margin-left:75px;">
+			<a href="https://www.securitymetrics.com/site_certificate.adp?s=174%2e129%2e1%2e49&amp;i=498314" target="_blank" >
+				<img src="https://www.securitymetrics.com/images/sm_ccsafe_check2.gif" alt="SecurityMetrics for PCI Compliance, QSA, IDS, Penetration Testing, Forensics, and Vulnerability Assessment" border="0">
+			</a>
+		</div>
+	</div>
+
+	<%= @Echo %>
+
+<style></style>
+
+<div id="ToolTip" style="display:none;">
+	<!--img src="/images/info.gif" style="float:left; margin-right:4px;" /-->
+	<div id="ToolTipTxt" style="float:left; text-align:left;"></div>
+</div>
+
+<div id="PopUpMist" onclick="HidePopUp();" style="display:none; position:absolute; top:0px; left:0px; height:200%; background-image:url('/images/mist.png');"></div>
+
+<div id="PopUp" class="PopUp" style="display:none;">
+	<!--img src="/images/doctor_section/Popup-RoundCorner_TL.jpg" style="float:left; border:0px;" />
+	<img src="/images/doctor_section/Popup-RoundCorner_TR.jpg" style="float:right; border:0px;" /-->
+	<div class="NestedClose" onclick="HidePopUp();"> X </div>
+	<div id="PopUpMessage">
+		For your convenience, help icons <img src="/images/provider_signup/question_mark.gif" style="text-align:middle;" /> are placed throughout the site to provide simple instructions on any given area.<br/>
+		If you have any additional questions, please email us at Customer Service <a href="mailto:customersupport@healthyprice.com">customersupport@healthyprice.com</a> or call phone support <a href="callto:1-800-455-2797">1-800-455-2797</a> for assistance.
+	</div>
+	<div style="border-bottom:1px solid #FDFDF0;">
+		<!--img src="/images/doctor_section/Popup-RoundCorner_BL.jpg" style="float:left; border:0px;" />
+		<img src="/images/doctor_section/Popup-RoundCorner_BR.jpg" style="float:right; border:0px;" /-->
+	</div>
+</div>
+
+<script>
+var HideTimeout;
+var tempX = 0;
+var tempY = 0;
+var IE = document.all?true:false
+var PopUp, PopUpMist;
+
+if (!IE) document.captureEvents(Event.MOUSEMOVE);
+
+document.onmousemove = getMouseXY;
+//window.document.onload = BindToolTips;
+document.onclick =  HideToolTip;
+window.onresize = Window_Resize;
+
+function Window_Resize(){
+	PopUp = document.getElementById("PopUp");
+	PopUpMist = document.getElementById("PopUpMist");
+	var Width = (window.innerWidth || document.body.offsetWidth);
+	var Height = 800;
+	//(window.innerHeight || document.body.offsetHeight);
+	var Left = (Width / 2) - (PopUp.offsetWidth / 2);
+	var Top = (Height / 2) - (PopUp.offsetHeight / 2);
+	//alert(Left + ":" + Top);
+	PopUp.style.left = Left + 'px';
+	PopUp.style.top = Top + 'px';
+	PopUpMist.style.width = Width + 'px';
+	//PopUpMist.style.height = (window.innerHeight || document.body.offsetHeight);
+}
+
+function ShowPopUp(){
+	PopUp = document.getElementById("PopUp");
+	PopUpMist = document.getElementById("PopUpMist");
+	//PopUpMist.style.display = '';
+	// ============================
+	fadeIn("PopUp");
+	PopUp.style.opacity = '0';
+	PopUp.style.filter = 'alpha(opacity = 0)';
+	PopUp.style.display = '';
+	// ============================
+	//fadeIn("PopUpMist");
+	//PopUpMist.style.opacity = '0';
+	//PopUpMist.style.filter = 'alpha(opacity = 0)';
+	setTimeout("PopUpMist.style.display='';", 250);
+	// ============================
+	Window_Resize();
+}
+
+function HidePopUp(){
+	PopUp = document.getElementById("PopUp");
+	PopUpMist = document.getElementById("PopUpMist");
+	// ============================
+	fadeOut("PopUp");
+	PopUp.style.opacity = '1';
+	PopUp.style.filter = 'alpha(opacity = 100)';
+	// ============================
+	//fadeOut("PopUpMist");
+	//PopUpMist.style.opacity = '1';
+	//PopUpMist.style.filter = 'alpha(opacity = 100)';
+	setTimeout("PopUpMist.style.display='none';", 250);
+	// ============================
+}
+
+function ValidateAndJumpToStep(Step){
+	var href = document.location.href;
+	var CurrentStep = href.substr(href.length - 1);
+	if(Step > CurrentStep){
+		//alert('Please use the buttons at the bottom of the page to move forward.');
+		var ErDiv = document.getElementById('error');
+		ErDiv.style.display = '';
+		ErDiv.innerHTML = '<ul><li>Please use the buttons at the bottom of the page to move forward.</li></ul>';
+	}else{
+		document.location = '/doctor_section/signup/step' + Step;
+	}
+	/*var Validated = true;
+	try{
+		Validated = Validate();
+	}catch(e){}
+	if(Validated){
+		document.location = '/doctor_section/signup/step' + Step;
+	}else{
+		//alert('You cannot jump to step '+Step+' because of a validation error.');
+		document.getElementsByName('continue')[0].click();
+	}*/
+}
+
+function BindToolTips(){
+	var elems = document.getElementsByTagName("img");
+	for(var i=0; i<elems.length; i++){
+		if(elems[i].alt != undefined){
+			elems[i].onmousemove = ToolTip;
+			elems[i].onmouseout = StartHideToolTip;
+			//elems[i].alt = "";
+		}
+		if(elems[i].title != undefined){
+			elems[i].onmousemove = ToolTip;
+			elems[i].onmouseout = StartHideToolTip;
+			//elems[i].title = "";
+		}
+	}
+	//document.onclick =  HideToolTip;
+}
+
+function ShowToolTip(tip, targ){
+	targ.onmouseout = StartHideToolTip;
+	var TTip = document.getElementById("ToolTip");
+	var TTxt = document.getElementById("ToolTipTxt");
+	TTip.style.display = 'inline';
+	TTxt.innerHTML = tip;
+	TTip.style.top = (tempY + 8) + 'px';
+	TTip.style.left = (tempX + 8) + 'px';
+	//TTxt.innerHTML = 'Top: '+tempY+'<br/>Position: '+TTip.style.position;
+	clearTimeout(HideTimeout);
+}
+
+function StartHideToolTip(){
+	clearTimeout(HideTimeout);
+	HideTimeout = setTimeout("HideToolTip();", 600)
+}
+
+function HideToolTip(){
+	var TTip = document.getElementById("ToolTip");
+	TTip.style.display = 'none';
+}
+
+function getMouseXY(e){
+  if (IE) { // grab the x-y pos.s if browser is IE
+    tempX = event.clientX + document.documentElement.scrollLeft;
+    tempY = event.clientY + document.documentElement.scrollTop;
+  } else {  // grab the x-y pos.s if browser is NS
+    tempX = e.pageX;
+    tempY = e.pageY;
+  }  
+  // catch possible negative values in NS4
+  if (tempX < 0){tempX = 0;}
+  if (tempY < 0){tempY = 0;}
+  //tempX = tempX + document.documentElement.scrollLeft;
+  //tempY = tempY + document.documentElement.scrollTop;
+  //alert(tempY + ":" + document.documentElement.scrollTop);
+  return true;
+}
+
+
+function ToolTip(){
+	var e = event;
+	var targ;
+	if (e.target) targ = e.target;
+	else if (e.srcElement) targ = e.srcElement;
+	if (targ.nodeType == 3) targ = targ.parentNode;
+	var text = targ.alt || targ.title
+	var TTip = document.getElementById("ToolTip");
+	var TTxt = document.getElementById("ToolTipTxt");
+	TTip.style.display = 'inline';
+	TTxt.innerHTML = text;
+	TTip.style.top = tempY + 8;
+	TTip.style.left = tempX + 8;
+	clearTimeout(HideTimeout);
+}
+</script>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-11891327-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</body>
+</html>
+<% end %>

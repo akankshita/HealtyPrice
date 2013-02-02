@@ -1,0 +1,65 @@
+
+div#body div.box{
+  overflow: hidden;
+}
+
+div#order {
+  border: 1px #bbbbbb solid;
+  overflow: hidden;
+}
+
+p {
+  margin: 0px
+}
+
+div#left_col, div#right_col {
+  float: left;
+  height: 100%;
+  width: 49%;
+}
+
+div#right_col {
+  border-left: 1px #bbbbbb solid;
+}
+
+div#doctor_service {
+}
+
+div#provider_details, div#price {
+  float: left;
+}
+
+div.order_content {
+  padding: 10px;
+}
+
+
+div#billing {
+  clear: left;
+  /*border-top: 1px #bbbbbb solid;*/
+}
+
+input#submit {
+  margin-top: 20px;
+  padding: 10px;
+  font-size: 14px;
+}
+
+img#headshot, img#clinic_photo {
+  border: 1px #bbbbbb solid;
+  margin: 10px;
+}
+
+#error{
+	clear:both;
+	float:left;
+	/*padding:6px;*/
+	width:600px;
+	border:1px solid #FF0000;
+	background-color:#FFCCCC;
+	margin-top:8px;
+	margin-bottom:12px;
+	text-align:left;
+	margin-left:0px;
+	padding:5px;
+}

@@ -1,0 +1,21 @@
+<% if @order == nil %>
+	<span style="color:red;">Order Not Found</span>
+<% else %>
+	<script>
+		SetVal('patient_name', '<%= @order.patient_name %>');
+		SetVal('first_name', '<%= @order.first_name %>');
+		SetVal('last_name', '<%= @order.last_name %>');
+		SetVal('address', '<%= @order.address %>');
+		SetVal('address2', '<%= @order.address2 %>');
+		SetVal('city', '<%= @order.city %>');
+		SetVal('state', '<%= @order.state %>');
+		SetVal('zipcode', '<%= @order.zipcode %>');
+		SetVal('phone', '<%= @order.phone %>');
+		SetVal('email', '<%= @order.email %>');
+		SetVal('credit_card', 'XXXX-XXXX-XXXX-<%= @ccnum[@ccnum.size-4, @ccnum.size-1] %>');
+		SetVal('ccv', 'XXX');
+		SetVal('expiration_month', '<%= @order.expiration.month %>');
+		SetVal('expiration_year', '<%= @order.expiration.year %>');
+		SetVal('market_survey', '<%= @order.market_survey %>');
+	</script>
+<% end %>

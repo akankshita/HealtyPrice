@@ -1,0 +1,64 @@
+			<div id="page_header_box">
+				<div id="headerX">Manage Procedures </div>
+				<div id="help"><span class="help"><a href="javascript:ShowPopUp();">Help</a></span></div>                        
+			</div>
+<% if @error != nil && @error != "" -%>
+	<% if @show_error_as_javascript == true -%>
+<script>alert('<%= @error %>');</script>
+	<% else -%>
+<div id="error" style="margin-top:16px; margin-bottom:-16px; margin-left:40px;"><!--img src="/images/provider_signup/error.gif" style="float:left;" /--><%= @error %></div>
+	<% end -%>
+<% end -%>
+
+			<div id="details_2">
+				<table width="880" border="0" cellspacing="5" cellpadding="2">
+					<tr>
+						<td width="500" align="left" class="chklist">
+
+	<span class="subheat_text_style">Practice Areas</span><br/>
+	<b>If you wish to change practice areas, please contact HealthyPrice.</b>
+	<%= form_tag({ :action => "index" }, :method => "post", :name=>"form1") %>
+		<%	@specialties.each do |ss| %>
+			<label><input type="checkbox" name="doctor[chk<%= ss.id %>]" <% if @selected_specialties.include?(ss) %>checked<% end %> disabled="true" />
+			<%= ss.name %></label>&nbsp;
+			<% if ss.description != nil %>
+			<img src="/images/provider_signup/question_mark.gif" style="margin-top:-3px;" onmousemove="ShowToolTip('<%= ss.description.gsub("'", "`") %>', this);" /><br/>
+			<% end %>
+		<%	end %><br/>
+		<input type="hidden" name="doctor[x]" value="x" />
+		<!--input name="save_specialties" type="submit" value="" style="background-image:url('/images/doctor_section/save_selection.jpg'); width:128px; height:26px; border:0px; vertical-align:middle;" /-->
+	</form>
+
+
+						</td><td width="475" class="chklist">
+
+	<%= form_tag({ :action => "index" }, :method => "post") %>
+			<%	@selected_specialties.each do |ss|
+					@ssid = ss.id.inspect %>
+		<div class="procedures_box">
+			<span class="subheat_text_style">
+		<% @path = Dir.pwd + '/public/download/practice_area_documents/' %>
+		<% if File::exists?(@path + @ssid + '_document.pdf') %>
+			<a href="/download/practice_area_documents/<%= @ssid %>_document.pdf" target="_blank">
+				<img src="/images/pdf.gif" style="margin-top:-4px; border:0px;" border="0"></a>
+		<% end %>
+			<%= ss.name %></span><br/>
+				<%	@services.each do |srv|
+						if srv.specialty_id == @ssid %>
+					<div style="margin-left:30px; margin-bottom:2px;">
+					<label style="line-height:16px; margin-left:-30px;"><input type="checkbox" name="doctor[chk<%= srv.specialty_service_id %>]" <%
+							if @selected_services.include?(srv.specialty_service_id) %>checked<% end %> />
+						<%= number_to_currency(srv.doctor_price) %> - <%= srv.service_name %></label>&nbsp;<%#= shorten(srv.service_name, 55) %>
+					<img src="/images/provider_signup/question_mark.gif" style="margin-top:-3px;" onmousemove="ShowToolTip('<%= srv.service_description.gsub("'", "`") %>', this);" /></div>
+				<%		end
+					end %>
+		</div><br/>
+			<%	end %>
+		<input type="hidden" name="doctor[x]" value="x" />
+		<input name="save_services" type="submit" value="" style="background-image:url('/images/doctor_section/save_selection.jpg'); width:128px; height:26px; border:0px; vertical-align:middle;" />
+	</form>
+
+						</td>
+					</tr>
+				</table>
+			</div>

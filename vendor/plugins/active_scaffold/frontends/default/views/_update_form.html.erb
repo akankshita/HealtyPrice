@@ -1,0 +1,153 @@
+<% url_options = params_for(:action => :update) -%>
+<%=
+if request.xhr?
+  if active_scaffold_config.update.multipart?  # file_uploads
+    form_remote_upload_tag url_options.merge({:iframe => true}),
+      :onsubmit => onsubmit,
+      :id => element_form_id(:action => :update),
+      :loading => "$('#{loading_indicator_id(:action => :update, :id => params[:id])}').style.visibility = 'visible';",
+      :class => 'update',
+      :method => :put
+  else
+    form_remote_tag :url => url_options,
+      :after => "$('#{loading_indicator_id(:action => :update, :id => params[:id])}').style.visibility = 'visible'; Form.disable('#{element_form_id(:action => :update)}');",
+      :complete => "$('#{loading_indicator_id(:action => :update, :id => params[:id])}').style.visibility = 'hidden'; Form.enable('#{element_form_id(:action => :update)}');",
+      :failure => "ActiveScaffold.report_500_response('#{active_scaffold_id}')",
+      :html => {
+      :href => url_for(url_options),
+      :onsubmit => onsubmit,
+      :id => element_form_id(:action => :update),
+      :class => 'update',
+      :method => :put
+    }
+  end
+else
+  form_tag url_options,
+    :onsubmit => onsubmit,
+    :id => element_form_id(:action => :update),
+    :multipart => active_scaffold_config.update.multipart?,
+    :class => 'update',
+    :method => :put
+end
+%>
+
+<%  if params[:controller] == "admin/orders" %>
+
+  <% @ordervalue = Order.find(params[:id]) %>
+
+  <%       @doctor_details=Doctor.find_by_sql("SELECT *
+    FROM doctors
+    JOIN doctor_services
+    ON doctors.id = doctor_services.doctor_id AND doctor_services.id = " + "#{@ordervalue['doctor_service_id']}")
+%>
+
+  <%       @doctor_price=Doctor.find_by_sql("SELECT *
+    FROM specialty_services
+    JOIN doctor_services
+    ON specialty_services.id = doctor_services.specialty_service_id AND doctor_services.id = " + "#{@ordervalue['doctor_service_id']}")
+%>
+
+  <%  @doctor_price.each do |drprice|
+    @services = Service.find(drprice.service_id)
+
+    @practices = Specialty.find(drprice.specialty_id)
+  %>
+  <% end %>
+
+  <% form_for :doctor, @doctor, :url => { :action => "create" ,:id=> params[:id] } do |f| %>
+<h3 style="margin-top:10px;"><%= "Update Order # " << params[:id] %></h3><br>
+    <%  @doctor_details.each do |drdetail| %>
+
+
+      <h4>Procedure :  <%= @services.name%> (<%= @practices.name %>)</h4>
+      <table border="0" cellspacing="0" cellpadding="0">
+	<tr><td width="370" valign="top">
+      &nbsp;&nbsp;Provider : <%= "" << drdetail.title << "&nbsp;" << drdetail.first_name << "&nbsp;" << drdetail.last_name  %> <br>
+      &nbsp;&nbsp;Price : <%= number_to_currency(@ordervalue['customer_price'],{:precision => 2}) %> (customer) | <%= number_to_currency(@ordervalue['doctor_price'],{:precision => 2}) %> (Doctor)<br>
+	</td><td valign="top">
+      &nbsp;&nbsp;Billing Code : <%= @ordervalue['billing_code'] %> <br>
+      &nbsp;&nbsp;PIN : <%= @ordervalue['pin'] %><br>
+	</td></tr>
+      </table>
+     &nbsp;&nbsp;Ordered On : <%= "" << @ordervalue['created_at'].strftime("%m/%d/%Y") %>
+
+      <br><br>
+    <% end %>
+    &nbsp;&nbsp;Order Status&nbsp;&nbsp;
+   <span style="vertical-align:middle;"> <%=  select_tag("doctor[orderstatus]", options_for_select({ :New => "New",:Pending => "Pending" ,:Unresolved => "Unresolved" ,:Closed => "Closed" }, @ordervalue['orderstatus'])) %> </span>
+
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Payment Reference  : <%= 
+      if @ordervalue['doctor_payments_id']==-1
+        "None"
+      else
+        "#{ @ordervalue['doctor_payments_id']}"
+      end %>
+    <br/>
+
+    &nbsp;&nbsp;Order Notes<br />
+   &nbsp;&nbsp; <%= f.text_area :order_notes ,:value=>@ordervalue['order_notes'] %>
+    <br/><br/>
+    <%
+    @patient_name=""
+    if @ordervalue['patient_name']!=nil
+      @patient_name = @ordervalue['patient_name']
+    end
+  %>
+
+
+    <h4 > <%= "Patient Information" %></h4>
+    &nbsp;&nbsp;<%= "Patient Name : " << @patient_name  %> <br>
+    &nbsp;&nbsp;<%= "Name : " << @ordervalue['first_name'] << " " << @ordervalue['last_name'] %> <br>
+    &nbsp;&nbsp;<%= "Phone : " << @ordervalue['phone']  %> <br>
+    &nbsp;&nbsp;<%= "Email : " %> <a href="mailto:<%=@ordervalue['email'] %>"><%= @ordervalue['email']  %></a> <br>
+    &nbsp;&nbsp;<%= "Address : " << @ordervalue['address']<< 
+     if @ordervalue['address2']!=nil
+  
+      " , " << @ordervalue['address2']
+     else
+       " "
+     end <<
+       "<br>" << " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    " << @ordervalue['city'] << "<br>" << " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    " <<  @ordervalue['state'] << " , " <<  @ordervalue['zipcode']%> <br>
+
+    <p id="policy" align="right">
+      <br /><br/>
+
+      
+    <p class="form-footer">
+
+      <%= submit_tag as_(:Save_Changes), :class => "submit" ,:confirm => 'Save Changes?' %>
+      <%= link_to as_(:cancel), params_for(:controller => params[:parent_controller] ? params[:parent_controller] : params[:controller], :action => 'list'), :class => 'cancel' %>
+      <%= loading_indicator_tag(:action => :update, :id => params[:id]) %>
+    </p>
+  <% end %>
+
+<%else %>
+
+    <%  if params[:controller] == "admin/configurations" %>
+
+<h4><%= @record.to_label.nil? ? active_scaffold_config.update.label : as_(:update_model, :model =>"Configuration ( ID " << params[:id] <<" )") %></h4>
+    <% else %>
+  <h4><%= @record.to_label.nil? ? active_scaffold_config.update.label : as_(:update_model, :model =>clean_column_value(@record.to_label)<< "( ID " << params[:id] <<" )") %></h4>
+   <% end %>
+  <% if request.xhr? -%>
+    <div id="<%= element_messages_id(:action => :update) %>" class="messages-container"><%= error_messages_for :record, :object_name => @record.class.human_name.downcase %></div>
+  <% else -%>
+    <%= render :partial => 'form_messages' %>
+  <% end -%>
+
+  <%= render :partial => 'form', :locals => { :columns => active_scaffold_config.update.columns } %>
+
+  <p class="form-footer">
+
+    <%= submit_tag as_(:Save_Changes), :class => "submit" ,:confirm => 'Save Changes?' %>
+    <%= link_to as_(:cancel), params_for(:controller => params[:parent_controller] ? params[:parent_controller] : params[:controller], :action => 'list'), :class => 'cancel' %>
+    <%= loading_indicator_tag(:action => :update, :id => params[:id]) %>
+  </p>
+
+  </form>
+  <script type="text/javascript">
+    Form.focusFirstElement('<%= element_form_id(:action => :update) -%>');
+  </script>
+<%end%>

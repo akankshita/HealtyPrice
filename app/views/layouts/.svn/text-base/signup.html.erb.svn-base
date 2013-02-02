@@ -1,0 +1,487 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <link href="/favicon.ico" rel="shortcut icon" />
+  <meta name="description" content="If you are a doctor or healthcare provider, we invite you to join the HealthyPrice family. It’s simple and free to join. One of our aims is to bring organization and clarity to the marketplace and make it easier for doctors to get paid for healthcare needs." />
+  <meta name="keywords" content="Health,Doctor,Appointment,Register,Signup,Account" />
+  <title>HealthyPrice, Inc. - Provider Signup</title>
+<script type="text/javascript">
+<!--
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+
+function MM_findObj(n, d) { //v4.01
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+  if(!x && d.getElementById) x=d.getElementById(n); return x;
+}
+
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+
+function Redirect_To_SSL(){
+	document.location=document.location.href.replace("http://", "https://");
+}
+//-->
+</script>
+<%#= stylesheet_link_tag 'signup-blueprint-parts' %>
+<!--[if lt IE 8]><%#= stylesheet_link_tag 'blueprint/ie',:media => 'screen, projection' %><![endif]-->
+<%= yield :head %>
+
+<%= stylesheet_link_tag 'jquery.tooltip', :media => 'screen, projection' %>
+<%= stylesheet_link_tag 'provider_signup' %>
+<%= stylesheet_link_tag 'hl' %>
+<%= stylesheet_link_tag 'hp_styles' %>
+<%= stylesheet_link_tag 'popup' %>
+<%= stylesheet_link_tag 'colorbox' %>
+<!--link href="/stylesheets/hp_styles.css" rel="stylesheet" type="text/css" /-->
+
+<%= javascript_include_tag '/js_routes','jquery-1.3.2.min','jquery.equalheights','jquery.hint','jquery.dimensions.min','jquery.bgiframe.min','jquery.tooltip.min','jquery.glow','jquery.colorbox-min','application', :cache => true %>
+<%= javascript_include_tag 'fader' %>
+</head>
+
+<body>
+	<!--div id="middle_content" style="clear:both;"--><!-- border:1px solid black;-->
+
+		<!--div class="container"--><!-- style="border:1px solid black;"-->
+			<!--div id="header_header">
+				<div id="logo" ><a href="#"><img src="/images/provider_signup/healthyprice_logo.png" border="0" /></a></div>
+				<div id="header_small">&nbsp;</div>
+				<div id="home" class="header_menu_link_hover">
+					<img src="/images/provider_signup/blue_bullet.png" width="5" height="5" /> &nbsp;<a href="/">Home</a>
+				</div>
+				<div id="Procedures" class="header_menu_link_hover">
+					<img src="/images/provider_signup/blue_bullet.png" width="5" height="5" /> &nbsp;<a href="/search/services">Procedures &amp; Services</a>
+				</div>
+				<div id="faq" class="header_menu_link_hover">
+					<img src="/images/provider_signup/blue_bullet.png" width="5" height="5" /> &nbsp;<a href="/page/faq">FAQ</a>
+				</div>
+				<div id="aboutus" class="header_menu_link_hover">
+					<img src="/images/provider_signup/blue_bullet.png" width="5" height="5" /> &nbsp;<a href="/page/about_us">About Us</a>
+				</div>
+				<div id="contact" class="header_menu_link_hover">
+					<img src="/images/provider_signup/blue_bullet.png" width="5" height="5" /> &nbsp;<a href="/page/contact_us">Contact</a>
+				</div>
+			</div>
+		</div-->
+<!-- main container start -->
+<div class="main_container">
+    <!-- header start -->
+    <div class="header">
+    	<div class="logo_img"><a href="/"><img src="/images/healthy_price_logo.jpg" /></a></div>
+        <div class="top_navi">
+       	  <div class="top_navi_1">
+            <table width="200" border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td width="14" align="left" valign="middle"><img src="/images/arrow.jpg" width="9" height="11" style="padding-right:5px;" /></td>
+                    <td width="139" align="left" valign="middle"><span class="help"><a href="/orders/lookup">Look Up Your Order</a></span></td>
+                    <td width="12" align="left" valign="middle"><!--img src="/images/question_mark.jpg" width="10" height="14" style="padding-right:5px;" /--></td>
+                    <td width="35" align="left" valign="middle"><span class="help"><!--a href="#">Help</a--></span></td>
+                  </tr>
+            </table>
+          </div>
+            <div class="top_navi_2">
+                <span class="top_main"><a href="/">Home</a></span>
+                <span class="top_navi_seperater"> | </span>
+                <span class="top_main"><a href="/search/services">Services &amp; Procedures</a></span>
+                <span class="top_navi_seperater"> | </span>
+                <span class="top_main"><a href="/page/faq">FAQ</a></span>
+                <span class="top_navi_seperater"> | </span>
+                <span class="top_main"><a href="/page/about_us">About Us</a></span>
+                <span class="top_navi_seperater"> | </span>
+                <span class="top_main"><a href="/page/contact_us">Contact</a></span>
+            </div>
+        </div>
+    </div>
+    <!-- header end -->
+
+
+<style>
+#header{
+	padding-top:2px;
+}
+</style>
+		<div id="dashboard_provider" style="border:1px solid #FFFFFF;">
+			<div id="page_header_box">
+				<div id="header">Provider Signup </div>
+				<div id="help"><span class="help"><a href="javascript:ShowPopUp();">Help</a></span></div>
+			</div>
+
+<%		if params[:step] == 'step1'
+			@step1, @step2, @step3, @step4, @step5, @step6, @step7 = "current", "incomplete", "incomplete", "incomplete", "incomplete", "incomplete", "incomplete"
+		elsif params[:step] == 'step2'
+			@step1, @step2, @step3, @step4, @step5, @step6, @step7 = "completed", "current", "incomplete", "incomplete", "incomplete", "incomplete", "incomplete"
+		elsif params[:step] == 'step3'
+			@step1, @step2, @step3, @step4, @step5, @step6, @step7 = "completed", "completed", "current", "incomplete", "incomplete", "incomplete", "incomplete"
+		elsif params[:step] == 'step4'
+			@step1, @step2, @step3, @step4, @step5, @step6, @step7 = "completed", "completed", "completed", "current", "incomplete", "incomplete", "incomplete"
+		elsif params[:step] == 'step5'
+			@step1, @step2, @step3, @step4, @step5, @step6, @step7 = "completed", "completed", "completed", "completed", "current", "incomplete", "incomplete"
+		elsif params[:step] == 'step6'
+			@step1, @step2, @step3, @step4, @step5, @step6, @step7 = "completed", "completed", "completed", "completed", "completed", "current", "incomplete"
+		elsif params[:step] == 'step7'
+			@step1, @step2, @step3, @step4, @step5, @step6, @step7 = "completed", "completed", "completed", "completed", "completed", "completed", "current"
+		elsif params[:step] == 'login'
+			@step1, @step2, @step3, @step4, @step5, @step6, @step7 = "incomplete", "incomplete", "incomplete", "incomplete", "incomplete", "incomplete", "incomplete"
+		elsif params[:step] == 'pending'
+			@step1, @step2, @step3, @step4, @step5, @step6, @step7 = "completed", "completed", "completed", "completed", "completed", "completed", "completed"
+		else
+			@step1, @step2, @step3, @step4, @step5, @step6, @step7 = "incomplete", "incomplete", "incomplete", "incomplete", "incomplete", "incomplete", "incomplete"
+		end
+		if session[:doctor] != nil
+			if session[:doctor].signup_step == 1
+				@step1 = "completed"
+			elsif session[:doctor].signup_step == 2
+				@step1, @step2 = "completed", "completed"
+			elsif session[:doctor].signup_step == 3
+				@step1, @step2, @step3 = "completed", "completed", "completed"
+			elsif session[:doctor].signup_step == 4
+				@step1, @step2, @step3, @step4 = "completed", "completed", "completed", "completed"
+			elsif session[:doctor].signup_step == 5
+				@step1, @step2, @step3, @step4, @step5 = "completed", "completed", "completed", "completed", "completed"
+			elsif session[:doctor].signup_step == 6
+				@step1, @step2, @step3, @step4, @step5, @step6 = "completed", "completed", "completed", "completed", "completed", "completed"
+			elsif session[:doctor].signup_step == 7
+				@step1, @step2, @step3, @step4, @step5, @step6, @step7 = "completed", "completed", "completed", "completed", "completed", "completed", "completed"
+			end
+		end
+		if params[:step] == 'step1'
+			@step1 = "current"
+		elsif params[:step] == 'step2'
+			@step2 = "current"
+		elsif params[:step] == 'step3'
+			@step3 = "current"
+		elsif params[:step] == 'step4'
+			@step4 = "current"
+		elsif params[:step] == 'step5'
+			@step5 = "current"
+		elsif params[:step] == 'step6'
+			@step6 = "current"
+		elsif params[:step] == 'step7'
+			@step7 = "current"
+		end %>
+			<div style="clear:both;float:left;width:930px;">
+				<table class="signup_progress" border="0" cellspacing="0" cellpadding="0">
+					<tr class="bubbles">
+						<td class="<%= @step1 %>">
+							<div class="number">1.</div>
+							<div class="text">Create<br/>Account</div>
+						</td>
+						<td class="<%= @step2 %>"<%if @step2=="completed"%> style="cursor:pointer;" onclick="ValidateAndJumpToStep(2);"<%end%>>
+							<div class="number">2.</div>
+							<div class="text">Practice<br/>Areas</div>
+						</td>
+						<td class="<%= @step3 %>"<%if @step3=="completed"%> style="cursor:pointer;" onclick="ValidateAndJumpToStep(3);"<%end%>>
+							<div class="number">3.</div>
+							<div class="text">Procedures<br/>&amp; Service Areas</div>
+						</td>
+						<td class="<%= @step4 %>"<%if @step4=="completed"%> style="cursor:pointer;" onclick="ValidateAndJumpToStep(4);"<%end%>>
+							<div class="number">4.</div>
+							<div class="text">Your<br/>Information</div>
+						</td>
+						<td class="<%= @step5 %>"<%if @step5=="completed"%> style="cursor:pointer;" onclick="ValidateAndJumpToStep(5);"<%end%>>
+							<div class="number">5.</div>
+							<div class="text">How Do<br/>We Pay You?</div>
+						</td>
+						<td class="<%= @step6 %>"<%if @step6=="completed"%> style="cursor:pointer;" onclick="ValidateAndJumpToStep(6);"<%end%>>
+							<div class="number">6.</div>
+							<div class="text">Confirm<br/>Information</div>
+						</td>
+						<td class="<%= @step7 %>">
+							<div class="number">7.</div>
+							<div class="text">Terms<br/></div>
+						</td>
+					</tr>
+				</table>
+			</div><br style="clear:both;"/>
+			<%= yield %>
+		</div>
+		<!--div style="clear:both; margin-top:15px; vertical-align:text-top;">
+			<table><tr><td width="36px"><%=image_tag 'apple_icon.png' %></td><td>2010 &copy; HealthyPrice</td></tr></table>
+		</div-->
+
+
+
+    <!-- footer start -->
+    <div class="footer">
+    	<div class="footer_logo">
+        	<table width="170" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td width="53"><img src="/images/footer_logo.jpg" width="46" height="46" /></td>
+                <td width="117">&copy; 2010 HealthyPrice</td>
+              </tr>
+              <tr>
+                <td height="19">&nbsp;</td>
+                <td valign="bottom"><span class="inner_footer_link"><a href="/page/terms__conditions" id="footer_terms">Privacy Policy and<br/>Terms &amp; Conditions</a></span></td>
+              </tr>
+            </table>
+        </div>
+        <div class="footer_content">
+        	<table width="690" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td width="230" class="footer_heading">Customers:</td>
+                <td width="230" class="footer_heading">Doctors/Providers:</td>
+                <td width="230" class="footer_heading">Business Owners:</td>
+              </tr>
+              <tr>
+                <td height="5" colspan="3"></td>
+              </tr>
+              <tr>
+                <td><span class="footer_link"><a href="/search/services">Find a Procedure or Service</a></span></td>
+<% if current_user_session.nil? %>
+                <td><span class="footer_link"><a href="/user_session/new">Log In</a></span></td>
+<% else %>
+                <td><span class="footer_link"><%=link_to 'Log Out', '/user_session/destroy' %></span></td>
+<%end%>
+                <td><span class="footer_link"><a href="/page/business">Get Info</a></span></td>
+              </tr>
+              <tr>
+                <td><span class="footer_link"><a href="/search/doctors">Search by Doctor or Provider</a></span></td>
+                <td><span class="footer_link"><a href="/page/doctor">Get Info</a><!-- and <a href="/doctor_section/signup/step1">Join HealthyPrice</a--></span></td>
+                <td><!--span class="footer_link"><a href="/page/faq">FAQ</a></span-->
+                </td>
+              </tr>
+              <tr>
+                <td><span class="footer_link"><a href="/search/practice_areas">Search by Practice Area</a></span></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
+            </table>
+
+        </div>
+    </div>
+	<!-- footer end -->
+</div>
+	<!--/div-->
+		<div style="width:290px; margin:auto; margin-top:50px;">
+			<div style="float:left;">
+				<!--img src="/HP.PNG"-->
+				<!-- GeoTrust True Site [tm] Smart Icon tag. Do not edit. -->
+				<!--SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript" 
+				SRC="//smarticon.geotrust.com/si.js"></SCRIPT-->
+				<img src="/images/geo_trust.jpg" style="cursor:pointer;" onclick="window.open('https://smarticon.geotrust.com/smarticonprofile?Referer=https://www.healthyprice.com','GeoTrust','width=383,height=600,toolbar=0,resizable=0,location=0,status=0');" />
+				<!-- end GeoTrust Smart Icon tag -->
+			</div>
+			<div style="float:left; margin-left:75px;">
+				<a href="https://www.securitymetrics.com/site_certificate.adp?s=174%2e129%2e1%2e49&amp;i=498314" target="_blank" >
+					<img src="https://www.securitymetrics.com/images/sm_ccsafe_check2.gif" alt="SecurityMetrics for PCI Compliance, QSA, IDS, Penetration Testing, Forensics, and Vulnerability Assessment" border="0">
+				</a>
+			</div>
+			<br/>&nbsp;
+		</div>
+<div style="height:30px;"></div>
+
+
+
+<div id="ToolTip" style="position:absolute; display:none; background-color:lightyellow; border:1px solid #888888; padding:3px; max-width:280px; font-size:10pt;">
+	<!--img src="/images/info.gif" style="float:left; margin-right:4px;" /-->
+	<div id="ToolTipTxt" style="float:left; text-align:left;"></div>
+</div>
+
+<div id="PopUpMist" onclick="HidePopUp();" style="display:none; position:absolute; top:0px; left:0px; height:200%; background-image:url('/images/mist.png');"></div>
+
+<div id="PopUp" class="PopUp" style="display:none;">
+	<!--img src="/images/doctor_section/Popup-RoundCorner_TL.jpg" style="float:left; border:0px;" />
+	<img src="/images/doctor_section/Popup-RoundCorner_TR.jpg" style="float:right; border:0px;" /-->
+	<div class="NestedClose" onclick="HidePopUp();"> X </div>
+	<div id="PopUpMessage">
+		For your convenience, help icons <img src="/images/provider_signup/question_mark.gif" style="text-align:middle;" /> are placed throughout the site to provide simple instructions on any given area.<br/>
+		If you have any additional questions, please email us at Customer Service <a href="mailto:customersupport@healthyprice.com">customersupport@healthyprice.com</a> or call phone support <a href="callto:1-800-455-2797">1-800-455-2797</a> for assistance.
+	</div>
+	<div style="border-bottom:1px solid #FDFDF0;">
+		<!--img src="/images/doctor_section/Popup-RoundCorner_BL.jpg" style="float:left; border:0px;" />
+		<img src="/images/doctor_section/Popup-RoundCorner_BR.jpg" style="float:right; border:0px;" /-->
+	</div>
+</div>
+
+<script>
+var HideTimeout;
+var tempX = 0;
+var tempY = 0;
+var IE = document.all?true:false
+var PopUp, PopUpMist;
+
+if (!IE) document.captureEvents(Event.MOUSEMOVE);
+
+document.onmousemove = getMouseXY;
+//window.document.onload = BindToolTips;
+document.onclick =  HideToolTip;
+window.onresize = Window_Resize;
+
+$(function(){
+	$('#footer_terms').healthybox({width: '750px', href: Routing.page_path({slug: 'terms__conditions', format: 'js'})})
+})
+
+function Window_Resize(){
+	PopUp = document.getElementById("PopUp");
+	PopUpMist = document.getElementById("PopUpMist");
+	var Width = (window.innerWidth || document.body.offsetWidth);
+	var Height = 800;
+	//(window.innerHeight || document.body.offsetHeight);
+	var Left = (Width / 2) - (PopUp.offsetWidth / 2);
+	var Top = (Height / 2) - (PopUp.offsetHeight / 2);
+	//alert(Left + ":" + Top);
+	PopUp.style.left = Left + 'px';
+	PopUp.style.top = Top + 'px';
+	PopUpMist.style.width = Width + 'px';
+	//PopUpMist.style.height = (window.innerHeight || document.body.offsetHeight);
+}
+
+function ShowPopUp(){
+	PopUp = document.getElementById("PopUp");
+	PopUpMist = document.getElementById("PopUpMist");
+	//PopUpMist.style.display = '';
+	// ============================
+	fadeIn("PopUp");
+	PopUp.style.opacity = '0';
+	PopUp.style.filter = 'alpha(opacity = 0)';
+	PopUp.style.display = '';
+	// ============================
+	//fadeIn("PopUpMist");
+	//PopUpMist.style.opacity = '0';
+	//PopUpMist.style.filter = 'alpha(opacity = 0)';
+	setTimeout("PopUpMist.style.display='';", 250);
+	// ============================
+	Window_Resize();
+}
+
+function HidePopUp(){
+	PopUp = document.getElementById("PopUp");
+	PopUpMist = document.getElementById("PopUpMist");
+	// ============================
+	fadeOut("PopUp");
+	PopUp.style.opacity = '1';
+	PopUp.style.filter = 'alpha(opacity = 100)';
+	// ============================
+	//fadeOut("PopUpMist");
+	//PopUpMist.style.opacity = '1';
+	//PopUpMist.style.filter = 'alpha(opacity = 100)';
+	setTimeout("PopUpMist.style.display='none';", 250);
+	setTimeout("PopUp.style.display='none';", 250);
+	// ============================
+}
+
+function ValidateAndJumpToStep(Step){
+	var href = document.location.href;
+	var CurrentStep = href.substr(href.length - 1);
+	if(Step > CurrentStep){
+		//alert('Please use the buttons at the bottom of the page to move forward.');
+		var ErDiv = document.getElementById('error');
+		ErDiv.style.display = '';
+		ErDiv.innerHTML = '<ul><li>Please use the buttons at the bottom of the page to move forward.</li></ul>';
+	}else{
+		document.location = '/doctor_section/signup/step' + Step;
+	}
+	/*var Validated = true;
+	try{
+		Validated = Validate();
+	}catch(e){}
+	if(Validated){
+		document.location = '/doctor_section/signup/step' + Step;
+	}else{
+		//alert('You cannot jump to step '+Step+' because of a validation error.');
+		document.getElementsByName('continue')[0].click();
+	}*/
+}
+
+function BindToolTips(){
+	var elems = document.getElementsByTagName("img");
+	for(var i=0; i<elems.length; i++){
+		if(elems[i].alt != undefined){
+			elems[i].onmousemove = ToolTip;
+			elems[i].onmouseout = StartHideToolTip;
+			//elems[i].alt = "";
+		}
+		if(elems[i].title != undefined){
+			elems[i].onmousemove = ToolTip;
+			elems[i].onmouseout = StartHideToolTip;
+			//elems[i].title = "";
+		}
+	}
+	//document.onclick =  HideToolTip;
+}
+
+function ShowToolTip(tip, targ){
+	targ.onmouseout = StartHideToolTip;
+	var TTip = document.getElementById("ToolTip");
+	var TTxt = document.getElementById("ToolTipTxt");
+	TTip.style.display = 'inline';
+	TTxt.innerHTML = tip;
+	TTip.style.top = (tempY + 8) + 'px';
+	TTip.style.left = (tempX + 8) + 'px';
+	//TTxt.innerHTML = 'Top: '+tempY+'<br/>Position: '+TTip.style.position;
+	clearTimeout(HideTimeout);
+}
+
+function StartHideToolTip(){
+	clearTimeout(HideTimeout);
+	HideTimeout = setTimeout("HideToolTip();", 600)
+}
+
+function HideToolTip(){
+	var TTip = document.getElementById("ToolTip");
+	TTip.style.display = 'none';
+}
+
+function getMouseXY(e){
+  if (IE) { // grab the x-y pos.s if browser is IE
+    tempX = event.clientX + document.documentElement.scrollLeft;
+    tempY = event.clientY + document.documentElement.scrollTop;
+  } else {  // grab the x-y pos.s if browser is NS
+    tempX = e.pageX;
+    tempY = e.pageY;
+  }  
+  // catch possible negative values in NS4
+  if (tempX < 0){tempX = 0;}
+  if (tempY < 0){tempY = 0;}
+  //tempX = tempX + document.documentElement.scrollLeft;
+  //tempY = tempY + document.documentElement.scrollTop;
+  //alert(tempY + ":" + document.documentElement.scrollTop);
+  return true;
+}
+
+
+function ToolTip(){
+	var e = event;
+	var targ;
+	if (e.target) targ = e.target;
+	else if (e.srcElement) targ = e.srcElement;
+	if (targ.nodeType == 3) targ = targ.parentNode;
+	var text = targ.alt || targ.title
+	var TTip = document.getElementById("ToolTip");
+	var TTxt = document.getElementById("ToolTipTxt");
+	TTip.style.display = 'inline';
+	TTxt.innerHTML = text;
+	TTip.style.top = tempY + 8;
+	TTip.style.left = tempX + 8;
+	clearTimeout(HideTimeout);
+}
+</script>
+
+<!-- #######################################################################33 -->
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-11891327-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</body>
+</html>

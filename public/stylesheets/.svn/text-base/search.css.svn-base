@@ -1,0 +1,59 @@
+div#search {
+  border: 1px solid #BBBBBB;
+  margin: 0px;
+  margin-top: 10px;
+}
+
+div#search table,div#search tr {
+  padding: 0px;
+  margin: 0px;
+}
+
+div#search td {
+  padding: 4px 10px 4px 10px;
+  cursor: pointer;
+  font-size:10pt;
+}
+
+div#search tr.service_tr_alternative td {
+  background-color:#F0F8FF;
+  border-bottom:1px solid #D0D8FF;
+}
+div#search tr.service_tr td {
+  background-color:#FFFFFF;
+  border-bottom:1px solid #D0D8FF;
+}
+
+div#search tr:hover {
+  background-color: #D6E7F7;
+  color: black;
+}
+
+input#query {
+  width: 100%;
+  margin: 0px;
+  border: none;
+  border-bottom: 1px solid #BBBBBB;
+}
+
+input#query.hint {
+  color: #BBBBBB;
+}
+
+div#results {
+  height: 300px;
+  overflow: auto;
+}
+
+div#other_search {
+  border: 1px #bbbbbb solid;
+  padding: 4px;
+  background-color: white;
+  float: right;
+  margin-top: 5px;
+}
+
+div#other_search a {
+  padding-left: 5px;
+  padding-right: 5px;
+}

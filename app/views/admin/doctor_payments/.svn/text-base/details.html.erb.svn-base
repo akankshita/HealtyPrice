@@ -1,0 +1,642 @@
+<% @States = "<option value=''>Select State</option><option value='Alabama'>Alabama</option><option value='Alaska'>Alaska</option><option value='American Samoa'>American Samoa</option><option value='Arizona'>Arizona</option><option value='Arkansas'>Arkansas</option><option value='California'>California</option><option value='Colorado'>Colorado</option><option value='Connecticut'>Connecticut</option><option value='Delaware'>Delaware</option><option value='District of Columbia'>District of Columbia</option><option value='Florida'>Florida</option><option value='Georgia'>Georgia</option><option value='Guam'>Guam</option><option value='Hawaii'>Hawaii</option><option value='Idaho'>Idaho</option><option value='Illinois'>Illinois</option><option value='Indiana'>Indiana</option><option value='Iowa'>Iowa</option><option value='Kansas'>Kansas</option><option value='Kentucky'>Kentucky</option><option value='Louisiana'>Louisiana</option><option value='Maine'>Maine</option><option value='Maryland'>Maryland</option><option value='Massachusetts'>Massachusetts</option><option value='Michigan'>Michigan</option><option value='Minnesota'>Minnesota</option><option value='Mississippi'>Mississippi</option><option value='Missouri'>Missouri</option><option value='Montana'>Montana</option><option value='Nebraska'>Nebraska</option><option value='Nevada'>Nevada</option><option value='New Hampshire'>New Hampshire</option><option value='New Jersey'>New Jersey</option><option value='New Mexico'>New Mexico</option><option value='New York'>New York</option><option value='North Carolina'>North Carolina</option><option value='North Dakota'>North Dakota</option><option value='Northern Mariana Islands'>Northern Mariana Islands</option><option value='Ohio'>Ohio</option><option value='Oklahoma'>Oklahoma</option><option value='Oregon'>Oregon</option><option value='Pennsylvania'>Pennsylvania</option><option value='Puerto Rico'>Puerto Rico</option><option value='Rhode Island'>Rhode Island</option><option value='South Carolina'>South Carolina</option><option value='South Dakota'>South Dakota</option><option value='Tennessee'>Tennessee</option><option value='Texas'>Texas</option><option value='US Virgin Islands'>US Virgin Islands</option><option value='Utah'>Utah</option><option value='Vermont'>Vermont</option><option value='Virginia'>Virginia</option><option value='Washington'>Washington</option><option value='West Virginia'>West Virginia</option><option value='Wisconsin'>Wisconsin</option><option value='Wyoming'>Wyoming</option>"
+    def states(sel)
+      if sel == nil || sel == ""
+        return @States
+      else
+        return @States.gsub(sel + "'>", sel + "' selected>")
+      end
+    end
+
+    @select_title = '<select name="doctor_payment[title]" id="doctor_payment_title"><option value=""> - select - </option><option value="Dr.">Dr.</option><option value="Mr.">Mr.</option><option value="Ms.">Ms.</option><option value="Mrs.">Mrs.</option></select>'
+    def titles(sel)
+      if sel == nil || sel == ""
+        return @select_title
+      else
+        return @select_title.gsub(sel + '">', sel + '" selected>')
+      end
+    end
+    @path = Dir.pwd + '/public/images/uploads/' %>
+
+    <% if !@error.nil? %>
+        <div class="error"><%= @error %></div>
+    <% end %>
+
+    <% form_for :doctor_payment, @doctor_payment,:html=>{:name=>"myform" ,:multipart => true}, :url =>{:action => "details_update",:id => @orders.id} do |f| -%>
+      <input type="hidden" name="id" value="<%= @orders.id.inspect %>" /><br/>
+      <div  id="outerdiv">
+        <div id="dashboard_provider1">
+          <div style="float:left; text-align:left;margin-left:40px; display:inline;">
+            <style>table tr td{height:1px;}</style>
+
+            <h4><b>Account Status</b></h4>
+            <div class="form_section">
+              <table style="margin-bottom:0px;">
+                <tr>
+		<td width="145">Created Date:</td>
+		<td width="200"><%= @orders.c_date %><%#.strftime("%m/%d/%Y %I:%M%p") %></td>
+		<td width="530"> &nbsp; </td>
+                </tr><tr>
+		<td>Last Modified Date:</td>
+		<td><%= @orders.m_date %><%#.strftime("%m/%d/%Y %I:%M%p") %></td>
+		<td></td>
+                </tr>
+                <tr><td>&nbsp;</td></tr>
+                <tr><td colspan="3" width="650">
+                    <label><input type="checkbox" value="1" name="doctor_payment[onhold]" <% if @orders.onhold == 1 %>checked=true<% end %> /> Account on Hold</label>
+                    &nbsp;&nbsp;
+                    <% if @orders.onhold_note != nil && @orders.onhold_note != "" %>
+                      <b>(<%= @orders.onhold_note %> on <%= @orders.onhold_date.strftime("%m/%d/%Y") %>)</b>
+                    <%  end %>
+                  </td>
+                </tr><tr>
+                  <td colspan="3">
+                    <label><input type="checkbox" value="1" name="doctor_payment[enabled]" <% if @orders.enabled == 1 %>checked=true<% end %> /> Account Enabled</label>
+                    &nbsp;&nbsp;
+                    <% if @orders.enabled_note!=nil %>
+                      <b>(<%= @orders.enabled_note %>  on  <%= @orders.enabled_date.strftime("%m/%d/%Y") %>)</b>
+                    <%  end %>
+                  </td>
+                </tr>
+              </table>
+	      <br/>
+              <table>
+                <tr>
+                  <td> <b>Password </b>
+                  </td><td><%=  f.password_field(:password ) %> &nbsp;&nbsp;<span class="small_text" style="vertical-align:middle;"> If not changing password, leave both fields blank </span></td>
+                </tr>
+                <tr>
+                  <td> <b>Confirm Password </b>
+                  </td><td><%=  f.password_field(:password_confirmation ) %></td>
+                </tr>
+              </table>
+            </div>
+
+            <h4><b>Personal Information</b></h4>
+            <div class="form_section">
+              <table style="margin-bottom:0px;">
+                <tr>
+                  <td class="rightalign" width="127">Provider ID:</td>
+                  <td><%= @orders.id %></td>
+                </tr>
+                <tr>
+                  <td class="rightalign">Title:</td>
+                  <td>
+			<%= titles(@orders.title) %>
+			<span class="small_text" style="vertical-align:middle;"> Optional</span>
+                  </td>
+                </tr>
+                <tr class="leading">
+                  <td  class="rightalign" style="vertical-align:top;" valign="top">Name:</td>
+                  <td style="width:90px;">First<br/><%=  f.text_field(:first_name,:value=> @orders.first_name ) %></td>
+                  <td style="width:30px;">MI<br/><%=  f.text_field(:middle_name,:value=> @orders.middle_name, :size=>"3" ) %></td>
+                  <td colspan="3">Last<br/><%=  f.text_field(:last_name,:value=> @orders.last_name ,:size=>"15" ) %></td>
+                </tr>
+                <tr>
+                  <td class="rightalign" >Email:</td>
+                  <td colspan="2"><%=  f.text_field(:email,:value=> @orders.email ) %></td>
+                </tr>
+                <tr>
+                  <td class="rightalign" >Notification Email:</td>
+                  <td colspan="2"><%=  f.text_field(:notification_email,:value=> @orders.notification_email ) %></td>
+                </tr>
+                <tr>
+                  <td class="rightalign">Date of Birth:</td>
+                  <td colspan="4"><%=  f.text_field(:date_of_birth,:value=> @orders.date_of_birth ) %> <span class="small_text" style="vertical-align:middle;"> (mm/dd/yyyy)</span></td>
+                </tr>
+              </table>
+              <table style="margin-bottom:0;">
+                <tr>
+                  <td class="rightalign"  width="127">Phone:</td>
+                  <td style="width:170px;"><%=  f.text_field(:phone,:value=> @orders.phone ) %></td>
+                  <td colspan="2">
+                    <label style="vertical-align:baseline;">
+		<input type="checkbox" name="doctor_payment[use_public_phone_number_in_emails]" <% if @orders.use_public_phone_number_in_emails == 1 %>checked<% end %> style="vertical-align:baseline;" />Use In Customer Emails
+                    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td  class="rightalign">Public Phone:</td>
+                  <td style="width:170px;"><%=  f.text_field(:public_phone,:value=> @orders.public_phone ) %> </td>
+                </tr>
+                <tr>
+                  <td  class="rightalign">Fax:</td>
+                  <td colspan="2"><%=  f.text_field(:fax,:value=> @orders.fax) %> <span class="small_text" style="vertical-align:middle;">(123-123-1234 x1)</span></td>
+                </tr>
+                <tr>
+                  <td class="rightalign">Tax ID:</td>
+                  <td><%=  f.text_field(:tax_id,:value=> @orders.tax_id ) %></td>
+                  <td >Tax ID Type:</td>
+                  <td style="">
+                    <label>
+                      <input type="radio" name="doctor_payment[tax_id_type]" value="EIN" <% if @orders.tax_id_type == "EIN" %>checked<% end %> style="vertical-align:baseline;" /> <span  style="vertical-align:middle;"> EIN </span>
+                    </label>
+                    <span class="small_text" style="vertical-align:middle;">(12-1234567)</span>
+                    <label>
+                      <input type="radio" name="doctor_payment[tax_id_type]" value="SSN" <% if @orders.tax_id_type == "SSN" %>checked<% end %> style="vertical-align:baseline;" /> <span  style="vertical-align:middle;"> SSN </span>
+                    </label>
+                    <span class="small_text" style="vertical-align:middle;">(123-12-1234)</span>
+                  </td>
+                </tr>
+              </table>
+            </div>
+
+            <h4><b>Qualifications</b></h4>
+            <div class="form_section1">
+              <table style="margin-bottom:0px;" width="850">
+                <tr>
+                  <td width="136" align="right" class="rightalign">Medical&nbsp;School:&nbsp;</td>
+                  <td xwidth="100"><%=  f.text_field(:medical_school,:value=> @orders.medical_school,:size=>"15", :class=>"textfieldmargin" ) %></td>
+                  <td xwidth="128" align="right" class="rightalign">Type&nbsp;of&nbsp;Degree:&nbsp;</td>
+                  <td xwidth="128"><%=  f.text_field(:type_of_degree,:value=> @orders.type_of_degree, :size=>"15" ) %></td>
+                  <td xwidth="130" align="right" class="rightalign">Year&nbsp;Graduated:&nbsp;</td>
+                  <td xwidth="187"><%=  f.text_field(:graduated_year,:value=> @orders.graduated_year, :size=>"6" ) %> <span class="small_text" style="vertical-align:middle"> (yyyy)</span> </td>
+                </tr>
+                <tr>
+                  <td align="right" class="rightalign">License Currently &nbsp;<br/>Issued In:&nbsp;</td>
+                  <td><select name="doctor_payment[medical_license_state]"><%= states(@orders.medical_license_state) %></select></td>
+                  <td align="right" class="rightalign"> &nbsp; License #:&nbsp;</td>
+                  <td><%=  f.text_field(:license_no,:value=> @orders.license_no,:size=>"15" ) %></td>
+                  <td colspan="2" align="left" > &nbsp;<span  style="vertical-align:middle;">Type:&nbsp;</span><%=  f.text_field(:medical_license_type,:value=> @orders.medical_license_type,:size=>"12" ) %>  <span class="small_text" style="vertical-align:middle">Optional</span></td>
+                </tr>
+                <tr class="leading">
+                  <td align="right" class="rightalign" style="vertical-align:middle;">Languages&nbsp;Spoken:&nbsp;</td>
+                  <td colspan="5">
+                    <label style="vertical-align:baseline;"><input type="checkbox" value="1" name="doctor_payment[spanish]" <% if @orders.spanish ==1 %>checked=true<% end %> /> Spanish</label>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span  style="vertical-align:middle;">Other:&nbsp;</span><%=  f.text_field(:other_languages,:value=> @orders.other_languages,:size=>"25" ) %> <span class="small_text" style="vertical-align:middle;">(Seperate by a comma) </span></td>
+                </tr>
+                <tr class="subscript">
+                  <td class="centeralign"><span class="small_text">(Other than English)</span></td>
+                  <td><span class="small_text">Optional</span></td>
+                  <td><span class="small_text" style="vertical-align:middle;">Optional</span></td>
+                </tr>
+              </table>
+              <table style="margin-bottom:0px;" width="850">
+                <tr>
+                  <td width="136" align="right" class="rightalign">Residency&nbsp;Training:&nbsp;</td>
+                  <td><%=  f.text_field(:residency_training,:value=> @orders.residency_training,:size=>"20") %></td>
+                  <td align="right" class="rightalign" colspan="2">Fellowship&nbsp;Training:&nbsp;</td>
+                  <td><%=  f.text_field(:fellowship_training,:value=> @orders.fellowship_training, :size=>"20") %></td>
+                  <td align="left">
+		<label>
+			<input type="checkbox" name="doctor_payment[display_training_to_public]" <% if @orders.display_training_to_public == 1 %>checked<% end %> style="vertical-align:baseline;" />
+			Display to the Public
+		</label>
+                  </td>
+                </tr>
+              </table>
+            </div>
+
+            <h4><b>Your Practice</b></h4>
+            <div class="form_section">
+              <table style="margin-bottom:0px;">
+                <tr>
+                  <td width="127" class="rightalign">Name of Practice:</td>
+                  <td colspan="2"><%=  f.text_field(:company,:value=> @orders.company ) %></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr class="leading">
+                  <td></td>
+                  <td>Line 1</td>
+                  <td>Line 2 <span class="small_text">Optional</span></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td class="rightalign">Street Address:</td>
+                  <td><%=  f.text_field(:address,:value=> @orders.address ) %></td>
+                  <td><%=  f.text_field(:address2,:value=> @orders.address2 ) %></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td class="rightalign">City:</td>
+                  <td><%=  f.text_field(:city,:value=> @orders.city ) %></td>
+                  <td style="vertical-align:baseline;"> <span style="vertical-align:middle">State: </span><select name="doctor_payment[state]"><%= states(@orders.state) %></select></td>
+                  <td>  <span style="vertical-align:middle">ZIP: </span> <%=  f.text_field(:zipcode,:value=> @orders.zipcode,:size=>"12" ) %> <span class="small_text">(12345-6789)</span></td>
+                </tr>
+              </table>
+              <script>
+                function SetMailingAddressToSame(chkBox){
+                  if(!chkBox.checked)
+                    return;
+                  AssignValue('address', 'mailing_address');
+                  AssignValue('address2', 'mailing_address2');
+                  AssignValue('city', 'mailing_city');
+                  AssignValue('state', 'mailing_state');
+                  AssignValue('zipcode', 'mailing_zipcode');
+                }
+
+                function AssignValue(FromElem, ToElem){
+                  SetValueOf(ToElem, GetValueOf(FromElem));
+                }
+                function GetValueOf(ElemName){
+                  return document.myform.elements['doctor_payment['+ElemName+']'].value;
+                }
+                function SetValueOf(ElemName, eValue){
+                  document.myform.elements['doctor_payment['+ElemName+']'].value = eValue;
+                }
+
+                function CountRemainingCharsForDescription(TextArea){
+                  if (TextArea.value.length > 700){
+                    document.getElementById('CharRemaining').innerHTML = '0';
+                    TextArea.value = TextArea.value.substring(0, 700);
+                  }
+                  else{
+                    document.getElementById('CharRemaining').innerHTML = 700 - TextArea.value.length;
+                  }
+                }
+              </script>
+              <table>
+                <tr>
+                  <td width="127" class="rightalign">Mailing Address:</td>
+                  <td colspan="2"><label><input type="checkbox" name="CopyAddress" onclick="SetMailingAddressToSame(this);" />Same as above</label></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr class="leading">
+                  <td></td>
+                  <td>Line 1</td>
+                  <td>Line 2 <span class="small_text">Optional</span></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td class="rightalign">Street Address:</td>
+                  <td><%=  f.text_field(:mailing_address,:value=> @orders.mailing_address ) %></td>
+                  <td><%=  f.text_field(:mailing_address2,:value=> @orders.mailing_address2 ) %></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td class="rightalign">City:</td>
+                  <td><%=  f.text_field(:mailing_city,:value=> @orders.mailing_city ) %></td>
+                  <td> <span style="vertical-align:middle">State: </span> <select name="doctor_payment[mailing_state]"><%= states(@orders.mailing_state) %></select></td>
+                  <td> <span style="vertical-align:middle">ZIP: </span> <%=  f.text_field(:mailing_zipcode,:value=> @orders.mailing_zipcode ,:size=>"12" ) %> <span class="small_text">(12345-6789)</span></td>
+                </tr>
+                <tr>
+                  <td colspan="4"><hr/></td>
+                </tr>
+                <tr>
+                  <td class="possition1 rightalign" style="padding-top:5px; text-align:right;">Website URL:</td>
+                  <td colspan="3" class="possition"><%=  f.text_field(:website,:value=> @orders.website ) %> <span class="small_text" style="vertical-align:middle">(www.yourwebsite.com)</span><br>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="possition1" style="padding-top:5px;"></td>
+                  <td colspan="3" class="possition"> <span class="small_text" style="vertical-align:middle">Optional </span><br>
+                  </td>
+                </tr>
+              </table>
+              <hr/>
+              <table>
+                <tr>
+                  <td colspan="2">Description of Your Practice:</td>
+                </tr>
+                <tr>
+                  <td><span class="small_text">700 characters or less;<br />this will be visible to<br />patients; please check<br />spelling and grammar.<br />&nbsp;<br />Please note:<br /> HealthyPrice terms and conditions require that<br />you NOT include any of<br />your contact information<br />in this space.</span>
+                  </td>
+                  <td valign="top"><textarea class="Description" name="doctor_payment[description]" onkeyup="CountRemainingCharsForDescription(this);"><%= @orders.description %></textarea>
+                    <br/><span id="CharRemaining"><% if @orders.description == nil %>700<% else %><%= (700 - @orders.description.size).inspect %><% end %></span> characters remaining</td>
+                </tr>
+              </table>
+	<table>
+              <tr>
+                <td width="520" valign="top" style="vertical-align:top;">
+		<iframe src="/admin/upload?id=<%= @orders.id.inspect %>" scrolling="no" frameborder="0" allowtransparency="true" style="border: 0px solid #ffffff;" width="520" height="96"></iframe>
+                </td>
+	      <td valign="top" style="vertical-align:top; padding-top:16px;">
+		<div id="video_checkboxes"<% if !File::exists?(@path + @orders.id.inspect + '_video.flv') %> style="display:none;"<% end %>>
+			<label><input type="checkbox" name="show_video" <% if @orders.video_code == "Show" %>checked<% end %> />Display Video?</label> &nbsp;
+			<label><input type="checkbox" name="delete_video" />Delete Video on Save</label>
+		</div>
+	      </td>
+              </tr>
+	</table>
+
+              <table style="margin-bottom:0;">
+                <tr>
+                  <td colspan="2"><b>Photos </b></td>
+                  <td style="width:340px;">
+                                    Your Photo:
+                    <p align="left" style="text-align:left; width:300px;">
+                      <% @path = Dir.pwd + '/public/images/uploads/' %>
+                      <% if File::exists?(@path + @orders.id.inspect + '_headshot.jpg') %>
+                        <img src="/images/uploads/<%= @orders.id.inspect %>_headshot.jpg?<%= Time.now.strftime("%y%m%d%H%M%S") %>" height="100" />
+                        <!--div style="background-image:url('/images/uploads/<%= @orders.id.inspect %>_headshot.jpg'); background-repeat:no-repeat; height:150px;"></div-->
+                      <% else %>
+                        <input type="hidden" name="doctor[headshot_photo_missing]" value="missing" />
+                      <% end %>
+                      <br/>
+                      <!--div class="file_upload_wrapper" id="file_upload_wrapper1">
+                                                    <span id="browse1" class="browse" onclick="headshot_photo.click();"></span><span id="filename1" class="filename"> &nbsp; no file selected</span></div-->
+                      <input type="file" name="doctor[headshot_photo]" class="fileinput" size="30" onchange="document.getElementById('filename1').innerHTML=' &nbsp; '+StripFilename(this.value);" />
+    <%#= inline_errors "headshot_photo", @errors %>
+                    </p>
+                  </td><td style="width:340px;">
+                                    Your Practice:
+                    <p align="left" style="text-align:left; width:300px;">
+                      <% if File::exists?(@path + @orders.id.inspect + '_practice.jpg') %>
+                        <img src="/images/uploads/<%= @orders.id.inspect %>_practice.jpg?<%= Time.now.strftime("%y%m%d%H%M%S") %>" height="100" />
+                        <!--div style="background-image:url('/images/uploads/<%= @orders.id.inspect %>_practice.jpg'); background-repeat:no-repeat; height:150px;"></div-->
+                      <% else %>
+                        <input type="hidden" name="doctor[practice_photo_missing]" value="missing" />
+                      <% end %>
+                      <br/>
+                      <!--div class="file_upload_wrapper" id="file_upload_wrapper2">
+                                                    <span id="browse2" class="browse" onclick="practice_photo.click();"></span><span id="filename2" class="filename"> &nbsp; no file selected</span></div-->
+                      <input type="file" name="doctor[practice_photo]" class="fileinput" size="30" onchange="document.getElementById('filename2').innerHTML=' &nbsp; '+StripFilename(this.value);" />
+    <%#= inline_errors "practice_photo", @errors %>
+                    </p>
+                  </td>
+                </tr>
+              </table>
+              <script>
+                //document.onload=SwitchGraphicalFileInput;
+
+                function StripFilename(FullPath){
+                  if(FullPath.indexOf("/")>-1){
+                    var i = (FullPath+'').lastIndexOf("/");
+                    return FullPath.substring(i+1);
+                  }
+                  else if(FullPath.indexOf("\\")>-1){
+                    var i = (FullPath+'').lastIndexOf("\\");
+                    return FullPath.substring(i+1);
+                  }
+                  else{
+                    return FullPath;
+                  }
+                }
+
+                function SwitchGraphicalFileInput(){
+                  document.getElementById('file_upload_wrapper1').style.display='';
+                  document.getElementById('file_upload_wrapper1').style.visibility='visible';
+                  document.getElementById('file_upload_wrapper2').style.display='';
+                  document.getElementById('file_upload_wrapper2').style.visibility='visible';
+                  document.getElementByName('headshot_photo').style.display='none';
+                  document.getElementByName('headshot_photo').style.visibility='hidden';
+                  document.getElementByName('practice_photo').style.display='none';
+                  document.getElementByName('practice_photo').style.visibility='hidden';
+                }
+              </script>
+	<table>
+              <tr>
+                <td colspan="2"><span class="small_text">We recommend a headshot of yourself and a photo of the exterior of your practice;<br/>photos should be JPEG images; recommended image size is 150px width and 150px height.</span></td>
+              </tr>
+	</table>
+            </div>
+
+            <h4><b>Insurance Information</b></h4>
+            <div class="form_section">
+              <table>
+                <tr>
+                  <td valign="top"><div style="float:left;"><div style="margin-bottom:20px;">Insurance Carriers<br/>You're an Approved<br/>Member of:</div><div><span class="small_text">You must provide the<br/>names of at least two<br/>insurance companies.</span></div></div></td>
+                  <td valign="top" class="give_space_between_inputs">Name of Company<br/>
+                    <input type="text" name="doctor[insurance_carriers][a]" value="<%= @insurance_carriers[0] %>" size="25" /><br/>
+                    <input type="text" name="doctor[insurance_carriers][b]" value="<%= @insurance_carriers[1] %>" size="25" /><br/>
+                    <input type="text" name="doctor[insurance_carriers][c]" value="<%= @insurance_carriers[2] %>" size="25" /><br/>
+                    <input type="text" name="doctor[insurance_carriers][d]" value="<%= @insurance_carriers[3] %>" size="25" /><br/>
+                    <input type="text" name="doctor[insurance_carriers][e]" value="<%= @insurance_carriers[4] %>" size="25" />
+                  </td>
+                </tr>
+                <tr>
+                  <td> <br/> Malpractice Insurance:  </td>
+                  <td>Name of Carrier<br/>	<%=  f.text_field(:insurance_carrier,:value=> @orders.insurance_carrier, :size=>"25" ) %></td>
+                  <td>Policy #<br/>		<%=  f.text_field(:insurance_policy_no,:value=> @orders.insurance_policy_no, :size=>"25" ) %>	</td>
+                  <td>Expiration Date<br/>	<%=  f.text_field(:insurance_expiry_date,:value=> @orders.insurance_expiry_date, :size=>"20" ) %> <span class="small_text" style="vertical-align:middle;">(mm/dd/yyyy)</span>
+                  <%=  f.hidden_field(:signup_step,:value=> @orders.signup_step) %>                                                        </td>
+                </tr>
+              </table>
+            </div>
+
+            <h4><b>Other Information</b></h4>
+            <div class="form_section">
+              <table width="397" style="margin-bottom:0;" >
+                <tr>
+                  <td  valign="top" style="vertical-align:text-top; width:90px; *width:90px;"> <div style="float:left; *width:90px;"><div style="margin-bottom:20px;">Hospital Affiliations:</div><div><span class="small_text">You must enter at least one hospital affiliation.</span></div></div>			</td>
+                  <td width="410">
+                    <div style="width:400px;">
+                      <table cellspacing="0" cellpadding="0" border="0" width="400">
+                        <tr>
+                          <td width="180"  align="left" style="margin-bottom:3px;">Hospital</td>
+                          <td width="146" align="left" style="margin-bottom:3px;">Usage %</td>
+                          <td width="54" style="margin-bottom:3px;">&nbsp;</td>
+                        </tr><tr>
+                          <td align="left" style="clear:right;"><input type="text" name="doctor[hospital_affiliations][a][hospital]" value="<%= @hospital_affiliations[0][1] %>" style="width:180px;" /></td>
+                          <td align="left"><input type="text" name="doctor[hospital_affiliations][a][usage]" value="<%= @hospital_affiliations[0][0] %>" size="5" /></td>
+                          <td>&nbsp;</td>
+                        </tr><tr>
+                          <td align="left" style="clear:right;"><input type="text" name="doctor[hospital_affiliations][b][hospital]" value="<%= @hospital_affiliations[1][1] %>" style="width:180px;" /></td>
+                          <td align="left"><input type="text" name="doctor[hospital_affiliations][b][usage]" value="<%= @hospital_affiliations[1][0] %>" size="5" /></td>
+                          <td>&nbsp;</td>
+                        </tr><tr>
+                          <td align="left" style="clear:right;"><input type="text" name="doctor[hospital_affiliations][c][hospital]" value="<%= @hospital_affiliations[2][1] %>" style="width:180px;" /></td>
+                          <td align="left"><input type="text" name="doctor[hospital_affiliations][c][usage]" value="<%= @hospital_affiliations[2][0] %>" size="5" /></td>
+                          <td>&nbsp;</td>
+                        </tr>
+                      </table>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+              <hr style="margin:0;"/>
+              <table style="margin-bottom:0;">
+                <tr>
+                  <td width="160"><div style="float:left;"><div style="margin-bottom:20px; margin-top:20px;">Doctor References:</div><div><span class="small_text">Optional; however, we<br/>strongly encourage you to<br/>provide references as this<br/>will increase the likelihood<br/>of patients purchasing<br/>your services.</span> </div></div></td>
+                  <td valign="top" colspan="3" class="give_space_between_inputs" style="padding:0px;">
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td width="198" style="width:175px; margin-bottom:3px;">First</td>
+                        <td width="175" style="width:175px; margin-bottom:3px;">Last</td>
+                        <td width="324" style="margin-bottom:3px;">Phone</td>
+                      </tr><tr>
+                        <td height="23"><input type="text" name="doctor[doctor_references][a][first_name]" value="<%= @doctor_references[0][1] %>" size="25" /></td>
+                        <td><input type="text" name="doctor[doctor_references][a][last_name]" value="<%= @doctor_references[0][2] %>" size="25" /></td>
+                        <td ><input type="text" name="doctor[doctor_references][a][phone]" value="<%= @doctor_references[0][0] %>" style="width:145px" /><span class="small_text" style="vertical-align:middle; padding-left:4px;">(123-123-1234 x1)</span></td>
+                        <!--td>(123-123-1234 x1)</td-->
+                      </tr><tr>
+                        <td><input type="text" name="doctor[doctor_references][b][first_name]" value="<%= @doctor_references[1][1] %>" size="25" /></td>
+                        <td><input type="text" name="doctor[doctor_references][b][last_name]" value="<%= @doctor_references[1][2] %>" size="25" /></td>
+                        <td><input type="text" name="doctor[doctor_references][b][phone]" value="<%= @doctor_references[1][0] %>" style="width:145px" /></td>
+                      </tr><tr>
+                        <td><input type="text" name="doctor[doctor_references][c][first_name]" value="<%= @doctor_references[2][1] %>" size="25" /></td>
+                        <td><input type="text" name="doctor[doctor_references][c][last_name]" value="<%= @doctor_references[2][2] %>" size="25" /></td>
+                        <td><input type="text" name="doctor[doctor_references][c][phone]" value="<%= @doctor_references[2][0] %>" style="width:145px" /></td>
+                      </tr><tr>
+                        <td><input type="text" name="doctor[doctor_references][d][first_name]" value="<%= @doctor_references[3][1] %>" size="25" /></td>
+                        <td><input type="text" name="doctor[doctor_references][d][last_name]" value="<%= @doctor_references[3][2] %>" size="25" /></td>
+                        <td><input type="text" name="doctor[doctor_references][d][phone]" value="<%= @doctor_references[3][0] %>" style="width:145px" /></td>
+                      </tr><tr>
+                        <td><input type="text" name="doctor[doctor_references][e][first_name]" value="<%= @doctor_references[4][1] %>" size="25" /></td>
+                        <td><input type="text" name="doctor[doctor_references][e][last_name]" value="<%= @doctor_references[4][2] %>" size="25" /></td>
+                        <td><input type="text" name="doctor[doctor_references][e][phone]" value="<%= @doctor_references[4][0] %>" style="width:145px" /></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </div>
+
+            <h4><b>Payment Information</b></h4>
+            <div class="form_section">
+              <table style="margin-bottom:0px;">
+		<tr>
+			<td>
+				<input style="vertical-align:top;" type="radio" name="doctor_payment[payment_method]" value="PayPal" onclick="ShowHideSubFields(this);" <% if @orders.payment_method == "PayPal" %>checked<% end %> />
+				<span style="vertical-align:bottom;">  PayPal </span>
+			</td>
+		</tr>
+		<tr id="PayPalSub" <% if @orders.payment_method != "PayPal" %>style="display:none; " <% end %>>
+			<td>
+				&nbsp; &nbsp; &nbsp; &nbsp; PayPal Email:
+				<input type="text" name="doctor_payment[paypal_email]" value="<%= @orders.paypal_email %>" size="25" />
+				<br/><br/>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input  type="radio" name="doctor_payment[payment_method]" value="Checks" onclick="ShowHideSubFields(this);" <% if @orders.payment_method == "Checks" %>checked<% end %> />
+				<span style="vertical-align:middle;"> Regular checks mailed via postal mail </span>
+			</td>
+		</tr>
+              </table>
+
+              <br/>
+              <table style="margin-bottom:0px;">
+		<tr>
+			<td style="width:160px;" class="rightalign">Payee Name: </td>
+			<td class="give_space_between_inputs"><input type="text" name="doctor_payment[payee_name]" value="<%= @orders.payee_name %>" style="width:200px;" /></td>
+		</tr><tr>
+			<td class="rightalign">Payee Phone Number: </td>
+			<td><input type="text" name="doctor_payment[payee_phone_number]" value="<%= @orders.payee_phone_number %>" style="width:200px;" /> <span class="small_text" style="vertical-align:middle;">(123-123-1234 x1)</span></td>
+		</tr><tr>
+			<td class="rightalign">Payee Email Address: </td>
+			<td><input type="text" name="doctor_payment[payee_email_address]" value="<%= @orders.payee_email_address %>" style="width:200px;" /></td>
+		</tr><tr>
+			<td class="rightalign">Payee Address: </td>
+			<td><input type="text" name="doctor_payment[payee_address1]" value="<%= @orders.payee_address1 %>" style="width:200px;" /></td>
+		</tr><tr>
+			<td class="rightalign">Payee Address (line 2): </td>
+			<td><input type="text" name="doctor_payment[payee_address2]" value="<%= @orders.payee_address2 %>" style="width:200px;" /></td>
+		</tr><tr>
+			<td class="rightalign">City: </td>
+			<td><input type="text" name="doctor_payment[payee_city]" value="<%= @orders.payee_city %>" style="width:200px;" /></td>
+		</tr><tr>
+			<td class="rightalign">State: </td>
+			<td>
+				<select name="doctor_payment[payee_state]" style="width:204px;"><%= states(@orders.payee_state) %></select>
+			<!--input type="text" name="doctor[payee_state]" value="<%= @orders.payee_state %>" /-->
+			</td>
+		</tr><tr>
+			<td class="rightalign">Zip: </td>
+			<td><input type="text" name="doctor_payment[payee_zip]" value="<%= @orders.payee_zip %>" style="width:200px;" /></td>
+		</tr><tr>
+			<td class="rightalign">
+				<label><input type="radio" name="doctor_payment[payee_tax_id_type]" value="EIN" <% if @orders.payee_tax_id_type == "EIN" %>checked<% end %> />EIN</label> &nbsp; 
+				<label><input type="radio" name="doctor_payment[payee_tax_id_type]" value="SSN" <% if @orders.payee_tax_id_type == "SSN" %>checked<% end %> />SSN</label>
+			</td>
+			<td>
+				<input type="text" name="doctor_payment[payee_tax_id]" value="<%= @orders.payee_tax_id %>" style="width:200px;" />
+				<span class="small_text" style="vertical-align:middle;">EIN: (12-1234567) &nbsp; SSN: (123-12-1234)</span>
+			</td>
+		</tr>
+              </table>
+
+            </div>
+            <script>
+              function ShowHideSubFields(controller){
+                if(controller.value == 'PayPal'){
+                  document.getElementById('PayPalSub').style.display = '';
+                }
+                else{
+                  document.getElementById('PayPalSub').style.display = 'none';
+                }
+              }
+            </script>
+            <br>
+            <table cellpadding="0" cellspacing="0" class="table">
+              <tr>
+                <td class="tdbuttonback">
+                  <INPUT  TYPE="button"  onclick="history.go(-1);" style="background-image:url('/images/back.jpg');height:21px;width:69px;border:0px;" />
+                </td>
+                <td class="tdbutton">
+                  <input name="save" type="submit" value="" style="background-image:url('/images/save_changes.jpg');height:26px;width:119px;border:0px;" />
+              </tr>
+          </table>
+	<% end %>
+
+        <!--div style="position:relative;"-->
+	<style>
+		div#video_upload_form{
+			position:absolute;
+			/*border: 1px solid #000000;*/
+			margin-left:12px;
+			<% if request.user_agent.inspect["Firefox/3"] %>
+			top:1435px;
+			<% elsif request.user_agent.inspect["Firefox"] %>
+			top:1435px;
+			<% elsif request.user_agent.inspect["MSIE 6"] %>
+			top:1420px;
+			<% elsif request.user_agent.inspect["MSIE 7"] %>
+			top:1590px;
+			<% elsif request.user_agent.inspect["MSIE 8"] %>
+			top:1435px;
+			<% elsif request.user_agent.inspect["Chrome"] %>
+			top:1400px;
+			<% elsif request.user_agent.inspect["Safari"] %>
+			top:1320px;
+			<% else %>
+			top:1435px;
+			<% end %>
+		}
+		div#video_upload_form form table tr td{
+			font-family:Verdana,Arial,Helvetica,sans-serif;
+		}
+	</style>
+	<div id="video_upload_form">
+	      <!-- <div style="margin:auto; padding-left:10px;"> -->
+		<script>
+			function Validate_video(form){
+				var VideoFileName =form.elements["doctor[video_code]"].value;
+				if (VideoFileName == ""){
+					alert("Please select a Flash video file (.flv) for upload.");
+					return false;
+				}
+				else if (VideoFileName.substring(VideoFileName.length-4) != ".flv"){
+					if (confirm("The file you have selected does not have the .flv extention. Are you sure that you want to attempt uploading this file.\nHowever, if the video format is not FLV, it will be rejected.")){
+						return true;
+					}
+					else{
+						return false;
+					}
+				}
+				else{
+					document.getElementById('UploadStatus').innerHTML = "<img src='/images/loading.gif' /> Uploading...";
+					return true;
+				}
+			}
+		</script>
+		<!--
+		<%= form_tag({ :action => "upload" }, :target => "uploadResult", :multipart => true, :method => "post", :style => "padding:0px;", :onsubmit => "return Validate_video(this);") %>
+			<table>
+			      <tr>
+				<td colspan="2"><b>Video</b><br/>
+					<div id="UploadStatus"><% if File::exists?(@path + @orders.id.inspect + '_video.flv') %><a href="/images/uploads/<%= @orders.id.inspect %>_video.flv">https://www.healthyprice.com/images/uploads/<%= @orders.id.inspect %>_video.flv</a><% else %>No video file<% end %></div>
+				</td>
+			      </tr>
+			      <tr>
+				<td colspan="2">
+					Upload a new video: 
+					<input type="file" size="30" name="doctor[video_code]" />
+					<input type="submit" value=" Upload " />
+				</td>
+			      </tr>
+			</table>
+		</form>-->
+		<iframe name="uploadResult" style="display:none; visibility:false; height:0px; width:0px;"></iframe>
+	      <!--/div-->
+	</div>
+        <!--/div-->
+
+        </div>
+
+      </div>
+      <div style=" clear:both; height:20px;"> &nbsp;</div>
+
+<%#= request.user_agent %>

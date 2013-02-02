@@ -1,0 +1,39 @@
+img#payment_methods {
+  border: 1px black solid;
+  top: 13px;
+  position: relative;
+}
+
+span#payment_methods_label {
+  margin-left: 100px;
+}
+
+li {
+  list-style: none;
+}
+
+p {
+  margin: 0px;
+}
+
+div#doctor_details {
+  float: left;
+}
+
+div#dr_more_info img {
+  margin: 30px;
+  border: 1px black solid;
+}
+
+div.specialties {
+  clear: both;
+  margin-top: 30px;
+}
+
+ul {
+  margin-top: 30px;
+}
+
+#available_label {
+  padding-top: 30px;
+}

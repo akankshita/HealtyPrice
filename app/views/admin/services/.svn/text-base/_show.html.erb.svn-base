@@ -1,0 +1,10 @@
+<h4><%= active_scaffold_config.show.label -%></h4>
+
+<%= render :partial => 'show_columns', :locals => {:columns => active_scaffold_config.show.columns} -%>
+
+<p class="form-footer">
+  &nbsp;<a href="/admin/services/<%= params[:id] %>/edit?_method=get&specialty_id=<%= params[:specialty_id] %>">Edit</a> &nbsp;
+  <%#= link_to as_(:close), params_for(:controller => params[:parent_controller] ? params[:parent_controller] : params[:controller], :action => 'list'), :class => 'cancel' %>
+  <a href="javascript: history.go(-1)">Close</a>
+  <%= loading_indicator_tag(:action => :create, :id => params[:id]) %>
+</p>

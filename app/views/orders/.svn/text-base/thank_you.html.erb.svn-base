@@ -1,0 +1,126 @@
+<% content_for :head do %>
+	<%= stylesheet_link_tag 'order_show','order_thank_you' %>
+	<%= javascript_include_tag 'order_show','order_thank_you' %>
+	<title>Order Confirmation</title>
+<% end %>
+<!--h6>
+	HealthyPrice Procedure / Service Order - Thank You<br/>
+	Order# <%= session[:order_number] %><%#=@order.number%>
+</h6-->
+
+<style>
+	p{
+		font-size:10pt;
+		color:#666666;
+	}
+</style>
+
+<%	def decrypt(input)
+		input = input.to_i
+		input = (input - 3) / 2
+		input.inspect
+	end
+
+	def mask_number(number)
+	  #number.to_s.size < 5 ? number.to_s : (('X' * number.to_s[0..-5].length) + number.to_s[-4..-1])
+	  "XXXX-XXXX-XXXX-" + number[number.size-4, number.size-1]
+	end
+
+	def CardType(number)
+		if number =~ /^3/
+			"AMEX"
+		elsif number =~ /^4/
+			"Visa"
+		elsif number =~ /^5/
+			"MasterCard"
+		elsif number =~ /^6/
+			"Discover"
+		else
+			""
+		end
+	end
+%>
+
+<% blue_box "Order Confirmation" do %>
+<div xid="order_hold">
+	<div xid="order">
+		<div id="print" style="float:right; margin-top:0px; margin-right:25px;"><%=link_to 'Print this page',{},{:id => 'print_href'}%></div>
+		<div id="service" class="order_content">
+			<div>
+				<h3 style="margin-top:0px; padding-top:0px;">Order Number: <%= @order.id.inspect %></h3>
+				<h3>Billing Code: <%= @order.billing_code %></h3>
+				<h3>PIN: <%= @order.pin %></h3>
+			</div>
+			<p>Your order has been submitted, and the payment is being transferred to the provider.<br/>
+			Please contact the provider within two business days to schedule the service.</p>
+			<br/>
+			<p><b>You have received an email confirming your order and containing a Billing Code. You must bring this Billing Code to your doctor's/provider's appointment.
+			Please do not give your Billing Code to the doctor/provider before you visit for your appointment.</b></p>
+		</div>
+		<table><tr><td valign="top" style="width:250px;">
+			<div id="price" class="order_content">
+				<p><strong>Procedure / Service</strong></p>
+				<p><%= @order.doctor_service.specialty_service.service_name %></p>
+				<br/>
+				<p><strong>HealthyPrice:</strong> <%= number_to_currency(@order.customer_price,{:precision => 2}) %></p>
+			</div>
+			<!--br style="clear:both;"/-->
+			<div id="patient_name" class="order_content" style="clear:both;">
+				<p><strong>Patient Name</strong>: <%= @order.patient_name %></p>
+			</div>
+		</td><td valign="top">
+			<div id="doctor" class="order_content">
+				<% @doctor = @order.doctor_service.doctor %>
+				<div id="doctor_details">
+					<p><strong>Doctor / Provider</strong></p>
+					<p><%= @doctor.name%></p>
+					<p><%= @doctor.company%></p>
+					<p id="address"><%= @doctor.address%><% if @doctor.address2 != nil && @doctor.address2 != "" %>, <%= @doctor.address2 %><% end %>,</p>
+					<p id="citystate"><%= @doctor.city%>, <%= @doctor.state%> <%= @doctor.zipcode%></p>
+					<p><%=link_to 'Map', {}, {:class => 'dr_map'} %></p>
+					<p><%= @doctor.public_phone%></p>
+				</div>
+			</div>
+		</tr></td></table>
+		<div id="billing" class="order_content">
+			<table><tr><td valign="top" style="width:250px;">
+				<p><strong>Payment Information</strong></p>
+				<p>Name: <%= @order.name %></p><br/>
+				<p>Address:</p>
+				<p><%= @order.address %> , <%= @order.address2 %></p>
+				<p><%= @order.city %>, <%= @order.state %> <%= @order.zipcode %></p><br/>
+				<p>Phone: <%= @order.phone %></p><br/>
+				<p>Email: <%= @order.email %></p>
+			</td><td valign="top">
+				<p>Payment Method: <%= CardType(decrypt(@order.credit_card)) %></p>
+				<p>Credit Card: <%= mask_number(decrypt(@order.credit_card)) %></p>
+				<p>Expiration Date:<%= @order.expiration.strftime("%m/%y") %></p>
+				<!--p>Verification (CCV): <%#= decrypt(@order.ccv) %></p-->
+			</tr></td></table>
+			<div id="order_actions">
+				<!--p id="cancel"><%=link_to 'Cancel Order', cancel_orders_path() %></p-->
+				<!--p>You may cancel your order up to 24 hours prior to your scheduled appointment.</p>
+				<p id="policy"><a href="/page/order_cancellation_policy" id="cancellation_policy">View Cancellation Policy</a></p-->
+			</div>
+		</div>
+		<div style="clear:both; height:30px;"></div>
+	</div>
+</div>
+<% end %>
+
+<script type="text/javascript" charset="utf-8">
+$(function(){
+	$('a.dr_map').click(showDrMap);
+});
+
+$(function(){
+	$('#cancellation_policy').healthybox({width: '750px', href: Routing.page_path({slug: 'order_cancellation_policy', format: 'js'})})
+})
+
+showDrMap = function() {
+	var address = $("p#address").text() + ", " + $("p#citystate").text();;
+	var drname = $("h3.doctorName").text();
+	showMap(address,drname);
+	return false;
+}
+</script>

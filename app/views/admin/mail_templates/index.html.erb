@@ -1,0 +1,104 @@
+<div id="body" class="span-24">
+	<div id="admin__configurations-active-scaffold" class="active-scaffold active-scaffold-admin__configurations admin/configurations-view blue-theme">
+		<div class="active-scaffold-header">
+			<div class="actions">
+			</div>
+			<h2>Email Templates</h2>
+		</div>
+		<table cellpadding="0" cellspacing="0">
+			<tbody class="before-header" id="admin__configurations-search-container">
+			</tbody>
+		</table>
+		<div id="admin__configurations-content">
+			<table cellpadding="0" cellspacing="0">
+				<thead>
+					<tr>
+						<th id="admin__configurations-config_name-column" class=" ">
+							<!--a href="/admin/configurations/update_table?page=1&amp;sort=config_name&amp;sort_direction=ASC" onclick="addActiveScaffoldPageToHistory('/admin/configurations/update_table?page=1&amp;sort=config_name&amp;sort_direction=ASC', 'admin__configurations'); new Ajax.Updater('admin__configurations-content', '/admin/configurations/update_table?page=1&amp;sort=config_name&amp;sort_direction=ASC', {asynchronous:true, evalScripts:true, method:'get', onFailure:function(request){ActiveScaffold.report_500_response('admin__configurations-active-scaffold')}, onLoading:function(request){Element.addClassName('admin__configurations-config_name-column','loading');}, parameters:'authenticity_token=' + encodeURIComponent('ySVx2dIUTgJ4lkzTEfp7tmpYC8JvkKFjtKXE+T0Mb6k=')}); return false;" title="">Configuration Name</a-->
+							<a>File name</a>
+						</th>
+						<th id="admin__configurations-config_value-column" class=" ">
+							<!--a href="/admin/configurations/update_table?page=1&amp;sort=config_value&amp;sort_direction=ASC" onclick="addActiveScaffoldPageToHistory('/admin/configurations/update_table?page=1&amp;sort=config_value&amp;sort_direction=ASC', 'admin__configurations'); new Ajax.Updater('admin__configurations-content', '/admin/configurations/update_table?page=1&amp;sort=config_value&amp;sort_direction=ASC', {asynchronous:true, evalScripts:true, method:'get', onFailure:function(request){ActiveScaffold.report_500_response('admin__configurations-active-scaffold')}, onLoading:function(request){Element.addClassName('admin__configurations-config_value-column','loading');}, parameters:'authenticity_token=' + encodeURIComponent('ySVx2dIUTgJ4lkzTEfp7tmpYC8JvkKFjtKXE+T0Mb6k=')}); return false;" title="">Configuration Value</a-->
+							<a>Last modified</a>
+						</th>
+						<th id="admin__configurations-config_value-column" class=" ">
+							<a>Size (KB)</a>
+						</th>
+						<th class="actions">
+						</th>
+					</tr>
+				</thead>
+				<tbody class="messages">
+					<tr>
+						<td colspan="3" class="messages-container">
+							<div id="admin__configurations-messages">
+							</div>
+							<p class="filtered-message"  style="display:none;" >(Filtered)</p>
+							<p id="admin__configurations-empty-message" class="empty-message"  style="display:none;" >No Entries</p>
+						</td>
+					</tr>
+				</tbody>
+				<tbody class="records" id="admin__configurations-tbody">
+					<% @row_class = ""
+					@count = 0
+					#@pathx = Dir.pwd + '/app/views/emailer/'
+					@contains.each do |file|
+						if file.index(".html.erb") != nil
+						@file_stat = File.stat(@path + file) %>
+					<tr class="record <%= @row_class %>" id="admin__configurations-list-<%= file %>-row">
+						<td class="config_name-column " ><%= file %></td>
+						<td class="config_value-column " ><%= @file_stat.mtime %></td>
+						<td class="config_name-column " ><%= @file_stat.size %></td>
+						<td class="actions">
+							<table cellpadding="0" cellspacing="0">
+								<tr>
+									<td class="indicator-container"><img alt="loading indicator" class="loading-indicator" id="admin__configurations-record-0-loading-indicator" src="/images/active_scaffold/default/indicator.gif?1262145270" style="visibility:hidden;" /></td>
+									<td><a href="/admin/mail_templates/<%= file.gsub(".html.erb", "") %>" position="replace">Edit</a></td>
+									<!--td><a href="/admin/admins/confirm_delete/<%#= file %>">Delete</a></td-->
+									<!--td><a href="javascript:AjaxLoad('/admin/admins/<%#= file %>', 'inline-adapter-cell<%#= file %>');" position="replace">Show</a></td-->
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr class="inline-adapter" id="inline-adapter<%#= file %>" style="display:none;">
+						<td class="inline-adapter-cell" id="inline-adapter-cell<%#= file %>" colspan="99" style="background-image: none; background-color: transparent;"></td>
+					</tr>
+					<% 		if @row_class == ""
+								@row_class = "even-record"
+							else
+								@row_class = ""
+							end
+							@count += 1
+						end
+					end %>
+				</tbody>
+			</table>
+			<script>
+				//javascript:DeleteAdmin(<%#= admin.id %>);
+				function DeleteAdmin(id){
+					if (confirm("Are you sure that you want to delete this Admin permenently?")){
+						//
+					}
+				}
+				//javascript:load_nested_for_edit(<%#= admin.id %>);
+				function load_nested_for_edit(id){
+					AjaxLoad('/admin/admins/'+id, 'inline-adapter-cell'+id);
+					document.getElementById('inline-adapter'+id).style.display = '';
+				}
+				function close_tr(id){
+					document.getElementById('inline-adapter'+id).style.display = 'none';
+					document.getElementById('admin__configurations-list-'+id+'-row').style.display = '';
+				}
+				//open_tr('<%#= admin.id %>');
+				function open_tr(id){
+					document.getElementById('inline-adapter'+id).style.display = '';
+					document.getElementById('admin__configurations-list-'+id+'-row').style.display = 'none';
+				}
+			</script>
+			<div class="active-scaffold-footer">
+				<div class="active-scaffold-found"><span class="active-scaffold-records"><%= @count %></span> Found</div>
+				<div class="active-scaffold-pagination"></div>
+				<br clear="both" />
+			</div>
+		</div>
+	</div>

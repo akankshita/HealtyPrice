@@ -1,0 +1,15 @@
+class DoctorSpecialties < ActiveRecord::Migration
+  def self.up
+	create_table :doctor_specialties, :id => false do |t|
+		t.integer	:specialty_id
+		t.integer	:doctor_id
+		t.datetime	:created_at
+		t.datetime	:updated_at
+	end
+	#remove_column('doctor_specialties', 'id')
+  end
+
+  def self.down
+	drop_table :doctor_specialties
+  end
+end

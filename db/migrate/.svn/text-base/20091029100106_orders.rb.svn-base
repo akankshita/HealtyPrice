@@ -1,0 +1,36 @@
+class Orders < ActiveRecord::Migration
+  def self.up
+	create_table :orders do |t|
+		t.integer	:doctor_service_id
+		t.string	:first_name
+		t.string	:last_name
+		t.string	:patient_name
+		t.string	:address
+		t.string	:city
+		t.string	:state
+		t.string	:zipcode
+		t.string	:phone
+		t.string	:email
+		t.string	:credit_card
+		t.datetime	:expiration
+		t.integer	:ccv
+		t.string	:paymentmethod
+		t.integer	:customer_price
+		t.integer	:doctor_price
+		t.string	:number
+		t.string	:pin
+		t.string	:billing_code
+		t.integer	:submitted,			:default => 0
+		t.datetime	:created_at
+		t.datetime	:updated_at
+		t.string	:orderstatus,		:default => 'New'
+		t.integer	:cronstatus,		:default => 0
+		t.integer	:doctor_payments_id,	:default => -1
+		t.text	:order_notes
+	end
+  end
+
+  def self.down
+	drop_table :orders
+  end
+end

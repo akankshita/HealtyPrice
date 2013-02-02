@@ -1,0 +1,72 @@
+class Doctors < ActiveRecord::Migration
+  def self.up
+	create_table :doctors do |t|
+		t.string	:title
+		t.string	:first_name
+		t.string	:middle_name
+		t.string	:last_name
+		t.string	:date_of_birth
+		t.string	:address
+		t.string	:address2
+		t.string	:city
+		t.string	:state
+		t.string	:zipcode
+		t.string	:mailing_address
+		t.string	:mailing_address2
+		t.string	:mailing_city
+		t.string	:mailing_state
+		t.string	:mailing_zipcode
+		t.string	:public_phone
+		t.string	:phone
+		t.string	:fax
+		t.string	:email
+		t.string	:company
+		t.string	:tax_id
+		t.string	:tax_id_type,		:default => 'SSN'
+		t.string	:website
+		t.string	:medical_school
+		t.string	:type_of_degree
+		t.string	:graduated_year
+		t.string	:medical_license_state
+		t.string	:license_no
+		t.string	:medical_license_type
+		t.string	:spanish,			:default => 0
+		t.string	:other_languages
+		t.string	:insurance_carrier
+		t.string	:insurance_policy_no
+		t.string	:insurance_expiry_date
+		t.string	:description
+		t.string	:show_video,		:default => 0
+		t.string	:crypted_password
+		t.string	:password_salt
+		t.string	:persistence_token
+		t.string	:single_access_token
+		t.string	:perishable_token
+		t.integer	:login_count,		:default => 0
+		t.integer	:failed_login_count,	:default => 0
+		t.datetime	:last_request_at
+		t.datetime	:current_login_at
+		t.datetime	:last_login_at
+		t.string	:current_login_ip
+		t.string	:last_login_ip
+		t.float	:lat
+		t.float	:lng
+		t.datetime	:created_at
+		t.datetime	:updated_at
+		t.integer	:enabled,			:default => 0
+		t.string	:enabled_note
+		t.datetime	:enabled_date
+		t.integer	:onhold,			:default => 0
+		t.string	:onhold_note
+		t.datetime	:onhold_date
+		t.integer	:signup_step,		:default => 0
+		t.string	:payment_method
+		t.string	:paypal_email
+		t.string	:user_type,		:default => 'Doctor'
+	end
+  end
+
+  def self.down
+	drop_table :doctors
+  end
+end

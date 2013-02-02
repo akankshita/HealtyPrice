@@ -1,0 +1,27 @@
+<div id="footer">
+<%=image_tag 'phone_icon.png', :id => 'telephone'%>
+<p id="footer_contact_us">Contact Us: 800-455-2797<p>
+<div id="footer_contact_info">
+	<%=link_to 'Web Contact Form','#', {:id => 'web_contact_form'}%>
+	<%=link_to 'Live Online Chat','#', {:id => 'live_online_chat'}%>
+</div>
+<hr>
+<h3>Patients:</h3>
+<p><%=link_to 'Find a Procedure or Service',search_services_path(:specialty_id => 'all')%></p>
+<p><%=link_to 'Search by Doctor or Provider',search_doctors_path %></p>
+<p><%=link_to 'Search by Practice Area',search_specialties_path %></p>
+
+<h3>Doctors/Providers</h3>
+<p><%=link_to 'Get Info and Join',page_path(:slug => 'doctor') %></p>
+
+<% if current_user_session.nil? %>
+<p><%=link_to 'Log In', new_user_session_path %></p>
+<p><%=link_to 'Signup', '/doctor_section/signup/step1' %></p>
+<% else %>
+<p><%=link_to 'Log Out', '/user_session/destroy' %></p>
+<p><%=link_to 'Manage My Account', '/doctor_section' %></p>
+<%end%>
+
+
+<h3>Business Owners</h3>
+<p><%=link_to 'Get Info',page_path(:slug => 'business')%></p>

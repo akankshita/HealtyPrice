@@ -1,0 +1,36 @@
+<div id="doctor_details">
+	<p><h3 class="doctorName"><%=doctor.name%></h3></p>
+	<p><%=doctor.company%></p>
+	<p id="address"><%=doctor.address%></p>
+	<p id="citystate"><%=doctor.city%>, <%=doctor.state%> <%=doctor.zipcode%></p>
+	<p><%=link_to 'Map', {}, {:class => 'dr_map'} %></p>
+	<p><%=doctor.phone%></p>
+	<br/>
+	<p><%=link_to doctor.website, doctor.website%>
+</div>
+<br/>
+
+<div id="doctor_photos">
+	<%# if !doctor.headshot.nil? -%>
+		<%#=image_tag doctor.headshot.public_filename(:mini), :id => 'headshot' %>
+	<%# end -%>
+	<img src="/images/uploads/<%= doctor.id.inspect %>_headshot.jpg" class="headshot" height="150" />
+
+	<%# if !doctor.clinic_photo.nil? -%>
+		<%#=image_tag doctor.clinic_photo.public_filename(:mini), :id => 'clinic_photo' %>
+	<%# end -%>
+	<img src="/images/uploads/<%= doctor.id.inspect %>_practice.jpg" class="clinic_photo" height="150" />
+</div>
+
+<script type="text/javascript" charset="utf-8">
+$(function(){
+	$('a.dr_map').click(showDrMap);
+});
+
+showDrMap = function() {
+	var address = $("p#address").text() + ", " + $("p#citystate").text();;
+	var drname = $("h3.doctorName").text();
+	showMap(address,drname);
+	return false;
+}
+</script>

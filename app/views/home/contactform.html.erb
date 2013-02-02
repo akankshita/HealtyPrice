@@ -1,0 +1,151 @@
+<% content_for :head do %>
+	<title>HealthyPrice, Inc. - Contact Us.</title>
+<% end %>
+<style>
+	table.ContactUsForm tr td{
+		padding:3px;
+		color:#666666;
+	}
+	textarea.Inquiry{
+		font-family:Arial, Tahoma, Verdana, Helvetica, sans-serif;
+		font-size:10pt;
+		height:100px;
+		/*width:220px;*/
+		width:400px;
+	}
+</style>
+
+<div style="width:735px; margin:auto;">
+<% blue_box 'Contact Us' do -%>
+
+<%= form_tag({ :action => "contactsubmit" }, :method => "post", :name => "contact_form",:id=>"contact_form" ) %>
+	<table style="margin:auto;" class="ContactUsForm" border="0" cellpadding="1" cellspacing="1">
+		<tr>
+			<td align="right">First Name:</td>
+			<td><input type="text" name="first_name" style="width:400px;" id="first_name"/></td>
+			<td width="80"></td>
+		</tr>
+		<tr>
+			<td align="right">Last Name:</td>
+			<td><input type="text" name="last_name" style="width:400px;" /></td>
+		</tr>
+		<tr>
+			<td align="right">Email Address:</td>
+			<td><input type="text" name="email" style="width:400px;" /></td>
+		</tr>
+		<tr>
+			<td align="right">Phone Number (Optional):</td>
+			<td><input type="text" name="phone" style="width:400px;" /></td>
+		</tr>
+		<tr>
+			<td align="right">Subject Category:</td>
+			<td>
+				<select name="category" style="width:406px;">
+					<!--option value="vishva8kumara@gmail.com">Testing</option-->
+					<option value="select" selected="true">Select</option>
+					<option value="<%= get_config("General_Inquiry_Email") %>">General Inquiry</option>
+					<option value="<%= get_config("Customer_Patient_Order_Related_Inquiry_Email") %>">Customer/Patient/Order Related</option>
+					<option value="<%= get_config("Doctor_Provider_Related_Inquiry_Email") %>">You Are a Doctor / Provider Related</option>
+					<option value="<%= get_config("Employee_Benefit_Options_For_Businesses") %>">Employee Benefit Options for Businesses</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td align="right">Subject of Inquiry:</td>
+			<td><input type="text" name="subject" style="width:400px;" /></td>
+		</tr>
+		<tr>
+			<td align="right" valign="top">Inquiry:</td>
+			<td><textarea name="inquiry" class="Inquiry"></textarea></td>
+		</tr>
+		<tr>
+			<td align="right" valign="top">Catcha:</td>
+			<td ><%= recaptcha_tags %><%#= show_simple_captcha(:image_style => 'embosed_silver', :label => "(are you human ?)") %></td>
+			
+		</tr>
+		<tr>
+			<td></td>
+			<td align="left"><input type="button" value="" onclick="return ContactUsValidate();" style="margin-top:10px; margin-bottom:20px; background-image:url('/images/btn_submit.jpg'); height:22px; width:70px; border:0px;"></td>
+		</tr>
+	</table>
+	<script>
+	/*		  $.ajax({
+              type: 'POST',
+              url: '/contact/captcha/valid',
+              data:{ params: $("contact_form").serialize() },
+              success: function(msg) {
+				alert(msg);
+              }
+          });
+		var aka = "";*/
+	function validcaptcha(){
+						$.ajax({
+					  type: 'POST',
+					  url: '/contact/captcha/valid',
+					  data:{ recaptcha_challenge_field :$("input#recaptcha_challenge_field").val(),recaptcha_response_field :$("input#recaptcha_response_field").val() },
+					  success: function(msg) {
+						if (msg == 'verify'){
+							$("#contact_form").submit();
+						}else{
+							alert('Your captcha is incorrect. Please try again');
+							Recaptcha.reload();
+							return false;
+						}
+					  }
+				  });
+		
+	}
+		function ContactUsValidate(){
+			
+		
+				//	return false;
+		var Form = document.contact_form;
+
+			if(Form.first_name.value == ""){
+				alert('Please enter your first name');
+				Form.first_name.focus();
+				return false;
+			}
+			else if(Form.last_name.value == ""){
+				alert('Please enter your last name');
+				Form.last_name.focus();
+				return false;
+			}
+			else if(Form.email.value == ""){
+				alert('Please enter your email address');
+				Form.email.focus();
+				return false;
+			}
+			else if(!(Form.email.value.indexOf(".") > 2) || !(Form.email.value.indexOf("@") > 0)){
+				alert('Please enter a valid email address');
+				Form.email.focus();
+				return false;
+			}
+			else if(Form.category.value == "select"){
+				alert('Please select a subject category');
+				Form.category.focus();
+				return false;
+			}
+			else if(Form.subject.value == ""){
+				alert('Please enter the subject of your inquiry');
+				Form.subject.focus();
+				return false;
+			}
+			else if(Form.inquiry.value == ""){
+				alert('Please enter your message');
+				Form.inquiry.focus();
+				return false;
+			}
+			
+			else{
+				//validcaptcha();
+				$("#contact_form").submit();
+				return false;
+
+		}
+		}
+	</script>
+
+
+<% end -%>
+</div>

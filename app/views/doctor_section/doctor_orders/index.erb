@@ -1,0 +1,35 @@
+<h4></h4>
+<table class="orders">
+	<thead>
+		<tr>
+			<td>Name</td>
+			<td>Address</td>
+			<td>Contact</td>
+			<td>Status</td>
+		<tr>
+	</thead>
+	<tbody>
+	<% @RowClass="white"
+	@RowsFound="none"
+	@orders.each do |ss| -%>
+		<tr bgcolor="<%=@RowClass %>">
+		<!--onmouseover="HighlightOnMouseover(this);" onmouseout="RemoveHighlightOnMouseover(this)" onclick="CheckOnRowClick('chk<%=ss.id%>', this)"-->
+			<td><%=ss.first_name%> <%=ss.last_name%></td>
+			<td><%=ss.address%> <%=ss.city%> <%=ss.state%> <%=ss.zipcode%></td>
+			<td><%=ss.phone%> <%=ss.email%></td>
+			<td><%=ss.orderstatus%></td>
+		<tr>
+	<%	if @RowClass == "white"
+			@RowClass = "lightyellow"
+		else
+			@RowClass = "white"
+		end
+		@RowsFound="yes"
+	end
+	if @RowsFound == "none" -%>
+		<tr>
+			<td colspan="10" align="center"><i>No results found</i></td>
+		<tr>
+	<% end -%>
+	</tbody>
+</table>

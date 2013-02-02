@@ -1,0 +1,59 @@
+<style>
+	li{
+		margin-bottom:15px;
+		margin-right:-10px;
+		font-size:10pt;
+	}
+	#error{
+		width:298px;
+		margin-left:10px;
+	}
+	#error ul{
+		list-style-type:none;
+		margin-left:0px;
+		margin-top:15px;
+	}
+	#error ul li{
+		margin-left:15px;
+	}
+</style>
+
+        <div class="look_up_box">
+        	<div class="blue_box_big">
+              <div class="blue_box_big_top_bg">Look Up Your Order</div>
+                <div class="blue_box_big_content">
+                	<div class="blue_box_big_content_inside">
+			<% if !@error.nil? %>
+				<div id="error"><ul><li><%= @error %></li></ul></div><br style="clear:both;" />
+			<% end %>
+                        <%= form_tag({ :action => "perform_lookup" }, :method => "post") %>
+                        <table width="310" border="0" cellspacing="0" cellpadding="0">
+                          <tr>
+                            <td width="85" class="blue_box_big_form_text">Billing Code</td>
+                            <td width="225" align="right"><%#=text_field_tag 'billing_code' %><input type="text" name="billing_code" id="textfield" class="form_fields" /></td>
+                          </tr>
+                          <tr>
+                            <td height="20" colspan="2"></td>
+                          </tr>
+                          <tr>
+                            <td class="blue_box_big_form_text">PIN</td>
+                            <td align="right"><%#=text_field_tag 'pin', :class=>'form_fields' %><input type="text" name="pin" id="textfield4" class="form_fields" /></td>
+                          </tr>
+                          <tr>
+                            <td height="20" colspan="2"></td>
+                          </tr>
+                          <tr>
+                            <td>&nbsp;</td>
+                            <td align="right"><%#=submit_tag 'continue'%><input type="image" src="/images/btn_submit.jpg" width="70px" height="22px" name="button" id="button" value="Submit" /></td>
+                          </tr>
+                        </table>
+                        </form>
+                  </div>
+                  <div class="blue_box_big_content_text" style="margin-top:12px;">
+                  	If you don't have your Billing Code or PIN please contact customer service<br />
+               	  at <strong>1-800-888-5555</strong> or email us at <span class="blue_box_big_link">
+		  <a href="mailto:support@healthyprice.com">support@healthyprice.com</a>.</span>
+                  </div>
+              </div>
+            </div>
+        </div>

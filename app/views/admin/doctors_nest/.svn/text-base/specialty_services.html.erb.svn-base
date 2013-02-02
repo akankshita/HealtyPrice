@@ -1,0 +1,190 @@
+<style>
+input.form_elem, select.form_elem{
+	width:460px;
+}
+textarea.form_elem{
+	width:780px;
+}
+input.form_elem_2, select.form_elem_2{
+	width:250px;
+}
+		
+*/body:nth-of-type(1) .active-scaffold-header div.actions {
+	top: -100px;
+}*/
+	</style>
+
+<% #sdafasdf=sdfasd %>
+<tr class="inline-adapter" id="inline-adapter_<%= params[:id] %>">
+<td class="inline-adapter-cell" colspan="99" style="background-image: none; background-color: transparent;">
+<div class="nested-view specialties-view view">
+<!--a href="" class="inline-adapter-close" title="Close">Close</a>
+<br/-->
+<div id="e186e5cc2ede54e4b62a3623dae60799-active-scaffold" class="active-scaffold active-scaffold-e186e5cc2ede54e4b62a3623dae60799 admin/doctors-view blue-theme">
+	<div style="padding-top: 0pt;" class="active-scaffold-header">
+		<table><tr><td>
+			<h2 style="width:630px; height:23px; font-size:17px; padding-top:5px;"><%= @paname[0].specialty_name %> - Procedures and Services</h2>
+		</td><td>
+			<div class="actions_x">
+				<img alt="loading indicator" class="loading-indicator" id="e186e5cc2ede54e4b62a3623dae60799-table-loading-indicator" src="/images/active_scaffold/default/indicator.gif?1263786554" style="visibility: hidden;">
+				<a class="new action" onclick="javascript:document.getElementById('add_new_nested_<%= params[:id] %>').style.display='';">Add a Procedure or Service for this Practice Area</a>
+			</div>
+		</td></tr></table>
+	</div>
+
+	<table cellpadding="0" cellspacing="0">
+		<tbody class="before-header" id="e186e5cc2ede54e4b62a3623dae60799-search-container">
+		</tbody>
+	</table>
+
+	<table cellspacing="0" cellpadding="0" id="add_new_nested_<%= params[:id] %>" style="display:none;">
+		<tbody id="40b0a82b037cb6143cfa1e4a9d92bc11-search-container" class="before-header">
+			<tr class="inline-adapter">
+				<td class="inline-adapter-cell" colspan="99" style="background-image: none; background-color: rgb(255, 255, 187);">
+					<div class="new_existing-view admin/specialties-view view">
+						<a title="Close" class="inline-adapter-close" onclick="javascript:document.getElementById('add_new_nested_<%= params[:id] %>').style.display='none';">Close</a>
+						<%= form_tag({ :action => "add_service" }, :method => "post") %>
+							<h4>Add a Procedure or Service</h4>
+							<input type="hidden" name="specialty_id" value="<%= params[:id] %>" />
+							<table>
+								<tr>
+									<td width="160"><label for="service_name">Procedure or Service: </label></td>
+									<td><input type="text" name="service_name" class="form_elem" /></td>
+								</tr><tr>
+									<td><label for="service_name">Procedure or Service Description: </label></td>
+									<td><textarea name="service_description" class="form_elem"></textarea></td>
+								</tr><tr>
+									<td><label for="service_name">Provider Price: </label></td>
+									<td><input type="text" name="provider_price" class="form_elem_2" /></td>
+								</tr><tr>
+									<td><label for="service_name">Customer Price: </label></td>
+									<td><input type="text" name="customer_price" class="form_elem_2" /></td>
+								</tr><tr>
+									<td><label for="service_name">Sort Order: </label></td>
+									<td><input type="text" name="sort_order" class="form_elem_2" /></td>
+								</tr><tr>
+									<td><label for="service_name">Display Note: </label></td>
+									<td>
+										<% @notes = Note.find(:all) %>
+										<select name="display_note" class="form_elem_2">
+											<option value="-1"> - select - </option>
+										<% @notes.each do |note| %>
+											<option value="<%= note.id %>"><%= note.slug %></option>
+										<% end %>
+										</select>
+									</td>
+								</tr>
+							</table>
+							<p class="form-footer">
+								<input type="submit" value="Add" name="commit" class="submit"/>
+								<a class="cancel" onclick="javascript:document.getElementById('add_new_nested_<%= params[:id] %>').style.display='none';" xhref="/admin/specialties/list?eid=40b0a82b037cb6143cfa1e4a9d92bc11&amp;nested=true&amp;parent_column=specialties&amp;parent_model=Doctor">Cancel</a>
+								<img style="visibility: hidden;" src="/images/active_scaffold/default/indicator.gif?1266205735" id="40b0a82b037cb6143cfa1e4a9d92bc11-add_existing-loading-indicator" class="loading-indicator" alt="loading indicator"/>
+								<span id="add_new_return_<%= params[:id] %>" sstyle="display:none;"></span>
+							</p>
+						</form>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div id="e186e5cc2ede54e4b62a3623dae60799-content">
+		<table cellpadding="0" cellspacing="0">
+			<thead>
+				<tr>
+					<th id="e186e5cc2ede54e4b62a3623dae60799-name-column" class="">
+						<p>Procedure or Service</p>
+					</th><th id="e186e5cc2ede54e4b62a3623dae60799-state-column" class="">
+						<p>Customer</p>
+					</th><th id="e186e5cc2ede54e4b62a3623dae60799-city-column" class="">
+						<p>Provider</p>
+					</th><th id="e186e5cc2ede54e4b62a3623dae60799-company-column" class="">
+						<p>Sort</p>
+					</th><th class="actions"></th>
+				</tr>
+			</thead>
+			<tbody class="messages">
+				<tr>
+					<td colspan="11" class="messages-container">
+						<div id="e186e5cc2ede54e4b62a3623dae60799-messages">
+						</div>
+						<p class="filtered-message" style="display: none;">(Filtered)</p>
+						<p id="e186e5cc2ede54e4b62a3623dae60799-empty-message" class="empty-message" style="display: none;">No Entries</p>
+					</td>
+				</tr>
+			</tbody>
+			<tbody class="records" id="e186e5cc2ede54e4b62a3623dae60799-tbody">
+<% 	@even = ""
+	@count = 0 %>
+<% 	@specialty_services.each do |specialty_service| %>
+				<tr class="record <%= @even %>" id="e186e5cc2ede54e4b62a3623dae60799-list-10104-row">
+					<td class="service_name-column"><%= specialty_service.service_name %></td>
+					<td class="customer_price-column numeric"><%= number_to_currency(specialty_service.customer_price) %></td>
+					<td class="doctor_price-column numeric"><%= number_to_currency(specialty_service.doctor_price) %></td>
+					<td class="service_description-column numeric"><%= specialty_service.sort_order %></td>
+					<td class="actions">
+						<table cellpadding="0" cellspacing="0">
+							<tbody>
+								<tr>
+									<td class="indicator-container">
+										<img alt="loading indicator" class="loading-indicator" id="e186e5cc2ede54e4b62a3623dae60799-record-10104-loading-indicator" src="/images/active_scaffold/default/indicator.gif?1263786554" style="visibility: hidden;">
+									</td><td>
+										<a href="javascript:Load_and_display('/admin/doctors_for_service/<%= specialty_service.id %>/<%= params[:id] %>', 'inline-adapter_<%= params[:id] %>_<%= specialty_service.id %>');" class="nested action" id="e186e5cc2ede54e4b62a3623dae60799-nested-10104-link" position="after">Doctors</a>
+									</td><td>
+										<a href="/admin/services/<%= specialty_service.id %>/edit?_method=get&specialty_id=<%= params[:id] %>" class="edit action" id="e186e5cc2ede54e4b62a3623dae60799-edit-10104-link" position="replace">Edit</a>
+									</td><td>
+<%
+sql = "FROM doctor_services "
+sql += "WHERE specialty_service_id = " + specialty_service.id.inspect
+@doctors = Order.find_by_sql("SELECT COUNT(*) AS RowCount " + sql)
+if @doctors[0].RowCount.to_i > 0 %>
+										<a href="javascript:alert('<%= @doctors[0].RowCount %> providers have selected this service or procedure. It cannot be deleted.');">Delete</a>
+<% else %>
+										<a href="/admin/services/<%= specialty_service.id %>?_method=delete" class="destroy action" id="e186e5cc2ede54e4b62a3623dae60799-destroy-10104-link" onclick="return confirm('Are you sure?');">Delete</a>
+<% end %>
+									</td><td>
+										<a href="/admin/services/<%= specialty_service.id %>/?specialty_id=<%= params[:id] %>" class="show action" id="e186e5cc2ede54e4b62a3623dae60799-show-10104-link" position="replace">Show</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+				<tr class="inline-adapter">
+					<td class="inline-adapter-cell" style="display:none; padding:0px;" id="inline-adapter_<%= params[:id] %>_<%= specialty_service.id %>" colspan="99" style="background-image: none; background-color: transparent;">
+					</td>
+				</tr>
+	<% 	if @even == "even-record"
+			@even = ""
+		else
+			@even = "even-record"
+		end
+		@count += 1 %>
+<% 	end %>
+	<% if @count == 0 %>
+				<tr class="record <%= @even %>" id="e186e5cc2ede54e4b62a3623dae60799-list-10104-row">
+					<td colspan="99" align="center">
+						<i>No results found</i>
+					</td>
+				</tr>
+	<% end %>
+			</tbody>
+		</table>
+		<div style="padding-bottom: 0pt;" class="active-scaffold-footer">
+			<div class="active-scaffold-found">
+				<span class="active-scaffold-records"><%= @count %></span>
+				Found
+			</div>
+			<div class="active-scaffold-pagination">
+			</div>
+			<br clear="both">
+			<div style="background-color: rgb(255, 255, 255);">
+				<span style="border-style: solid; border-color: rgb(236, 255, 230); border-width: 0px 1px; overflow: hidden; background-color: rgb(218, 255, 205); display: block; height: 1px; font-size: 1px; margin-left: 0px; margin-right: 0px;"></span>
+				<span style="border-style: solid; border-color: rgb(236, 255, 230); border-width: 0px 1px; overflow: hidden; background-color: rgb(218, 255, 205); display: block; height: 1px; font-size: 1px; margin-left: 1px; margin-right: 1px;"></span>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</td>
+</tr>

@@ -1,0 +1,79 @@
+
+div#order_form_fields {
+  float: left;
+}
+
+div#errorExplanation {
+	border:1px solid #FF0000;
+	background-color:#FFCCCC;
+  padding: 10px;
+  /*color: red; */  margin-bottom: 20px; 
+  float: left;
+}
+
+div#errorExplanation ul {
+  padding: 0px;
+  margin: 0px;
+}
+
+input#submit {
+  clear: both;
+}
+
+li { 
+  list-style: none;
+}
+
+label {
+   width: 10em;
+   float: left;
+   margin-top: 5px;
+}
+
+p {
+  margin: 0px;
+}
+
+input[type="checkbox"] {
+  float: left;
+}
+
+p.checkbox {
+  padding-top: 5px;
+}
+
+div#order_info div {
+  padding: 30px;
+  padding-right: 150px;
+  padding-top: 0px;
+}
+
+div#procedure_hold {
+  float: left;
+}
+
+div#provider_hold {
+  float: left;
+}
+
+div#customer_details {
+  clear: left;
+}
+
+p#billing_information_label {
+  margin-bottom: 20px;
+}
+
+div.fieldWithErrors input {
+  border: 1px red solid;
+}
+
+input#order_ccv {
+  width: 50px;
+}
+
+/* ----------------------------------------------------------------- */
+
+
+/* ----------------------------------------------------------------- */
+

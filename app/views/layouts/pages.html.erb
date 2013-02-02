@@ -1,0 +1,89 @@
+<% inside_layout 'application' do -%>
+	<!--div class="span-17" id="left-col">
+	</div-->
+<style>
+.blue_box_big_content p{
+	font-size:10pt;
+	line-height:160%;
+	color:#666666;
+	text-align:justify;
+	/*width:600px;*/
+	width:95%;
+}
+.blue_box_big_content ul{
+	/*width:560px;*/
+	width:85%;
+	list-style-type:square;
+}
+.blue_box_big_content li{
+	font-size:10pt;
+	line-height:160%;
+	color:#666666;
+	text-align:justify;
+	/*width:550px;*/
+	margin-bottom:15px;
+}
+</style>
+	<div class="mid_container_left">
+		<%= yield %>
+	</div>
+
+		<div class="mid_container_right">
+		    <table width="250" border="0" cellspacing="0" cellpadding="0">
+		      <tr>
+			<td height="25" valign="top"><img src="/images/inner_right_customers.jpg" width="111" height="18" /></td>
+		      </tr><tr>
+			<td><span class="mid_container_right_link"><a href="/search/services">Find a Procedure or Service</a></span></td>
+		      </tr><tr>
+			<td><span class="mid_container_right_link"><a href="/search/doctors">Search by Doctor or Provider</a></span></td>
+		      </tr><tr>
+			<td><span class="mid_container_right_link"><a href="/search/practice_areas">Search by Practice Area</a></span></td>
+		      </tr><tr>
+			<td align="center"><img src="/images/mid_container_right_seperater.jpg" width="218" height="1" class="mid_container_right_seperater" /></td>
+		      </tr><tr>
+			<td height="25" valign="top"><img src="/images/inner_right_doctors.jpg" width="184" height="18" /></td>
+		      </tr><tr>
+			<td><span class="mid_container_right_link"><a href="/page/doctor">Get Info</a></span></td>
+		      </tr>
+<% if current_user_session.nil? %>
+		      <tr>
+			<td><span class="mid_container_right_link"><a href="/doctor_section/signup/step1">Join HealthyPrice</a></span></td>
+		      </tr><tr>
+			<td><span class="mid_container_right_link"><a href="/user_session/new">Log In</a></span></td>
+		      </tr>
+<% elsif current_user.user_type == "Admin" %>
+		      <tr>
+			<td><span class="mid_container_right_link"><%=link_to 'Log Out', '/user_session/destroy' %></span></td>
+		      </tr><tr>
+			<td><span class="mid_container_right_link"><%=link_to 'Admin Console', '/admin' %></span></td>
+		      </tr>
+<% else %>
+		      <tr>
+			<td><span class="mid_container_right_link"><%=link_to 'Log Out', '/user_session/destroy' %></span></td>
+		      </tr><tr>
+			<td><span class="mid_container_right_link"><%=link_to 'Manage My Account', '/doctor_section' %></span></td>
+		      </tr>
+<%end%>
+		      <tr>
+			<td align="center"><img src="/images/mid_container_right_seperater.jpg" width="218" height="1" class="mid_container_right_seperater" /></td>
+		      </tr><tr>
+			<td height="25" valign="top"><img src="/images/inner_right_business.jpg" width="172" height="18" /></td>
+		      </tr><tr>
+			<td><span class="mid_container_right_link"><a href="/page/business">Get Info</a></span></td>
+		      </tr><!--tr>
+			<td><span class="mid_container_right_link"><a href="/page/faq">FAQ</a></span></td>
+		      </tr-->
+		    </table>
+		</div>
+
+	<!--div style="float:left; width:250px; margin-left:20px;">
+		<% blue_box 'Right Column' do -%>
+		This is the right column
+		<% end %>
+	</div-->
+
+	<%#=render :partial => '/common/right_col'%>
+<% end -%>
+
+
+

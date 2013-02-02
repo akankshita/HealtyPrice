@@ -1,0 +1,12 @@
+<% @file = File.open(Dir.pwd + "/public/mail_templates/web_contact_form.html.erb") %>
+<% @template = @file.read %>
+
+<%	@template = @template.gsub("{name}", @name) %>
+<%	@template = @template.gsub("{from_email}", @from_email) %>
+<%	@template = @template.gsub("{from_email}", @from_email) %>
+<%	@template = @template.gsub("{phone}", @phone) %>
+<%	@template = @template.gsub("{subjectcat}", @subjectcat) %>
+<%	@template = @template.gsub("{subjectx}", @subjectx) %>
+<%	@template = @template.gsub("{inquiry}", @inquiry) %>
+
+<%= @template %>

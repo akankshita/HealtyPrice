@@ -1,0 +1,110 @@
+
+div.procedures_box{
+	border:1px solid #000000;
+	margin-top:12px;
+	margin-bottom:16px;
+	width:650px;
+	float:left;
+}
+
+h3{
+	font-size:16px;
+	margin-top:16px;
+	margin-bottom:8px;
+}
+
+h4{
+	font-size:14px;
+	margin-top:16px;
+	margin-bottom:8px;
+}
+
+h5{
+	border-bottom:1px solid #000000;
+	background-color:#CCCCCC;
+	font-size:17px;
+	font-weight:bold;
+	margin-top:0px;
+	margin-bottom:0px;
+	padding:4px;
+}
+
+ul.list_down{
+	margin-top:3px;
+}
+
+/* ============================================================ */
+
+div.form_section{
+	background-color:#FFEFE7;
+	font-size:11pt;
+	padding:4px;
+	width:100%;
+}
+
+div.form_section table tr td{
+	padding:4px;
+	/*border:1px solid #888888;*/
+}
+
+div.form_section table tr.leading td{
+	padding-top:3px;
+	padding-bottom:0px;
+}
+
+div.form_section table tr.subscript td{
+	padding-top:0px;
+	padding-bottom:3px;
+}
+
+.small_text{
+	font-size:9pt;
+}
+
+textarea.Description{
+	font-family:arial;
+	height:130px;
+	width:500px;
+}
+
+td.give_space_between_inputs input{
+	margin-top:3px;
+	margin-bottom:3px;
+}
+
+/* ============================================================ */
+
+.lbl1{
+	width:150px;
+}
+
+.lbl2{
+	width:300px;
+}
+
+.inline{
+	display:inline;
+}
+
+/* ============================================================ */
+
+#error{
+	float:left;
+	/*padding:6px;*/
+	width:540px;
+	border:1px solid #FF0000;
+	background-color:#FFCCCC;
+	margin-top:8px;
+	margin-bottom:12px;
+}
+
+#error ul{
+	margin-top:12px;
+}
+
+input[type="submit"]{
+	width:180px;
+	margin-top:4px;
+	margin-bottom:4px;
+}
+

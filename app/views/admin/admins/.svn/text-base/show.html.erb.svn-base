@@ -1,0 +1,26 @@
+<h4><b>Edit Administrator: <%= @admin.name %></b></h4>
+<div class="form_section" xstyle="width:300px">
+	<div style="inline-adapter-cell" xclass="show-view admin/configurations-view view">
+		<%	if session[:error] != nil %>
+			<div style="color:red;"><%= session[:error] %></div>
+		<%		session[:error] = nil
+			end %>
+		<%= form_tag({ :action => "update" }, :method => "post") %>
+		<% #:onsubmit => "AjaxSubmit(this, 7, '/admin/admins/update', 'inline-adapter-cell" + @admin.id.inspect + "');" %>
+		<!--form onsubmit="AjaxSubmit(this, 7, '/admin/admins/update', 'inline-adapter-cell<%= @admin.id %>');"-->
+		<input type="hidden" name="id" value="<%= @admin.id %>" />
+		<table>
+			<tr><td width="120">First Name</td><td><input type="text" name="first_name" value="<%= @admin.first_name %>" /></td></tr>
+			<tr><td>Last Name</td><td><input type="text" name="last_name" value="<%= @admin.last_name %>" /></td></tr>
+			<tr><td>Email</td><td><input type="text" name="email" value="<%= @admin.email %>" /></td></tr>
+			<tr><td>New Password</td><td><input type="password" name="password" /></td></tr>
+			<tr><td>Confirm Password</td><td><input type="password" name="password_conf" /></td></tr>
+		</table>
+		<p class="form-footer">
+		<input type="submit" value=" Save " />
+		<a href="/admin/admins">Back</a>
+		<img id="admin__configurations-create-0-loading-indicator" class="loading-indicator" style="visibility: hidden;" src="/images/active_scaffold/default/indicator.gif?1262145270" alt="loading indicator"/>
+		</p>
+		</form>
+	</div>
+</div>

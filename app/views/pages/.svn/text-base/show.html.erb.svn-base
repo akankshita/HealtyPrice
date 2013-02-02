@@ -1,0 +1,10 @@
+<% content_for :head do %>
+	<%# if !@page.nav_item.nil? -%>
+		<%#=javascript_tag 'currentSection = "' + @page.nav_item + '";' %>
+	<%# end -%>
+	<title>HealthyPrice, Inc. - <%= @page.title %></title>
+<% end %>
+
+<% blue_box @page.title do -%>
+	<%= @page.body %>
+<% end -%>

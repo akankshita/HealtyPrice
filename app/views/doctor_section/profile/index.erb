@@ -1,0 +1,382 @@
+<%= stylesheet_link_tag 'doctor_profile' %>
+<style>.small_text{font-size:9pt;}</style>
+			<div id="page_header_box">
+				<div id="headerX">Manage Profile </div>
+				<div id="help"><span class="help"><a href="javascript:ShowPopUp();">Help</a></span></div>
+			</div>
+
+			<div id="details_0">
+Why can't I change some of this information?
+<img src="/images/provider_signup/question_mark.gif" style="margin-top:-1px;" onmousemove="ShowToolTip('Some of the your profile information has to be confirmed by HealthyPrice before we release it to the public. If you need to edit any of your permanent information please contact our Customer Service for assistance.', this);" />
+			</div>
+
+			<div id="details_2" style="margin-top:41px; padding-top:0px;">
+
+<% if @error != nil && @error != "" -%>
+	<% if @show_error_as_javascript == true -%>
+<script>alert('<%= @error %>');</script>
+	<% else -%>
+<br/>
+<div id="error"><!--img src="/images/provider_signup/error.gif" style="float:left;" /--><%= @error %></div>
+	<% end -%>
+<% end -%>
+
+<% @States = "<option value=''>Select State</option><option value='Alabama'>Alabama</option><option value='Alaska'>Alaska</option><option value='American Samoa'>American Samoa</option><option value='Arizona'>Arizona</option><option value='Arkansas'>Arkansas</option><option value='California'>California</option><option value='Colorado'>Colorado</option><option value='Connecticut'>Connecticut</option><option value='Delaware'>Delaware</option><option value='District of Columbia'>District of Columbia</option><option value='Florida'>Florida</option><option value='Georgia'>Georgia</option><option value='Guam'>Guam</option><option value='Hawaii'>Hawaii</option><option value='Idaho'>Idaho</option><option value='Illinois'>Illinois</option><option value='Indiana'>Indiana</option><option value='Iowa'>Iowa</option><option value='Kansas'>Kansas</option><option value='Kentucky'>Kentucky</option><option value='Louisiana'>Louisiana</option><option value='Maine'>Maine</option><option value='Maryland'>Maryland</option><option value='Massachusetts'>Massachusetts</option><option value='Michigan'>Michigan</option><option value='Minnesota'>Minnesota</option><option value='Mississippi'>Mississippi</option><option value='Missouri'>Missouri</option><option value='Montana'>Montana</option><option value='Nebraska'>Nebraska</option><option value='Nevada'>Nevada</option><option value='New Hampshire'>New Hampshire</option><option value='New Jersey'>New Jersey</option><option value='New Mexico'>New Mexico</option><option value='New York'>New York</option><option value='North Carolina'>North Carolina</option><option value='North Dakota'>North Dakota</option><option value='Northern Mariana Islands'>Northern Mariana Islands</option><option value='Ohio'>Ohio</option><option value='Oklahoma'>Oklahoma</option><option value='Oregon'>Oregon</option><option value='Pennsylvania'>Pennsylvania</option><option value='Puerto Rico'>Puerto Rico</option><option value='Rhode Island'>Rhode Island</option><option value='South Carolina'>South Carolina</option><option value='South Dakota'>South Dakota</option><option value='Tennessee'>Tennessee</option><option value='Texas'>Texas</option><option value='US Virgin Islands'>US Virgin Islands</option><option value='Utah'>Utah</option><option value='Vermont'>Vermont</option><option value='Virginia'>Virginia</option><option value='Washington'>Washington</option><option value='West Virginia'>West Virginia</option><option value='Wisconsin'>Wisconsin</option><option value='Wyoming'>Wyoming</option>"
+def states(sel)
+	if sel == nil
+		return @States
+	else
+		return @States.gsub(sel + "'>", sel + "' selected>")
+	end
+end %>
+
+<%= form_tag({ :action => "index" }, :multipart => true, :method => "post", :name => 'form1') %>
+
+<div style="float:left;">
+<div class="manage_profile_subhead"><span class="subheat_text_style">Personal Information</span></div>
+<div class="form_section">
+	<table>
+		<tr>
+			<td class="right_align_120">Provider ID:</td>
+			<td><%= session[:doctor].id %></td>
+		</tr><tr>
+			<td class="right_align_120">Name:</td>
+			<td><%= session[:doctor].title %> <%= session[:doctor].first_name %> <%= session[:doctor].middle_name %> <%= session[:doctor].last_name %></td>
+		</tr><tr>
+			<td class="right_align_120">Email:</td>
+			<td><%= session[:doctor].email %></td>
+		</tr><tr>
+			<td class="right_align_120">Notification Email:</td>
+			<td><input type="text" name="doctor[notification_email]" value="<%= session[:doctor].notification_email %>" size="30" /></td>
+		</tr><tr>
+			<td class="right_align_120">Phone:</td>
+			<td><%= session[:doctor].phone %></td>
+		</tr><tr>
+			<td class="right_align_120">Fax:</td>
+			<td><input type="text" name="doctor[fax]" value="<%= session[:doctor].fax %>" /> (123-123-1234 x1)</td>
+		</tr>
+	</table>
+<hr/>
+	<table>
+		<tr>
+			<td class="right_align_120">Password:</td>
+			<td><input type="password" name="doctor[passwordxxx]" /> <span class="small_text">If not changing password, leave both fields blank.</span></td>
+		</tr>
+		<tr>
+			<td class="right_align_120">Verify Password:</td>
+			<td><input type="password" name="doctor[verify_passwordxxx]" /></td>
+		</tr>
+	</table>
+	<script>
+		window.onload = EmptyPasswordField;
+		function EmptyPasswordField(){
+			var Form = document.form1;
+			Form.elements['doctor[passwordxxx]'].value = "";
+			Form.elements['doctor[verify_passwordxxx]'].value = "";
+		}
+	</script>
+</div>
+
+<br/><br/>
+<div class="manage_profile_subhead"><span class="subheat_text_style">Qualifications</span></div>
+<div class="form_section">
+	<table style="margin-bottom:0px;">
+		<tr>
+			<td width="120px" class="right_align_120">Medical School:</td>
+			<td width="140px"><%= session[:doctor].medical_school %></td>
+			<td width="120px" class="rightalign"> &nbsp; Type of Degree:</td>
+			<td><%= session[:doctor].type_of_degree %></td>
+			<td class="rightalign"> &nbsp; Year Graduated:</td>
+			<td><%= session[:doctor].graduated_year %></td>
+		</tr>
+		<tr>
+			<td width="120px" class="right_align_120">License Currently Issued In:</td>
+			<td width="140px"><%= session[:doctor].medical_license_state %></td>
+			<td width="120px" class="rightalign" style="text-align:right;"> &nbsp; License #:</td>
+			<td width="105px"><%= session[:doctor].license_no %></td>
+			<td class="rightalign" style="text-align:right;"> &nbsp; Type:</td>
+			<td><%= session[:doctor].medical_license_type %></td>
+		</tr>
+	</table>
+<hr/>
+	<table>
+		<tr>
+			<td width="130">Languages Spoken:<br/><span class="small_text">Other than English</span></td>
+			<td>
+				<label><input type="checkbox" name="doctor[spanish]" <% if session[:doctor].spanish == 1 %>checked<% end %> /> Spanish</label>
+				<div><span class="small_text">Optional</span></div>
+			</td>
+			<td style="text-align:right;"> &nbsp; Other:</td>
+			<td>
+				<input type="text" name="doctor[other_languages]" value="<%= session[:doctor].other_languages %>" size="15" /> <span class="small_text">Seperate by a comma.</span>
+				<div><span class="small_text">Optional</span></div>
+			</td>
+		</tr>
+	</table>
+	<table width="850">
+		<tr>
+			<td width="124" align="right" class="rightalign" style="letter-spacing:-1px;">Residency Training:</td>
+			<td><%= session[:doctor].residency_training %></td>
+			<td align="right" class="rightalign" colspan="2">Fellowship Training:</td>
+			<td><%= session[:doctor].fellowship_training %></td>
+			<td align="left">
+				<label>
+					<input type="checkbox" name="doctor[display_training_to_public]" <% if session[:doctor].display_training_to_public == 1 %>checked<% end %> style="vertical-align:baseline;" />
+					Display to the Public
+				</label>
+			</td>
+		</tr>
+	</table>
+</div>
+
+<br/><br/>
+<div class="manage_profile_subhead"><span class="subheat_text_style">Your Practice</span></div>
+<div class="form_section">
+	<table>
+		<tr>
+			<td class="right_align_120">Practice Name:</td>
+			<td colspan="2"><%= session[:doctor].company %></td>
+		</tr>
+		<tr class="leading">
+			<td valign="top" class="right_align_120">Practice Location:</td>
+			<td valign="top">
+				<%= session[:doctor].address %><br/><%= session[:doctor].address2 %><br/>
+				<%= session[:doctor].city %>, <%= session[:doctor].state %> <%= session[:doctor].zipcode %>
+			</td>
+		</tr>
+	</table>
+	<table>
+		<tr>
+			<td colspan="1" class="right_align_120">Mailing Address:</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="right_align_120">Street Address:</td>
+			<td>Line 1<br/><input type="text" name="doctor[mailing_address]" value="<%= session[:doctor].mailing_address %>" size="25" /></td>
+			<td>Line 2 <span class="small_text">Optional</span><br/><input type="text" name="doctor[mailing_address2]" value="<%= session[:doctor].mailing_address2 %>" size="25" /></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="right_align_120">City:</td>
+			<td><input type="text" name="doctor[mailing_city]" value="<%= session[:doctor].mailing_city %>" size="25" /></td>
+			<td>State: <select name="doctor[mailing_state]"><%= states(session[:doctor].mailing_state) %></select></td>
+			<td>ZIP: <input type="text" name="doctor[mailing_zipcode]" value="<%= session[:doctor].mailing_zipcode %>" size="8" /> <span class="small_text">(12345-6789)</span></td>
+		</tr>
+	</table>
+	<hr/>
+	<table>
+		<tr>
+			<td class="right_align_120">Website URL:</td>
+			<td colspan="3">
+				<input type="text" name="doctor[website]" value="<%= session[:doctor].website %>" size="35" /> (www.yourwebsite.com)
+				<div><span class="small_text">Optional</span></div>
+			</td>
+		</tr>
+	</table>
+	<hr/>
+	<table>
+		<tr>
+			<td colspan="2">Description of Your Practice:</td>
+		</tr>
+		<tr>
+			<td valign="top" style="width:160px;"><span class="small_text">700 characters or less;<br />this will be visible to<br />patients; please check<br />spelling and grammar<br />&nbsp;<br />Please note: HealthyPrice<br />terms and conditions require that you NOT<br/>include any of your contact<br />information in this space.</span></td>
+			<td valign="top">
+				<textarea class="Description" name="doctor[description]" onkeyup="CountRemainingCharsForDescription(this);"><%= session[:doctor].description %></textarea>
+				<div>
+					<span id="CharRemaining"><% if session[:doctor].description == nil %>700<% else %><%= (700 - session[:doctor].description.size).inspect %><% end %></span> characters remaining
+				</div>
+			</td>
+			<td valign="top"></td>
+		</tr>
+	</table>
+	<script>
+		function CountRemainingCharsForDescription(TextArea){
+			document.getElementById('CharRemaining').innerHTML = 700 - TextArea.value.length;
+			if (TextArea.value.length > 700)
+				TextArea.value = TextArea.value.substring(0, 700);
+		}
+	</script>
+	<hr/>
+	<table>
+		<tr>
+			<td valign="top" style="width:190px;">
+				Change Photos:<br/><span class="small_text">HealthyPrice requires that you<br/>upload a photo of yourself and<br/>your office. You may change the<br/>photos at any time but may not<br/>delete them.<br/>&nbsp;</span>
+			</td>
+			<td valign="top">
+				Your Photo<br/>
+				<% @path = Dir.pwd + '/public/images/uploads/' %>
+				<% if File::exists?(@path + session[:doctor].id.inspect + '_headshot.jpg') %>
+					<img src="/images/uploads/<%= session[:doctor].id.inspect %>_headshot.jpg" height="100" />
+				<% else %>
+					<input type="hidden" name="doctor[headshot_photo_missing]" value="missing" />
+				<% end %><br/>
+			</td>
+			<td valign="top">
+				Your Practice<br/>
+				<% if File::exists?(@path + session[:doctor].id.inspect + '_practice.jpg') %>
+					<img src="/images/uploads/<%= session[:doctor].id.inspect %>_practice.jpg" height="100" />
+				<% else %>
+					<input type="hidden" name="doctor[practice_photo_missing]" value="missing" />
+				<% end %><br/>
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><input type="file" name="doctor[headshot_photo]" size="30"></td>
+			<td><input type="file" name="doctor[practice_photo]" size="30"></td>
+		</tr>
+	</table>
+</div>
+
+<br/><br/>
+<div class="manage_profile_subhead"><span class="subheat_text_style">Other Information</span></div>
+<div class="form_section">
+	<table>
+		<tr>
+			<td valign="top" style="width:160px;">Hospital Affiliations:<br/><span class="small_text">You must enter at least<br/>one hospital affiliation.</span></td>
+			<td valign="top" class="give_space_between_inputs" colspan="2" style="padding:0px;">
+				<table border="0" cellpadding="0" cellspacing="0">
+					<tr>
+						<td>Hospital</td>
+						<td>Usage %</td>
+					</tr><tr>
+						<td><input type="text" name="doctor[hospital_affiliations][a][hospital]" value="<%= @hospital_affiliations[0][1] %>" size="25" /></td>
+						<td><input type="text" name="doctor[hospital_affiliations][a][usage]" value="<%= @hospital_affiliations[0][0] %>" size="5" /></td>
+					</tr><tr>
+						<td><input type="text" name="doctor[hospital_affiliations][b][hospital]" value="<%= @hospital_affiliations[1][1] %>" size="25" /></td>
+						<td><input type="text" name="doctor[hospital_affiliations][b][usage]" value="<%= @hospital_affiliations[1][0] %>" size="5" /></td>
+					</tr><tr>
+						<td><input type="text" name="doctor[hospital_affiliations][c][hospital]" value="<%= @hospital_affiliations[2][1] %>" size="25" /></td>
+						<td><input type="text" name="doctor[hospital_affiliations][c][usage]" value="<%= @hospital_affiliations[2][0] %>" size="5" /></td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+	<hr/>
+	<table>
+		<tr>
+			<td valign="top" style="width:160px;">Doctor References:<br/><span class="small_text">Optional; however, we<br/>strongly encourage you to<br/>provide references as this<br/>will increase the likelihood<br/>of patients purchasing<br/>your services.</span></td>
+			<td valign="top" class="give_space_between_inputs" colspan="4" style="padding:0px;">
+				<table border="0" cellpadding="0" cellspacing="0">
+					<tr>
+						<td>First</td>
+						<td>Last</td>
+						<td>Phone</td>
+					</tr><tr>
+						<td><input type="text" name="doctor[doctor_references][a][first_name]" value="<%= @doctor_references[0][1] %>" size="24" /></td>
+						<td><input type="text" name="doctor[doctor_references][a][last_name]" value="<%= @doctor_references[0][2] %>" size="24" /></td>
+						<td><input type="text" name="doctor[doctor_references][a][phone]" value="<%= @doctor_references[0][0] %>" size="18" /></td>
+						<td><span class="dex">(123-123-1234)</span></td>
+					</tr><tr>
+						<td><input type="text" name="doctor[doctor_references][b][first_name]" value="<%= @doctor_references[1][1] %>" size="24" /></td>
+						<td><input type="text" name="doctor[doctor_references][b][last_name]" value="<%= @doctor_references[1][2] %>" size="24" /></td>
+						<td><input type="text" name="doctor[doctor_references][b][phone]" value="<%= @doctor_references[1][0] %>" size="18" /></td>
+					</tr><tr>
+						<td><input type="text" name="doctor[doctor_references][c][first_name]" value="<%= @doctor_references[2][1] %>" size="24" /></td>
+						<td><input type="text" name="doctor[doctor_references][c][last_name]" value="<%= @doctor_references[2][2] %>" size="24" /></td>
+						<td><input type="text" name="doctor[doctor_references][c][phone]" value="<%= @doctor_references[2][0] %>" size="18" /></td>
+					</tr><tr>
+						<td><input type="text" name="doctor[doctor_references][d][first_name]" value="<%= @doctor_references[2][1] %>" size="24" /></td>
+						<td><input type="text" name="doctor[doctor_references][d][last_name]" value="<%= @doctor_references[2][2] %>" size="24" /></td>
+						<td><input type="text" name="doctor[doctor_references][d][phone]" value="<%= @doctor_references[2][0] %>" size="18" /></td>
+					</tr><tr>
+						<td><input type="text" name="doctor[doctor_references][e][first_name]" value="<%= @doctor_references[2][1] %>" size="24" /></td>
+						<td><input type="text" name="doctor[doctor_references][e][last_name]" value="<%= @doctor_references[2][2] %>" size="24" /></td>
+						<td><input type="text" name="doctor[doctor_references][e][phone]" value="<%= @doctor_references[2][0] %>" size="18" /></td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+</div>
+
+<br/><br/>
+<div class="manage_profile_subhead"><span class="subheat_text_style">Payment Information</span></div>
+<div class="form_section">
+	<table style="margin-bottom:0px;">
+		<tr>
+			<td>
+				<input style="vertical-align:top;" type="radio" name="doctor[payment_method]" value="PayPal" onclick="ShowHideSubFields(this);" <% if session[:doctor].payment_method == "PayPal" %>checked<% end %> />  <span style="vertical-align:bottom;">  PayPal </span>
+			</td>
+		</tr>
+		<tr id="PayPalSub" <% if session[:doctor].payment_method != "PayPal" %>style="display:none; " <% end %>>
+			<td>
+				<span  style="vertical-align:top;"> &nbsp; &nbsp; &nbsp; &nbsp; PayPal Email: <input type="text" name="doctor[paypal_email]" value="<%= session[:doctor].paypal_email %>" size="25" /></span>
+				<br/><br/>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input  type="radio" name="doctor[payment_method]" value="Checks" onclick="ShowHideSubFields(this);" <% if session[:doctor].payment_method == "Checks" %>checked<% end %> />
+				<span style="vertical-align:middle;">Regular checks mailed via postal mail</span>
+			</td>
+		</tr>
+		<tr id="PostalCheckSub" <%# if session[:doctor].payment_method == "PayPal" %>xstyle="display:none; " <%# end %>>
+			<td>
+				<table>
+					<tr>
+						<td style="width:160px;" align="right">Payee Name: </td>
+						<td class="give_space_between_inputs"><input type="text" name="doctor[payee_name]" value="<%= session[:doctor].payee_name %>" style="width:200px;" /></td>
+					</tr><tr>
+						<td align="right">Payee Phone Number: </td>
+						<td><input type="text" name="doctor[payee_phone_number]" value="<%= session[:doctor].payee_phone_number %>" style="width:200px;" /> (123-123-1234)</td>
+					</tr><tr>
+						<td align="right">Payee Email Address: </td>
+						<td><input type="text" name="doctor[payee_email_address]" value="<%= session[:doctor].payee_email_address %>" style="width:200px;" /></td>
+					</tr><tr>
+						<td align="right">Payee Address: </td>
+						<td><input type="text" name="doctor[payee_address1]" value="<%= session[:doctor].payee_address1 %>" style="width:200px;" /></td>
+					</tr><tr>
+						<td align="right">Payee Address (line 2): </td>
+						<td><input type="text" name="doctor[payee_address2]" value="<%= session[:doctor].payee_address2 %>" style="width:200px;" /></td>
+					</tr><tr>
+						<td align="right">City: </td>
+						<td><input type="text" name="doctor[payee_city]" value="<%= session[:doctor].payee_city %>" style="width:200px;" /></td>
+					</tr><tr>
+						<td align="right">State: </td>
+						<td>
+							<select name="doctor[payee_state]" style="width:204px;"><%= states(session[:doctor].payee_state) %></select>
+						<!--input type="text" name="doctor[payee_state]" value="<%= session[:doctor].payee_state %>" /-->
+						</td>
+					</tr><tr>
+						<td align="right">Zip: </td>
+						<td><input type="text" name="doctor[payee_zip]" value="<%= session[:doctor].payee_zip %>" style="width:200px;" /> (12345-6789)</td>
+					</tr><tr>
+						<td align="right">Tax ID Type: </td>
+						<td>
+							<label><input type="radio" name="doctor[payee_tax_id_type]" value="EIN" <% if session[:doctor].payee_tax_id_type == "EIN" %>checked<% end %> />EIN</label> (12-1234567) &nbsp; 
+							<label><input type="radio" name="doctor[payee_tax_id_type]" value="SSN" <% if session[:doctor].payee_tax_id_type == "SSN" %>checked<% end %> />SSN</label> (123-12-1234)
+						</td>
+					</tr><tr>
+						<td align="right">Tax ID: </td>
+						<td><input type="text" name="doctor[payee_tax_id]" value="<%= session[:doctor].payee_tax_id %>" style="width:200px;" /></td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+		    <script>
+		      function ShowHideSubFields(controller){
+			if(controller.value == 'PayPal'){
+			  document.getElementById('PayPalSub').style.display = '';
+			  //document.getElementById('PostalCheckSub').style.display = 'none';
+			}
+			else{
+			  document.getElementById('PayPalSub').style.display = 'none';
+			  //document.getElementById('PostalCheckSub').style.display = '';
+			}
+		      }
+		    </script>
+</div>
+
+<br/>
+	<input type="hidden" name="doctor[id]" value="<%= session[:doctor].id.inspect %>">
+	<input name="back" type="submit" value="" style="background-image:url('/images/doctor_section/save_changes.jpg'); width:119px; height:26px; border:0px; vertical-align:middle;" />
+
+</div>
+
+</form>
+
+			</div>

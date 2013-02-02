@@ -1,0 +1,6 @@
+<% @file = File.open(Dir.pwd + "/public/mail_templates/provider_account_disable.html.erb") %>
+<% @template = @file.read %>
+
+<%	@template = @template.gsub("{full_name}", @full_name) %>
+
+<%= @template %>

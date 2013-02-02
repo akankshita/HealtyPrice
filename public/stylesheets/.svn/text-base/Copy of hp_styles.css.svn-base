@@ -1,0 +1,373 @@
+/* Healthy Price CSS Document by Pramith Rupasinghe */
+
+body, img {
+	margin:0;
+	border:0;
+	font-family:Arial, Helvetica, sans-serif;
+}
+
+.main_container {
+	margin:auto;
+	width:948px;
+	height:auto;
+	overflow:hidden;
+	border:solid 1px #a7a7a7;
+}
+
+
+/* header start */
+.header {
+	float:left;
+	width:924px;
+	height:80px;
+	padding:10px 13px 20px 13px;
+}
+
+.logo_img {
+	float:left;
+	width:315px;
+	height:75px;
+}
+
+.top_navi {
+	float:right;
+	width:567px;
+	height:71px;
+}
+
+.top_navi_1 {
+	float:right;
+	width:210px;
+	height:15px;
+	padding-top:5px;
+	text-align:right;
+}
+
+.help A:link {
+	font-size: 12px; color:#5e5e5e; font-weight:bold; text-decoration: none;
+}
+
+.help A:visited {
+	font-size: 12px; color:#5e5e5e; font-weight:bold; text-decoration: none;
+}
+
+.help A:hover {
+	font-size: 12px; color:#ef790d; font-weight:bold; text-decoration: none;
+}
+
+.top_navi_2 {
+	clear:both;
+	float:right;
+	width:547px;
+	height:26px;
+	margin-top:20px;
+	background-image:url(../images/top_navi_bg.jpg);
+	background-repeat:no-repeat;
+	padding: 5px 10px 0 10px;
+	text-align:center;
+}
+
+.top_main A:link {
+	font-size: 15px; color:#2d8dc8; font-weight:bold; text-decoration: none;
+}
+
+.top_main A:visited {
+	font-size: 15px; color:#2d8dc8; font-weight:bold; text-decoration: none;
+}
+
+.top_main A:hover {
+	font-size: 15px; color:#ef790d; font-weight:bold; text-decoration: none;
+}
+
+.top_main_select A:link {
+	font-size: 15px; color:#ef790d; font-weight:bold; text-decoration: none;
+}
+
+.top_main_select A:visited {
+	font-size: 15px; color:#ef790d; font-weight:bold; text-decoration: none;
+}
+
+.top_main_select A:hover {
+	font-size: 15px; color:#2d8dc8; font-weight:bold; text-decoration: none;
+}
+
+.top_navi_seperater {
+	font-size: 16px;
+	color:#b4d9ec;
+	font-weight:bold;
+	padding-left:14px;
+	padding-right:14px;
+}
+/* header end */
+
+
+/* mid container start */
+	/* home page styles start */
+.mid_container {
+	clear:both;
+	float:left;
+	width:924px;
+	height:auto;
+	overflow:hidden;
+	padding:15px 13px 20px 13px;
+}
+
+.top_banner {
+	float:left;
+	width:924px;
+	height:280px;
+}
+
+.top_banner_left {
+	float:left;
+	width:510px;
+	height:280px;
+}
+
+.top_banner_right {
+	float:left;
+	width:399px;
+	height:250px;
+	padding:20px 0 10px 15px;
+}
+
+.top_banner_right_1 {
+	float:left;
+	width:399px;
+	height:52px;
+}
+
+.get_started {
+	float:left;
+	width:120px;
+	height:52px;
+}
+
+.tell_us {
+	float:left;
+	width:274px;
+	height:42px;
+	padding:10px 0 0 5px;
+	font-size:24px;
+	color:#5e5e5e;
+	font-weight:bold;
+}
+
+.top_banner_right_search {
+	clear:both;
+	float:left;
+	width:399px;
+	height:auto;
+	overflow:hidden;
+	margin-top:20px;
+}
+
+.top_banner_search_field {
+	border:1px solid #a7a7a7;
+	width:304px;
+	height:18px;
+	padding:8px;
+	font-size:14px;
+	color:#5e5e5e;
+}
+
+.top_banner_eg_text {
+	font-size:13px;
+	color:#5e5e5e;
+}
+
+.doctors_pro_img {
+	clear:both;
+	float:left;
+	width:399px;
+	height:69px;
+	margin-top:55px;
+	*margin-top:50px;
+	text-align:right;
+}
+
+.blue_box {
+	clear:both;
+	float:left;
+	width:922px;
+	height:auto;
+	overflow:hidden;
+	border:1px solid #a7a7a7;
+}
+
+.blue_box_top_bg {
+	float:left;
+	width:912px;
+	height:28px;
+	background-image:url(../images/blue_top_bg.jpg);
+	background-repeat:repeat-x;
+	padding:5px 0 0 10px;
+	font-size:19px;
+	color:#FFFFFF;
+}
+
+.blue_box_content {
+	clear:both;
+	float:left;
+	width:897px;
+	height:auto;
+	padding:20px 10px 5px 15px;
+	line-height:20px;
+}
+
+.blue_box_item_big {
+	font-size:16px;
+	color:#5e5e5e;
+}
+
+.blue_box_item_small {
+	font-size:14px;
+	color:#5e5e5e;
+}
+
+.blue_box_link A:link {
+	font-size: 14px; color:#ef790d; text-decoration: none;
+}
+
+.blue_box_link A:visited {
+	font-size: 14px; color:#ef790d; text-decoration: none;
+}
+
+.blue_box_link A:hover {
+	font-size: 14px; color:#2d8dc8; text-decoration: none;
+}
+
+.blue_box_clear {
+	clear:both;
+	float:left;
+	width:912px;
+	height:15px;
+}
+
+.bottom_btn_navi {
+	clear:both;
+	float:left;
+	margin-top:15px;
+	width:924px;
+	height:auto;
+	overflow:hidden;
+}
+
+.bottom_boxes {
+	clear:both;
+	float:left;
+	margin-top:35px;
+	width:924px;
+	height:auto;
+	overflow:hidden;
+}
+
+.contact_box {
+	float:left;
+	width:214px;
+	height:78px;
+	border:solid 1px #a7a7a7;
+	padding:10px;
+}
+
+.contact_box_heading {
+	font-size:18px;
+	color:#5e5e5e;
+}
+
+.contact_box_content_1 {
+	font-size:20px;
+	color:#2d8dc8;
+}
+
+.contact_box_content_2 {
+	font-size:15px;
+	font-weight:bold;
+	color:#ef790d;
+}
+
+.signup_box {
+	float:left;
+	margin-left:25px;
+	width:352px;
+	height:88px;
+	border:solid 1px #a7a7a7;
+	padding:5px;
+}
+
+.signup_sub_head {
+	font-size:13px;
+	font-weight:bold;
+	color:#2d8dc8;
+	padding-left:10px;
+}
+
+.signup_field {
+	border:1px solid #a7a7a7;
+	width:155px;
+	height:17px;
+	font-size:13px;
+	color:#5e5e5e;
+}
+
+.signup_field_small {
+	font-size:12px;
+	font-weight:bold;
+	color:#5e5e5e;
+}
+
+.share_box {
+	float:left;
+	margin-left:25px;
+	width:262px;
+	height:88px;
+	border:solid 1px #a7a7a7;
+	padding:5px;
+}
+	/* home page styles start */
+/* mid container end */
+
+
+/* footer start */
+.footer {
+	clear:both;
+	width:930px;
+	height:100px;
+	border-top:solid 1px #a7a7a7;
+	padding:25px 10px 10px 10px;
+	background-color:#f6f6f6;
+}
+
+.footer_logo {
+	float:left;
+	width:170px;
+	height:46px;
+	font-size:12px;
+	color:#5e5e5e;
+}
+
+.footer_content {
+	float:left;
+	margin-left:50px;
+	width:690px;
+	height:100px;
+	line-height:18px;
+}
+
+.footer_heading {
+	font-size:19px;
+	color:#5e5e5e;
+}
+
+.footer_link A:link {
+	font-size: 12px; color:#ed750b; font-weight:bold; text-decoration: none;
+}
+
+.footer_link A:visited {
+	font-size: 12px; color:#ed750b; font-weight:bold; text-decoration: none;
+}
+
+.footer_link A:hover {
+	font-size: 12px; color:#2d8dc8; font-weight:bold; text-decoration: none;
+}
+/* footer end */

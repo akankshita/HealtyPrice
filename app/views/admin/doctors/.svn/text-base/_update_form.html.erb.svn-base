@@ -1,0 +1,4 @@
+
+<script>
+  document.location='/admin/doctors/edit_details/<%= params[:id] %>';
+</script>

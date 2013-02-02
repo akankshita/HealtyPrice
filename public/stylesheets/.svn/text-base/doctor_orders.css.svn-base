@@ -1,0 +1,144 @@
+table.orderstbl{
+	border:1px solid #666666;
+	width:850px;
+}
+
+table.orderstbl tr td{
+	border-top:1px solid #AAAACC;
+	border-right:1px solid #CCCCDD;
+	padding-left:4px;
+	color:#444444;
+}
+
+table.orderstbl tr th{
+	/*border-bottom:1px solid #888888;*/
+	background-color:#2971B5;
+}
+
+table.orderstbl tr th p{
+	height:20px;
+	margin:2px;
+	color:#FFFFFF;
+}
+
+
+
+tr.odd-record{
+	background-color:white;
+	cursor:pointer;
+}
+
+tr.even-record{
+	background-color:#E8F4FF;
+	cursor:pointer;
+}
+
+tr.highlight-row{
+	/*background-color:#FFEEF0;*/
+	background-color:#FFFFAA;
+	cursor:pointer;
+}
+
+input[type="checkbox"]{
+	vertical-align:middle;
+}
+
+table.order_status_tbl{
+	border-top:1px solid #666666;
+	border-left:1px solid #666666;
+	width:750px;
+}
+table.order_status_tbl tr td{
+	border-bottom:1px solid #666666;
+	border-right:1px solid #666666;
+	vertical-align:text-top;
+	padding:4px;
+	width:50%;
+}
+table.order_status_tbl tr.head_row td{
+	font-weight:bold;
+	background-color:#FFE0CC;
+}
+
+/* ===================================================== */
+
+div.NestedSpace table.orderstbl{
+	width:830px;
+	margin-bottom:16px;
+}
+
+div.NestedSpace table.orderstbl tr th{
+	/*background-color:#105098;*/
+	background-color:#4991D5;
+	padding-top:2px;
+}
+div.NestedSpace table.orderstbl tr th p{
+	height:20px;
+	margin-top:0px;
+	color:#EEEEEE;
+}
+div.NestedSpace table.orderstbl tr td{
+	height:18px;
+	padding-left:3px;
+	color:#777777;
+}
+tr.HiddenRow{
+	background-color:#E0E8F0;
+}
+/*table.orderstbl tr.HiddenRow td{
+	border-top:2px solid #888888;
+}*/
+div.NestedSpace{
+	margin:8px;
+	margin-bottom:0px;
+	float:left;
+	width:90%;
+}
+div.NestedClose{
+	float:right;
+	background-color:#FF8888;
+	border:1px solid #888888;
+	color:#FFFFFF;
+	height:15px;
+	width:15px;
+	margin:5px;
+	cursor:pointer;
+	line-height:15px;
+	text-align:center;
+	vertical-align:middle;
+}
+
+/* ===================================================== */
+
+table.search_by_status_and_practice_area{
+	/*float:right;*/
+	float:left;
+	width:400px;
+}
+
+table.search_by_status_and_practice_area tr td{
+	padding:2px;
+}
+
+div.search_by_keyword{
+	float:left;
+	clear:both;
+}
+
+div.pagination{
+	clear:both;
+	float:left;
+	font-size:10pt;
+	margin-top:2px;
+	margin-bottom:2px;
+	margin-left:4px;
+}
+
+div.rotten_order_msg{
+	background-color:#E0E0E0;
+	padding:6px;
+}
+
+/*
+
+*/

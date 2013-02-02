@@ -1,0 +1,59 @@
+
+<%
+         @doctor_price=Doctor.find_by_sql("SELECT *
+    FROM specialty_services
+    JOIN doctor_services
+    ON specialty_services.id = doctor_services.specialty_service_id AND doctor_services.id = " + "#{@show_order.doctor_service_id}")
+%>
+
+  <%  @doctor_price.each do |drprice|
+    #@services = Service.find(drprice.service_id)
+
+    @practices = Specialty.find(drprice.specialty_id)
+  %>
+
+  <table cellpadding="0" cellspacing="0" class="heading_font" style="margin-bottom:0;">
+  <tr>
+<td class="headtd"> <div  style="background-image:url('/images/top_l.jpg');height:31px;width:3px;border:0px; float:left;"></div><div class="headmiddiv"><div class="headmidtext">Show Order </div></div> <div  style="background-image:url('/images/top_r.jpg');height:31px;width:3px;border:0px; float:left;"></div></td>
+  </tr>
+</table>
+<table bgcolor="#e6f2ff" cellpadding="0" cellspacing="0" class="table_font" style="margin-bottom:0;">
+
+  <tr>
+    <td><h4> Order # <%= @show_order.id %> </h4></td>
+  </tr>
+  <tr>
+    <td tdfont> Payment Reference Id : <%= @show_order.doctor_payments_id %> </td>
+  </tr>
+  <tr>
+    <td tdfont> Date : <%= @show_order.created_at.strftime("%B %d, %Y")   %></td>
+  </tr>
+  <tr>
+    <td tdfont> Patient Name : <%= @show_order.first_name << " " << @show_order.last_name %></td>
+  </tr>
+   <tr>
+    <td tdfont> Procedure : <%=  drprice.service_name << " " %> (<%=  @practices.name %> ) </td>
+  </tr>
+  <tr>
+    <td tdfont> Std Amt :  <%= number_to_currency(@show_order.doctor_price) %></td>
+  </tr>
+  <tr>
+    <td tdfont> Order Status : <%= @show_order.orderstatus   %></td>
+  </tr>
+  <tr>
+    <td tdfont> Customer Email : <a href="mailto:<%= @show_order.email %>"><%= @show_order.email %></a></td>
+  </tr>
+  
+ 
+<% end %>
+ 
+</table>
+<div  class="paginationfoter" ></div>
+
+<table cellpadding="0" cellspacing="0" class="heading_font" style="margin-bottom:0;">
+  <tr><td></td><td></td><td></td><td></td><td></td> <td style="text-align:right;">
+      <INPUT class="heading_font" TYPE="button" VALUE="<< Back" onclick="history.go(-1);">
+  </td>
+
+  </tr>
+</table>

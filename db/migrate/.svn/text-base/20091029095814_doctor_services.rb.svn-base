@@ -1,0 +1,14 @@
+class DoctorServices < ActiveRecord::Migration
+  def self.up
+	create_table :doctor_services do |t|
+		t.integer	:doctor_id
+		t.integer	:specialty_service_id
+		t.datetime	:created_at
+		t.datetime	:updated_at
+	end
+  end
+
+  def self.down
+	drop_table :doctor_services
+  end
+end

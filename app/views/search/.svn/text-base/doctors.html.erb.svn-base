@@ -1,0 +1,51 @@
+<% content_for :head do %>
+  <%= javascript_include_tag 'doctors_search_tabs','doctors' %>
+  <%= javascript_include_tag 'auto_fill' %>
+  <%= stylesheet_link_tag 'doctors_search_tabs','doctors' %>
+  <title>HealthyPrice, Inc. - Search by Doctor / Provider.</title>
+<% end %>
+
+
+<div class="tell_us" style="width:400px; float:left; margin-top:0px;">Search by Doctor / Provider</div>
+<br style="clear:both;" />
+
+<div style="float:right; margin-top:-5px;">
+	<span style="font-size:10pt;">More search options: </span>
+	<%=link_to 'Search by Practice Area',search_specialties_path %> | 
+	<%=link_to 'Search by Services / Procedures', "/search/services" %>
+</div><br style="clear:both;" />
+
+<%=render :partial => 'doctor_search_tabs' %>
+	
+<div id="results">
+	<ul>
+		<li>Use the search options above to find your doctor</li>
+	</ul>
+</div>
+
+<% if !@submit_search.nil? %>
+	<script type="text/javascript" charset="utf-8">
+		$(document).ready(function(){
+			setTimeout("submitSearchAuto('<%= @submit_search %>')",100)
+		});
+	</script>
+<% end %>
+		<!-- *** -->
+		<div id="Sugesstions" style="display:none;" onfocus="CancelHideSuggestions();" onblur="HideSuggestions();"></div>
+		<style>
+		div#Sugesstions{
+			border:1px solid #666666;
+			background-color:#FFFFFF;
+			overflow:auto;
+			position:absolute;
+		}
+		div.Suggestion{
+			cursor:pointer;
+			height:20px;
+			overflow:hidden;
+			background-color:#FFFFFF;
+			font-size:10pt;
+		}
+		</style>
+		<!-- *** -->
+

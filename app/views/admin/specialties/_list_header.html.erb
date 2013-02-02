@@ -1,0 +1,76 @@
+<% if params[:nested] %>
+
+	<% if active_scaffold_config.action_links.any? { |link| link.type == :table } -%>
+	  <div class="actions">
+		<a class="new_existing" position="top" href="javascript:ShowElem('enable_specialty_for_doctor');">Enable a Practice Area for this Provider</a>
+	  </div>
+	<% end %>
+	<h2 style="width:750px; margin-bottom:0px;"><%= active_scaffold_config.list.user.label %></h2>
+	<%	@doc_id = request.request_uri[15, 30]
+		@doc_id = @doc_id[0, @doc_id.index('/')]
+		#session[:doc_id] = @doc_id %>
+
+
+<div class="new_existing-view admin/specialties-view view" id="enable_specialty_for_doctor" style="display:none; border:1px solid #7FCF00;">
+	<a class="inline-adapter-close" title="Close" href="javascript:HideElem('enable_specialty_for_doctor');">Close</a>
+	<%#<form id="70ffe5941846d68c91455cf3db6a7e0f-add_existing--form" class="create" onsubmit="new Ajax.Request('/admin/specialties/add_existing?eid=70ffe5941846d68c91455cf3db6a7e0f&nested=true&parent_column=specialties&parent_model=Doctor', {asynchronous:true, evalScripts:true, onComplete:function(request){$('70ffe5941846d68c91455cf3db6a7e0f-add_existing-loading-indicator').style.visibility = 'hidden'; Form.enable('70ffe5941846d68c91455cf3db6a7e0f-add_existing--form');}, onFailure:function(request){ActiveScaffold.report_500_response('70ffe5941846d68c91455cf3db6a7e0f-active-scaffold')}, parameters:Form.serialize(this)}); $('70ffe5941846d68c91455cf3db6a7e0f-add_existing-loading-indicator').style.visibility = 'visible'; Form.disable('70ffe5941846d68c91455cf3db6a7e0f-add_existing--form');; return false;" method="post" href="/admin/specialties/add_existing?eid=70ffe5941846d68c91455cf3db6a7e0f&nested=true&parent_column=specialties&parent_model=Doctor" action="/admin/specialties/add_existing?eid=70ffe5941846d68c91455cf3db6a7e0f&nested=true&parent_column=specialties&parent_model=Doctor">%>
+	<!--form onsubmit="return AjaxLoad('specialties/enable_for_provider/<%= @doc_id %>/'+this.associated_id.value, 'submit_result_<%= @doc_id %>')"-->
+	<form action="/admin/specialties/enable_specialty_for_doctor" method="post" onsubmit="return ValidateForm(this);">
+		<h4>Add a Practice Area</h4>
+		<div id="70ffe5941846d68c91455cf3db6a7e0f-add_existing--messages" class="messages-container"/>
+			<table>
+				<tbody>
+					<tr>
+						<td width="90"><label for="record_Specialty">Practice Area: </label></td>
+						<td>
+							<select id="associated_id" name="associated_id">
+								<option value="-1">- select -</option>
+							<% @specialties = Specialty.find_by_sql("SELECT * FROM specialties WHERE id NOT IN (SELECT specialty_id FROM doctor_specialties WHERE doctor_id = "+@doc_id+") ORDER BY `name`") %>
+							<% @specialties.each do |specialty| %>
+								<option value="<%= specialty.id %>"><%= specialty.name %></option>
+							<% end %>
+							</select>
+							<input type="hidden" name="doctor_id" value="<%= @doc_id %>" />
+							<input type="hidden" value="<%= form_authenticity_token() %>" name="authenticity_token"/>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		<p class="form-footer">
+			<input class="submit" type="submit" value="Add" name="commit"/>
+			<a class="cancel" href="javascript:HideElem('enable_specialty_for_doctor');">Cancel</a>
+			<img id="70ffe5941846d68c91455cf3db6a7e0f-add_existing-loading-indicator" class="loading-indicator" style="visibility: hidden;" src="/images/active_scaffold/default/indicator.gif?1267069817" alt="loading indicator"/>
+		</p>
+	</form>
+	<script>
+		var AlreadyAdded = new Array();
+		function ValidateForm(form_to_validate){
+			if (form_to_validate.associated_id.value == -1){
+				alert('Please select a practice area.');
+				return false;
+			}
+			return true;
+		}
+	</script>
+	<div id="submit_result_<%= @doc_id %>"></div>
+</div>
+
+
+<% else %>
+
+	<% if active_scaffold_config.action_links.any? { |link| link.type == :table } -%>
+	  <div class="actions">
+	    <% new_params = params_for(:action => :table) %>
+	    <% active_scaffold_config.action_links.each :table do |link| -%>
+	      <% next if controller.respond_to? link.security_method and !controller.send(link.security_method) -%>
+		  <% next if link.action == 'new' && params[:nested].nil? && active_scaffold_config.list.always_show_create %>
+		  <% next if link.action == 'show_search' && active_scaffold_config.list.always_show_search %>
+	      <%= render_action_link(link, new_params) -%>
+	    <% end -%>
+
+	    <%= loading_indicator_tag(:action => :table) %>
+	  </div>
+	<% end %>
+	<h2><%= active_scaffold_config.list.user.label %></h2>
+
+<% end %>

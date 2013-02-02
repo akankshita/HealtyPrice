@@ -1,0 +1,50 @@
+<% if !(@order.number == nil) -%>
+<div>
+	<h3>Order Number: <%=@order.number %></h3>
+	<h3>PIN: <%=@order.pin %></h3>
+</div>
+<% end -%>
+
+<div id="order_hold">
+	<div id="order">
+		<div id="left_col">
+			<div id="doctor_service">
+				<div id="service" class="order_content">
+					<p><strong>Procedure / Service</strong></p>
+					<p><%=@order.doctor_service.specialty_service.service.name %></p>
+				</div>
+				<!--div id="provider_details" class="order_content">
+					<p><strong>Doctor / Provider:</strong></p>
+					<p><%=@order.doctor_service.doctor.name %></p>
+					<p><%=@order.doctor_service.doctor.company %></p>
+				</div-->
+				<div id="price" class="order_content">
+					<p><strong>HealthyPrice:</strong></p>
+					<p><%=number_to_currency(@order.doctor_service.specialty_service.customer_price,{:precision => 0}) %></p>
+				</div>
+				<!--br style="clear:both;"/-->
+				<div id="patient_name" class="order_content" style="clear:both;">
+					<p><strong>Patient Name</strong>: <%=@order.patient_name %></p>
+				</div>
+			</div>
+			<div id="billing" class="order_content">
+				<p><strong><%=link_to 'Edit Payment Details',edit_order_path(:id => @order.id)%></strong></p>
+				<p>Payment Method: MasterCard</p>
+				<p>Name: <strong><%=@order.name %></strong></p>
+				<p>Address:</p>
+				<p><strong><%=@order.address %></strong></p>
+				<p><strong><%=@order.city %>, <%=@order.state %> <%=@order.zipcode %></strong></p>
+				<p><strong><%=@order.phone %></strong></p>
+				<p><strong><%=@order.email %></strong></p>
+				<p>Credit Card: <strong><%=@order.credit_card %></strong></p>
+				<p>Expiration Date:<strong><%=@order.expiration.strftime("%m/%y") %></strong></p>
+				<p>Verification (CCV): <strong><%=@order.ccv %></strong></p>
+			</div>
+		</div>
+		<div id="right_col">
+			<div id="doctor" class="order_content">
+				<%= render :partial => '/common/doctor', :locals => {:doctor => @order.doctor_service.doctor }%>
+			</div>
+		</div>
+	</div>
+</div>

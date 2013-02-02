@@ -1,0 +1,72 @@
+<%#= stylesheet_link_tag 'login' %>
+
+<style>
+	label{
+		width:100px;
+		margin-left:50px;
+		*margin-left:50px;
+		_margin-left:25px;
+		display:block;
+		float:left;
+	}
+	ul{
+		margin-left:5px;
+		margin-right:10px;
+		list-style-type:none;
+	}
+	li{
+		margin-bottom:15px;
+		font-size:12px;
+		color:#5e5e5e;
+	}
+	div.fieldWithErrors{
+		display:inline;
+		margin:0px;
+		padding:0px;
+	}
+	#error{
+		width:309px;
+		margin-left:45px;
+		*margin-left:45px;
+		_margin-left:25px;
+	}
+	#error ul{
+		margin-left:8px;
+	}
+</style>
+
+        <div class="look_up_box" style="width:550px;">
+	<div style="*margin-left:70px;">
+	<% blue_box 'Login' do -%>
+		<%#= f.error_messages %>
+		<% form_for @user_session, :url => user_session_path do |f| %>
+		  <ul style="clear:both;">
+		<% if @error != nil && @error != "" %>
+			<li>
+				<div id="error" style="clear:both;"><%= @error %></div>
+				<br style="clear:both;" />
+			</li>
+		<% end %>
+			<li>
+				<%= f.label :email %>
+				<%= f.text_field :email, :style => "width:200px;" %>
+			</li>
+			<li>
+				<%= f.label :password %>
+				<%= f.password_field :password, :style => "width:200px;" %>
+			</li>
+			<li>
+				<%= f.label :remember_me %>
+				<%= f.check_box :remember_me %>
+				<%#= f.submit "Login" %>
+				<input style="background-image:url('/images/btn_login.jpg'); height:22px; width:99px; border:0px; margin-left:84px;" id="user_session_submit" name="commit" type="submit" value="" />
+			</li>
+			<li style="margin-bottom:0px; margin-top:-10px;">&nbsp;</li>
+			<li><div style="margin-left:50px;">Forgot your password? Please <a href="/page/contact_us">contact us.</a></div></li>
+			<li style="margin-bottom:0px; margin-top:-10px;">&nbsp;</li>
+			<li><div style="margin-left:50px;">Don't have an account? <a href="/doctor_section/signup/step1">Signup now.</a></div></li>
+		  </ul>
+		<% end %>
+	<% end -%>
+	</div>
+        </div>

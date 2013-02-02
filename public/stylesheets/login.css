@@ -1,0 +1,38 @@
+div#errorExplanation {
+  display:none;
+  visibility:hidden;
+}
+
+#error{
+	clear:both;
+	float:left;
+	width:331px;
+	border:1px solid #FF0000;
+	background-color:#FFCCCC;
+	margin-top:8px;
+	margin-bottom:12px;
+	text-align:left;
+	margin-left:20px;
+}
+
+#error ul{
+	margin-top:8px;
+	margin-bottom:6px;
+	margin-left:21px;
+}
+
+
+label {
+   width: 10em;
+   float: left;
+   margin-top: 5px;
+}
+
+p {
+  margin: 0px;
+}
+
+li { 
+  list-style: none;
+}
+

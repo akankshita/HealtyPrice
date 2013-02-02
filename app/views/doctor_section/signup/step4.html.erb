@@ -1,0 +1,536 @@
+<%= stylesheet_link_tag 'colorbox' %>
+
+<div class="signup_header_text" style="display:inline; width:866px;">
+	<span class="subheat_text_style">
+		Your Information
+	</span>
+	<br/>
+	<br/>All fields are required unless indicated otherwise.<br/>
+	<br/>This step requires many items of information, most of which are required.
+	<strong>Note that you can partially complete any step and return later to fill-in the rest.</strong>
+	Simply click the SAVE AND COMPLETE LATER button at the bottom of the page.
+	When you login again, you will be directed to this page.
+</div><br/>&nbsp;<br/>
+
+<% if @error != nil && @error != "" -%>
+	<% if @show_error_as_javascript == true -%>
+<script>alert('<%= @error %>');</script>
+	<% else -%>
+<div id="error" style="width:867px;"><!--img src="/images/provider_signup/error.gif" style="float:left;" /--><%= @error %></div>
+	<% end -%>
+<% else -%>
+<div id="error" style="display:none; width:867px;"></div>
+<% end -%>
+
+<style>
+.inline_errors{
+	color:#EE4444;
+	font-size:8pt;
+}
+p{
+	text-align:justify;
+	width:600px;
+}
+div#error{
+	width:755px;
+	display: inline;
+}
+</style>
+
+<% @States = "<option value=''>Select State</option><option value='Alabama'>Alabama</option><option value='Alaska'>Alaska</option><option value='American Samoa'>American Samoa</option><option value='Arizona'>Arizona</option><option value='Arkansas'>Arkansas</option><option value='California'>California</option><option value='Colorado'>Colorado</option><option value='Connecticut'>Connecticut</option><option value='Delaware'>Delaware</option><option value='District of Columbia'>District of Columbia</option><option value='Florida'>Florida</option><option value='Georgia'>Georgia</option><option value='Guam'>Guam</option><option value='Hawaii'>Hawaii</option><option value='Idaho'>Idaho</option><option value='Illinois'>Illinois</option><option value='Indiana'>Indiana</option><option value='Iowa'>Iowa</option><option value='Kansas'>Kansas</option><option value='Kentucky'>Kentucky</option><option value='Louisiana'>Louisiana</option><option value='Maine'>Maine</option><option value='Maryland'>Maryland</option><option value='Massachusetts'>Massachusetts</option><option value='Michigan'>Michigan</option><option value='Minnesota'>Minnesota</option><option value='Mississippi'>Mississippi</option><option value='Missouri'>Missouri</option><option value='Montana'>Montana</option><option value='Nebraska'>Nebraska</option><option value='Nevada'>Nevada</option><option value='New Hampshire'>New Hampshire</option><option value='New Jersey'>New Jersey</option><option value='New Mexico'>New Mexico</option><option value='New York'>New York</option><option value='North Carolina'>North Carolina</option><option value='North Dakota'>North Dakota</option><option value='Northern Mariana Islands'>Northern Mariana Islands</option><option value='Ohio'>Ohio</option><option value='Oklahoma'>Oklahoma</option><option value='Oregon'>Oregon</option><option value='Pennsylvania'>Pennsylvania</option><option value='Puerto Rico'>Puerto Rico</option><option value='Rhode Island'>Rhode Island</option><option value='South Carolina'>South Carolina</option><option value='South Dakota'>South Dakota</option><option value='Tennessee'>Tennessee</option><option value='Texas'>Texas</option><option value='US Virgin Islands'>US Virgin Islands</option><option value='Utah'>Utah</option><option value='Vermont'>Vermont</option><option value='Virginia'>Virginia</option><option value='Washington'>Washington</option><option value='West Virginia'>West Virginia</option><option value='Wisconsin'>Wisconsin</option><option value='Wyoming'>Wyoming</option>"
+def states(sel)
+	if sel == nil
+		return @States
+	else
+		return @States.gsub(sel + "'>", sel + "' selected>")
+	end
+end
+%>
+
+<%= form_tag({ :action => "index" }, :multipart => true, :method => "post") %>
+
+<div style="float:left; text-align:left;margin-left:40px; display:inline;">
+<h4><a name="personal_information"></a>Personal Information</h4>
+<div class="form_section">
+	<table style="margin-bottom:0px;">
+		<tr>
+			<td class="rightalign" width="120px">Provider ID:</td>
+			<td><%= session[:doctor].id %></td>
+		</tr>
+		<tr>
+			<td class="rightalign">Title:</td>
+			<td><select name="doctor[title]">
+				<option value="" <% if session[:doctor].title == "" %>selected<% end %>> </option>
+				<option value="Dr." <% if session[:doctor].title == "Dr." %>selected<% end %>>Dr.</option>
+				<option value="Mr." <% if session[:doctor].title == "Mr." %>selected<% end %>>Mr.</option>
+				<option value="Mrs." <% if session[:doctor].title == "Mrs." %>selected<% end %>>Mrs.</option>
+				<option value="Ms." <% if session[:doctor].title == "Ms." %>selected<% end %>>Ms.</option>
+			</select> <span class="small_text">(Optional)</span></td>
+		</tr>
+		<tr class="leading">
+			<td class="rightalign" style="vertical-align:top;" valign="top">Name:</td>
+			<td style="width:90px;">First<br/><input type="text" name="doctor[first_name]" value="<%= session[:doctor].first_name %>" />
+			<%= inline_errors "first_name", @errors %></td>
+			<td style="width:30px;">MI<br/><input type="text" name="doctor[middle_name]" value="<%= session[:doctor].middle_name %>" size="4" /></td>
+			<td colspan="3">Last<br/><input type="text" name="doctor[last_name]" value="<%= session[:doctor].last_name %>" />
+			<%= inline_errors "last_name", @errors %></td>
+		</tr>
+		<tr>
+			<td class="rightalign">Email:</td>
+			<td colspan="2"><input type="text" name="doctor[email]" value="<%= session[:doctor].email %>" size="29" />
+			<%= inline_errors "email", @errors %></td>
+		</tr>
+		<tr>
+			<td class="rightalign">Notification Email:</td>
+			<td colspan="2"><input type="text" name="doctor[notification_email]" value="<% if session[:doctor].notification_email != nil %><%= session[:doctor].notification_email %><% else %><%= session[:doctor].email %><% end %>" size="29" />
+			<%= inline_errors "notification_email", @errors %></td>
+		</tr>
+		<tr>
+			<td class="rightalign">Date of Birth:</td>
+			<td colspan="4"><input type="text" name="doctor[date_of_birth]" value="<%= session[:doctor].date_of_birth %>" size="15" /> (mm/dd/yyyy)
+			<%= inline_errors "date_of_birth", @errors %></td>
+		</tr>
+	</table>
+	<table>
+		<tr>
+			<td class="rightalign" width="120px">Phone:</td>
+			<td style="width:170px;"><input type="text" name="doctor[phone]" value="<%= session[:doctor].phone %>" />
+			<%= inline_errors "phone", @errors %></td>
+			<td class="rightalign" style="width:90px;">Fax:</td>
+			<td><input type="text" name="doctor[fax]" value="<%= session[:doctor].fax %>" /> (123-123-1234 x1)
+			<%= inline_errors "fax", @errors %></td>
+		</tr>
+		<tr>
+			<td class="rightalign">Tax ID:</td>
+			<td><input type="text" name="doctor[tax_id]" value="<%= session[:doctor].tax_id %>" />
+			<%= inline_errors "tax_id", @errors %></td>
+			<td class="rightalign">Tax ID Type:</td>
+			<td style="">
+				<label>
+					<input type="radio" name="doctor[tax_id_type]" value="EIN" <% if session[:doctor].tax_id_type == "EIN" %>checked<% end %> style="vertical-align:baseline;" />
+					EIN
+				</label>
+				(12-1234567)
+				<label>
+					<input type="radio" name="doctor[tax_id_type]" value="SSN" <% if session[:doctor].tax_id_type == "SSN" %>checked<% end %> style="vertical-align:baseline;" />
+					SSN
+				</label>
+				(123-12-1234)
+				<%= inline_errors "tax_id_type", @errors %>
+			</td>
+		</tr>
+	</table>
+	<table>
+		<tr>
+			<td class="rightalign" width="120px"></td>
+			<td colspan="5">
+				<span class="small_text">
+					HealthyPrice is committed to protecting your personal information. We will never disclose any of your<br/>
+					personal information, including your email address, to any party outside of HealthyPrice for any purpose<br/>
+					unless required to by law. All information is transmitted in encrypted form.
+					<!--a style="border:1px solid #666666;" href="javascript:ShowPopUpX('/page/privacy_policy');" style="font-size:8pt; font-family:Verdana,Arial,Helvetica,sans-serif; line-height:10pt;">Click here to read our privacy policy.</a-->
+				</span>
+			</td>
+		</tr>
+	</table>
+</div>
+<script>
+	function ShowPopUpX(url){
+		$.fn.healthybox({href: url, open:true, maxWidth: '660px'});
+	}
+</script>
+
+<h4><a name="qualifications"></a>Qualifications</h4>
+<div class="form_section">
+	<table style="margin-bottom:0px;">
+		<tr>
+			<td width="120px" class="rightalign">Medical School:</td>
+			<td width="180px"><input type="text" name="doctor[medical_school]" style="width:170px;" value="<%= session[:doctor].medical_school %>" /><%= inline_errors "medical_school", @errors %></td>
+			<td width="129px" class="rightalign" width="129"> &nbsp; Type of Degree:</td>
+			<td><input type="text" name="doctor[type_of_degree]" value="<%= session[:doctor].type_of_degree %>" size="15" /><%= inline_errors "type_of_degree", @errors %></td>
+			<td class="rightalign"> &nbsp; Year Graduated:</td>
+			<td><input type="text" name="doctor[graduated_year]" value="<%= session[:doctor].graduated_year %>" size="4" /> (yyyy)<%= inline_errors "graduated_year", @errors %></td>
+		</tr>
+	</table>
+	<table style="margin-bottom:0px;">
+		<tr>
+			<td width="120px" class="rightalign" style="line-height:1.0;">License Currently Issued In:</td>
+			<td width="180px"><select name="doctor[medical_license_state]" style="width:173px;"><%= states(session[:doctor].medical_license_state) %></select><%= inline_errors "medical_license_state", @errors %></td>
+			<td width="129px" class="rightalign" width="129"> &nbsp; License #:</td>
+			<td><input type="text" name="doctor[license_no]" value="<%= session[:doctor].license_no %>" size="15" /><%= inline_errors "license_no", @errors %></td>
+			<td class="rightalign"> &nbsp; Type:</td>
+			<td><input type="text" name="doctor[medical_license_type]" value="<%= session[:doctor].medical_license_type %>" size="12" /> <span class="small_text">(Optional)</span></td>
+		</tr>
+	</table>
+	<table>
+		<tr class="leading">
+			<td width="124px" style="padding-left:0px; letter-spacing:-1px;" class="rightalign">Languages Spoken:</td>
+			<td><!--<%= session[:doctor].spanish.inspect %>--><label><input type="checkbox" name="doctor[spanish]" <% if session[:doctor].spanish == 1 || session[:doctor].spanish.inspect == "1" || session[:doctor].spanish == true %>checked<% end %> style="vertical-align:baseline;" /> Spanish</label></td>
+			<td class="rightalign" width="134"> &nbsp; Other:</td>
+			<td><input type="text" name="doctor[other_languages]" value="<%= session[:doctor].other_languages %>" size="15" /> <span class="small_text">(Seperate by a comma)</span></td>
+		</tr>
+		<tr class="subscript">
+			<td class="rightalign"><span class="small_text" style="letter-spacing:-1px;">(Other than English)</span></td>
+			<td><span class="small_text">(Optional)</span></td>
+			<td></td>
+			<td><span class="small_text">(Optional)</span></td>
+		</tr>
+	</table>
+	<table>
+		<tr>
+			<td width="124px" align="right" class="rightalign" style="line-height:1.0; letter-spacing:-1px;">Residency Training:<br/><span class="small_text">&nbsp;</span></td>
+			<td><input type="text" name="doctor[residency_training]" style="width:170px;" value="<%= session[:doctor].residency_training %>" /><br/><span class="small_text">(Optional)</span></td>
+			<td align="right" class="rightalign" colspan="1">Fellowship Training:<br/><span class="small_text">&nbsp;</span></td>
+			<td><input type="text" name="doctor[fellowship_training]" style="width:170px;" value="<%= session[:doctor].fellowship_training %>" /><br/><span class="small_text">(Optional)</span></td>
+			<td align="left" style="line-height:1.0;">
+				<label>
+					<input type="checkbox" name="doctor[display_training_to_public]" <% if session[:doctor].display_training_to_public == 1 %>checked<% end %> style="vertical-align:baseline;" />
+					Display to the Public<br/><span class="small_text">&nbsp;</span>
+				</label>
+			</td>
+		</tr>
+	</table>
+</div>
+
+<h4><a name="your_practice"></a>Your Practice</h4>
+<div class="form_section">
+	<table>
+		<tr>
+			<td width="120" class="rightalign" width="120px">Name of Practice:</td>
+			<td colspan="2"><input type="text" name="doctor[company]" value="<%= session[:doctor].company %>" size="35" />
+			<%= inline_errors "company", @errors %></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr class="leading">
+			<td style="vertical-align:text-top;" class="rightalign">Street Address:</td>
+			<td class="give_space_between_inputs">
+				Line 1<br/>
+				<input type="text" name="doctor[address]" value="<%= session[:doctor].address %>" size="25" />
+				<%= inline_errors "address", @errors %>
+			</td>
+			<td class="give_space_between_inputs">
+				Line 2 <span class="small_text">(Optional)</span><br/>
+				<input type="text" name="doctor[address2]" value="<%= session[:doctor].address2 %>" size="25" />
+				<%= inline_errors "address2", @errors %>
+			</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="rightalign">City:</td>
+			<td><input type="text" name="doctor[city]" value="<%= session[:doctor].city %>" size="25" />
+			<%= inline_errors "city", @errors %></td>
+			<td>State: <select name="doctor[state]"><%= states(session[:doctor].state) %></select>
+			<%= inline_errors "state", @errors %></td>
+			<td>ZIP: <input type="text" name="doctor[zipcode]" value="<%= session[:doctor].zipcode %>" size="8" /> <span class="small_text">(12345-6789)</span>
+			<%= inline_errors "zipcode", @errors %></td>
+		</tr>
+	</table>
+	<script>
+		function SetMailingAddressToSame(chkBox){
+			if(!chkBox.checked)
+				return;
+			AssignValue('address', 'mailing_address');
+			AssignValue('address2', 'mailing_address2');
+			AssignValue('city', 'mailing_city');
+			AssignValue('state', 'mailing_state');
+			AssignValue('zipcode', 'mailing_zipcode');
+		}
+		function AssignValue(FromElem, ToElem){
+			SetValueOf(ToElem, GetValueOf(FromElem));
+		}
+		function GetValueOf(ElemName){
+			return document.forms[0].elements['doctor['+ElemName+']'].value;
+		}
+		function SetValueOf(ElemName, eValue){
+			document.forms[0].elements['doctor['+ElemName+']'].value = eValue;
+		}
+		function CountRemainingCharsForDescription(TextArea){
+			if (TextArea.value.length > 700){
+				document.getElementById('CharRemaining').innerHTML = '0';
+				TextArea.value = TextArea.value.substring(0, 700);
+			}
+			else{
+				document.getElementById('CharRemaining').innerHTML = 700 - TextArea.value.length;
+			}
+		}
+	</script>
+	<table>
+		<tr>
+			<td width="120px" class="rightalign">Mailing Address:</td>
+			<td colspan="2"><label><input type="checkbox" name="CopyAddress" onclick="SetMailingAddressToSame(this);" style="vertical-align:baseline;" />Same as above</label></td>
+			<td></td>
+			<td></td>
+		</tr>
+	</table>
+	<table>
+		<tr class="leading">
+			<td style="vertical-align:text-top;" class="rightalign" width="120px">Street Address:</td>
+			<td class="give_space_between_inputs">
+				Line 1<br/>
+				<input type="text" name="doctor[mailing_address]" value="<%= session[:doctor].mailing_address %>" size="25" />
+				<%= inline_errors "mailing_address", @errors %>
+			</td>
+			<td class="give_space_between_inputs">
+				Line 2 <span class="small_text">(Optional)</span><br/>
+				<input type="text" name="doctor[mailing_address2]" value="<%= session[:doctor].mailing_address2 %>" size="25" />
+				<%= inline_errors "mailing_address2", @errors %>
+			</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="rightalign">City:</td>
+			<td><input type="text" name="doctor[mailing_city]" value="<%= session[:doctor].mailing_city %>" size="25" />
+			<%= inline_errors "mailing_city", @errors %></td>
+			<td>State: <select name="doctor[mailing_state]"><%= states(session[:doctor].mailing_state) %></select>
+			<%= inline_errors "mailing_state", @errors %></td>
+			<td>ZIP: <input type="text" name="doctor[mailing_zipcode]" value="<%= session[:doctor].mailing_zipcode %>" size="8" /> <span class="small_text">(12345-6789)</span>
+			<%= inline_errors "mailing_zipcode", @errors %></td>
+		</tr>
+	</table>
+	<hr/>
+	<table>
+		<tr>
+			<td style="vertical-align:text-top; width:120px;" class="rightalign" width="120px">Website URL:</td>
+			<td colspan="3" style="vertical-align:text-top;">
+				<input type="text" name="doctor[website]" value="<%= session[:doctor].website %>" size="35" /> (www.yourwebsite.com)
+				<br/><span class="small_text">(Optional)</span>
+				<%= inline_errors "website", @errors %>
+			</td>
+		</tr>
+	</table>
+	<hr/>
+	<table>
+		<tr>
+			<td colspan="2">Description of Your Practice:</td>
+		</tr>
+		<tr>
+			<td valign="top" style="vertical-align:text-top; width:160px;"><span class="small_text">700 characters or less;<br />this will be visible to<br />patients; please check<br />spelling and grammar<br />&nbsp;<br />Please note: our terms<br />and conditions require that<br />you NOT include any of<br />your contact information<br />in this space</span></td>
+			<td valign="top">
+				<textarea class="Description" name="doctor[description]" onkeyup="CountRemainingCharsForDescription(this);"><%= session[:doctor].description %></textarea>
+				<br/><span id="CharRemaining"><% if session[:doctor].description == nil %>700<% else %><%= (700 - session[:doctor].description.size).inspect %><% end %></span> characters remaining
+				<%= inline_errors "description", @errors %>
+			</td>
+			<!--td valign="top"></td-->
+		</tr>
+	</table>
+	<hr/>
+	<table>
+		<tr>
+			<td colspan="2" valign="top" style="vertical-align:text-top; width:120px;">Photos:</td>
+			<td style="width:340px;">
+				Your Photo:
+				<p align="left" style="text-align:left; width:300px;">
+				<% @path = Dir.pwd + '/public/images/uploads/' %>
+				<% if File::exists?(@path + session[:doctor].id.inspect + '_headshot.jpg') %>
+					<img src="/images/uploads/<%= session[:doctor].id.inspect %>_headshot.jpg?<%= Time.now.strftime("%y%m%d%H%M%S") %>" height="100" />
+					<!--div style="background-image:url('/images/uploads/<%= session[:doctor].id.inspect %>_headshot.jpg'); background-repeat:no-repeat; height:150px;"></div-->
+				<% else %>
+					<input type="hidden" name="doctor[headshot_photo_missing]" value="missing" />
+				<% end %>
+					<br/>
+					<!--div class="file_upload_wrapper" id="file_upload_wrapper1">
+						<span id="browse1" class="browse" onclick="headshot_photo.click();"></span><span id="filename1" class="filename"> &nbsp; no file selected</span></div-->
+					<input type="file" name="headshot_photo" class="fileinput" size="30" onchange="document.getElementById('filename1').innerHTML=' &nbsp; '+StripFilename(this.value);" />
+					<%#= inline_errors "headshot_photo", @errors %>
+				</p>
+			</td><td style="width:340px;">
+				Your Practice:
+				<p align="left" style="text-align:left; width:300px;">
+				<% if File::exists?(@path + session[:doctor].id.inspect + '_practice.jpg') %>
+					<img src="/images/uploads/<%= session[:doctor].id.inspect %>_practice.jpg?<%= Time.now.strftime("%y%m%d%H%M%S") %>" height="100" />
+					<!--div style="background-image:url('/images/uploads/<%= session[:doctor].id.inspect %>_practice.jpg'); background-repeat:no-repeat; height:150px;"></div-->
+				<% else %>
+					<input type="hidden" name="doctor[practice_photo_missing]" value="missing" />
+				<% end %>
+					<br/>
+					<!--div class="file_upload_wrapper" id="file_upload_wrapper2">
+						<span id="browse2" class="browse" onclick="practice_photo.click();"></span><span id="filename2" class="filename"> &nbsp; no file selected</span></div-->
+					<input type="file" name="practice_photo" class="fileinput" size="30" onchange="document.getElementById('filename2').innerHTML=' &nbsp; '+StripFilename(this.value);" />
+					<%#= inline_errors "practice_photo", @errors %>
+				</p>
+			</td>
+		</tr>
+	</table>
+			<script>
+			//document.onload=SwitchGraphicalFileInput;
+
+			function StripFilename(FullPath){
+				if(FullPath.indexOf("/")>-1){
+					var i = (FullPath+'').lastIndexOf("/");
+					return FullPath.substring(i+1);
+				}
+				else if(FullPath.indexOf("\\")>-1){
+					var i = (FullPath+'').lastIndexOf("\\");
+					return FullPath.substring(i+1);
+				}
+				else{
+					return FullPath;
+				}
+			}
+
+			function SwitchGraphicalFileInput(){
+				document.getElementById('file_upload_wrapper1').style.display='';
+				document.getElementById('file_upload_wrapper1').style.visibility='visible';
+				document.getElementById('file_upload_wrapper2').style.display='';
+				document.getElementById('file_upload_wrapper2').style.visibility='visible';
+				document.getElementByName('headshot_photo').style.display='none';
+				document.getElementByName('headshot_photo').style.visibility='hidden';
+				document.getElementByName('practice_photo').style.display='none';
+				document.getElementByName('practice_photo').style.visibility='hidden';
+			}
+			</script>
+	<table>
+		<tr>
+			<td colspan="4">
+				<span class="small_text">
+					We recommend a head shot of yourself and a photo of the exterior of your practice. Photos should be JPEG images (photo.jpg).
+					<br/><strong>The recommended image size is 150px width and 150px height. Image files must not exceed 2MB in size.</strong>
+				</span>
+			</td>
+		</tr>
+	</table>
+</div>
+
+<h4><a name="insurance_information"></a>Insurance Information</h4>
+<div class="form_section">
+	<table>
+		<tr>
+			<td valign="top" style="vertical-align:text-top; width:160px;">Insurance Carriers<br/>You're an Approved<br/>Member of:
+				<img src="/images/provider_signup/blue_bg_question_mark.gif" onmousemove="ShowToolTip('Insurance companies that have approved you for rapid processing of claims.', this);" style="vertical-align:-4px;" />
+				<br/><span class="small_text" style="display:block; margin-top:15px;">You must provide the<br/>names of at least two<br/>insurance companies</span></td>
+			<td valign="top" class="give_space_between_inputs">Name of Company<br/>
+				<input type="text" name="doctor[insurance_carriers][a]" value="<%= @insurance_carriers[0] %>" size="25" /><br/>
+				<input type="text" name="doctor[insurance_carriers][b]" value="<%= @insurance_carriers[1] %>" size="25" /><br/>
+				<input type="text" name="doctor[insurance_carriers][c]" value="<%= @insurance_carriers[2] %>" size="25" /><br/>
+				<input type="text" name="doctor[insurance_carriers][d]" value="<%= @insurance_carriers[3] %>" size="25" /><br/>
+				<input type="text" name="doctor[insurance_carriers][e]" value="<%= @insurance_carriers[4] %>" size="25" />
+				<%= inline_errors "insurance_carriers", @errors %>
+			</td>
+		</tr>
+		<tr>
+			<td valign="top" style="vertical-align:top;">Malpractice Insurance:</td>
+			<td style="width:175px;" class="give_space_between_inputs">
+				Name of Carrier<br/>
+				<input type="text" name="doctor[insurance_carrier]" value="<%= session[:doctor].insurance_carrier %>" size="25" />
+				<%= inline_errors "insurance_carrier", @errors %>
+			</td>
+			<td style="width:175px;" class="give_space_between_inputs">
+				Policy #<br/>
+				<input type="text" name="doctor[insurance_policy_no]" value="<%= session[:doctor].insurance_policy_no %>" size="25" />
+				<%= inline_errors "insurance_policy_no", @errors %>
+			</td>
+			<td class="give_space_between_inputs">
+				Expiration Date<br/>
+				<input type="text" name="doctor[insurance_expiry_date]" value="<%= session[:doctor].insurance_expiry_date %>" size="15" />
+				<%= inline_errors "insurance_expiry_date", @errors %>
+			</td>
+			<td style="padding-top:22px;">
+				 (mm/dd/yyyy)
+			</td>
+		</tr>
+	</table>
+</div>
+
+<h4><a name="other_information"></a>Other Information</h4>
+<div class="form_section">
+	<table>
+		<tr>
+			<td valign="top" style="vertical-align:text-top; width:160px;">Hospital Affiliations:
+				<br/><span class="small_text" style="display:block; margin-top:15px;">You must enter at least<br/>one hospital affiliation</span></td>
+			<td valign="top" colspan="2" class="give_space_between_inputs" style="width:175px; padding:0px;">
+				<table cellspacing="0" cellpadding="0" border="0">
+					<tr>
+						<td style="width:175px; margin-bottom:3px;">Hospital</td>
+						<td style="margin-bottom:3px;">Usage %</td>
+					</tr><tr>
+						<td><input type="text" name="doctor[hospital_affiliations][a][hospital]" value="<%= @hospital_affiliations[0][1] %>" size="25" /></td>
+						<td><input type="text" name="doctor[hospital_affiliations][a][usage]" value="<%= @hospital_affiliations[0][0] %>" size="5" /></td>
+					</tr><tr>
+						<td><input type="text" name="doctor[hospital_affiliations][b][hospital]" value="<%= @hospital_affiliations[1][1] %>" size="25" /></td>
+						<td><input type="text" name="doctor[hospital_affiliations][b][usage]" value="<%= @hospital_affiliations[1][0] %>" size="5" /></td>
+					</tr><tr>
+						<td><input type="text" name="doctor[hospital_affiliations][c][hospital]" value="<%= @hospital_affiliations[2][1] %>" size="25" /></td>
+						<td><input type="text" name="doctor[hospital_affiliations][c][usage]" value="<%= @hospital_affiliations[2][0] %>" size="5" /></td>
+					</tr>
+				</table>
+				<%= inline_errors "hospital_affiliations", @errors %>
+			</td>
+		</tr>
+	</table>
+	<hr/>
+	<table>
+		<tr>
+			<td valign="top" style="vertical-align:text-top; width:160px;">Doctor References:
+				<img src="/images/provider_signup/blue_bg_question_mark.gif" onmousemove="ShowToolTip('Doctors that can vouch for you. This information will be visible to the public.', this);" style="vertical-align:-4px;" />
+				<br/><span class="small_text" style="display:block; margin-top:15px;">Optional. We strongly<br/>encourage you to provide<br/>references as this will<br/>increase the likelihood of<br/>patients purchasing your services.</span></td>
+			<td valign="top" colspan="3" class="give_space_between_inputs" style="width:175px; padding:0px;">
+				<table cellspacing="0" cellpadding="0" border="0">
+					<tr>
+						<td style="width:175px; margin-bottom:3px;">First</td>
+						<td style="width:175px; margin-bottom:3px;">Last</td>
+						<td style="margin-bottom:3px;">Phone</td>
+					</tr><tr>
+						<td><input type="text" name="doctor[doctor_references][a][first_name]" value="<%= @doctor_references[0][1] %>" size="25" /></td>
+						<td><input type="text" name="doctor[doctor_references][a][last_name]" value="<%= @doctor_references[0][2] %>" size="25" /></td>
+						<td><input type="text" name="doctor[doctor_references][a][phone]" value="<%= @doctor_references[0][0] %>" style="width:145px" /></td>
+						<td><div style="position:relative; top:-12px;"><div style="position:absolute; left:0px; width:200px;">(123-123-1234 x1)</div></div></td>
+					</tr><tr>
+						<td><input type="text" name="doctor[doctor_references][b][first_name]" value="<%= @doctor_references[1][1] %>" size="25" /></td>
+						<td><input type="text" name="doctor[doctor_references][b][last_name]" value="<%= @doctor_references[1][2] %>" size="25" /></td>
+						<td><input type="text" name="doctor[doctor_references][b][phone]" value="<%= @doctor_references[1][0] %>" style="width:145px" /></td>
+					</tr><tr>
+						<td><input type="text" name="doctor[doctor_references][c][first_name]" value="<%= @doctor_references[2][1] %>" size="25" /></td>
+						<td><input type="text" name="doctor[doctor_references][c][last_name]" value="<%= @doctor_references[2][2] %>" size="25" /></td>
+						<td><input type="text" name="doctor[doctor_references][c][phone]" value="<%= @doctor_references[2][0] %>" style="width:145px" /></td>
+					</tr><tr>
+						<td><input type="text" name="doctor[doctor_references][d][first_name]" value="<%= @doctor_references[2][1] %>" size="25" /></td>
+						<td><input type="text" name="doctor[doctor_references][d][last_name]" value="<%= @doctor_references[2][2] %>" size="25" /></td>
+						<td><input type="text" name="doctor[doctor_references][d][phone]" value="<%= @doctor_references[2][0] %>" style="width:145px" /></td>
+					</tr><tr>
+						<td><input type="text" name="doctor[doctor_references][e][first_name]" value="<%= @doctor_references[2][1] %>" size="25" /></td>
+						<td><input type="text" name="doctor[doctor_references][e][last_name]" value="<%= @doctor_references[2][2] %>" size="25" /></td>
+						<td><input type="text" name="doctor[doctor_references][e][phone]" value="<%= @doctor_references[2][0] %>" style="width:145px" /></td>
+					</tr>
+				</table>
+				<%= inline_errors "doctor_references", @errors %>
+			</td>
+		</tr>
+	</table>
+</div>
+</div>
+
+	<input type="hidden" name="doctor[id]" value="<%= session[:doctor].id.inspect %>">
+	<div style="float:left;clear:both;width:800px;"> 	
+		<table class="bottom_buttons">
+			<tr>
+				<td height="5"><input name="continue" type="submit" value="" style="width:0px; height:0px; background-color:white; border:0px;" /></td>
+			</tr><tr>
+				<td class="left_column">
+					<input name="back" type="submit" value="" style="background-image:url('/images/provider_signup/back_3.jpg');height:26px;width:177px;border:0px;" />
+				</td><td class="right_column">
+					<input name="continue" type="submit" value="" style="background-image:url('/images/provider_signup/continue_5.jpg');height:26px;width:206px;border:0px;" />
+				</td>
+			</tr>
+<% if session[:doctor].signup_step == 5 && false %>
+			<tr>
+				<td height="8"></td>
+			</tr><tr>
+				<td></td>
+				<td class="right_column">
+					<input name="continue_6" type="submit" value="" style="background-image:url('/images/provider_signup/continue_6.jpg');height:26px;width:206px;border:0px;" />
+				</td>
+			</tr>
+<% end %>
+			<tr>
+				<td height="8"></td>
+			</tr><tr>
+				<td></td>
+				<td class="right_column">
+					<input name="save" type="submit" value="" style="background-image:url('/images/provider_signup/saveandcompleate.jpg');height:26px;width:206px;border:0px;" />
+				</td>
+			</tr>
+		</table>
+	</div>
+
+</form>

@@ -1,0 +1,152 @@
+<div id="doctor_search_options">
+	<ul id="tabs">
+		<li id="zipcode"><a href="#">by Zip Code</a></li>
+		<li id="city-state"><a href="#">by City &amp; State</a></li>
+		<li id="doctor-name"><a href="#">by Doctor/Provider Name</a></li>
+		<li id="company-name"><a href="#">by Practice Name</a></li>
+	</ul>
+
+<style>
+	ul#tabs_content li{
+		font-size:10pt;
+	}
+</style>
+
+<script>
+	var spanish = false;
+	function CheckAllSpanish(sender){
+		spanish = sender.checked;
+		for(var i = 0; i < document.forms.length; i++){
+			if (document.forms[i].elements["spanish"] != sender){
+				document.forms[i].elements["spanish"].checked = spanish;
+			}
+		}
+	}
+</script>
+
+	<ul id="tabs_content">
+		<li>
+			Enter your zip code to find nearby doctors/providers:
+			<% form_tag ({}, {:id => "zipcode_form", :name => "zipcode_form", :style => "margin:0px; margin-top:18px;"}) do -%>
+				<table>
+					<tr>
+						<td>
+				<label for="zipcode">Zip Code</label>
+						</td>
+						<td>
+				<%= text_field_tag 'zipcode',@zipcode %>
+						</td>
+						<td>
+				<%= submit_tag "", :style=>"background-image:url('/images/btn_search.jpg'); height:22px; width:99px; border:0px;" %>
+						</td>
+					</tr>
+				</table>
+				<table style="margin-top:10px;">
+					<tr>
+						<td colspan="99">
+					<label>
+				<input type="checkbox" name="spanish" onclick="CheckAllSpanish(this); submitSearchZipcode(null, Method.Ajax);" id="zip_code_spanish" />
+				Limit search results to providers that speak Spanish.
+				[Limitar los resultados de b&uacute;squeda a los proveedores que hablan espa&ntilde;ol.]
+					</label>
+						</td>
+					</tr>
+				</table>
+			<% end -%>
+		</li>
+		<li>
+			Enter your City &amp; State to find nearby doctors/providers:
+			<% form_tag ({}, {:id => "city_state_form", :name => "city_state_form", :style => "margin:0px; margin-top:18px;"}) do -%>
+				<table>
+					<tr>
+						<td>
+				<label for="city">City</label>
+						</td>
+						<td>
+				<%=text_field_tag 'city',@city %>
+						</td>
+						<td>
+				<label for="state">State</label>
+						</td>
+						<td>
+				<%= select_tag 'state',state_options_for_select(selected = 'California', country = 'US') ,{:id => :state} %>
+						</td>
+						<td>
+				<%= submit_tag "", :style=>"background-image:url('/images/btn_search.jpg'); height:22px; width:99px; border:0px;" %>
+						</td>
+					</tr>
+				</table>
+				<table style="margin-top:10px;">
+					<tr>
+						<td colspan="99">
+					<label>
+				<input type="checkbox" name="spanish" onclick="CheckAllSpanish(this); submitSearchCityState(null, Method.Ajax);" id="city_state_spanish" />
+				Limit search results to providers that speak Spanish.
+				[Limitar los resultados de b&uacute;squeda a los proveedores que hablan espa&ntilde;ol.]
+					</label>
+						</td>
+					</tr>
+				</table>
+			<% end -%>
+		</li>
+		<li>
+			Enter a doctors name to search through our database of doctors/providers:
+			<% form_tag ({}, {:id => "search_doctor_name", :name => "search_doctor_name", :style => "margin:0px; margin-top:18px;"}) do -%>
+				<table>
+					<tr>
+						<td>
+				<label for="doctor_name">Doctor Name</label>
+						</td>
+						<td>
+				<%=text_field_tag 'doctor_name',@doctor_name_query, :onkeyup=>"GetSugesstions(this, event);", :onblur=>"HideSuggestions();" %>
+						</td>
+						<td>
+				<%= submit_tag "", :style=>"background-image:url('/images/btn_search.jpg'); height:22px; width:99px; border:0px;" %>
+				<input type="button" onmousedown="showAllDoctors();" style="background-image:url('/images/btn_see_providers.jpg'); height:22px; width:156px; border:0px; margin-left:25px;" />
+						</td>
+					</tr>
+				</table>
+				<table style="margin-top:10px;">
+					<tr>
+						<td colspan="99">
+					<label>
+				<input type="checkbox" name="spanish" onclick="CheckAllSpanish(this); submitSearchDoctorName(null, Method.Ajax);" id="doc_name_spanish" />
+				Limit search results to providers that speak Spanish.
+				[Limitar los resultados de b&uacute;squeda a los proveedores que hablan espa&ntilde;ol.]
+					</label>
+						</td>
+					</tr>
+				</table>
+			<% end -%>
+		</li>
+		<li>
+			Enter the practice name to search:
+			<% form_tag ({}, {:id => "company_form", :name => "company_form", :style => "margin:0px; margin-top:18px;"}) do -%>
+				<table>
+					<tr>
+						<td>
+				<label for="company">Practice Name</label>
+						</td>
+						<td>
+				<%=text_field_tag 'company',@company_name_query, :onkeyup=>"GetSugesstions(this, event);", :onblur=>"HideSuggestions();" %>
+						</td>
+						<td>
+				<%= submit_tag "", :style=>"background-image:url('/images/btn_search.jpg'); height:22px; width:99px; border:0px;" %>
+						</td>
+					</tr>
+				</table>
+				<table style="margin-top:10px;">
+					<tr>
+						<td colspan="99">
+					<label>
+				<input type="checkbox" name="spanish" onclick="CheckAllSpanish(this); submitSearchCompany(null, Method.Ajax);" id="company_name_spanish" />
+				Limit search results to providers that speak Spanish.
+				[Limitar los resultados de b&uacute;squeda a los proveedores que hablan espa&ntilde;ol.]
+					</label>
+						</td>
+					</tr>
+				</table>
+			<% end -%>
+		</li>
+	</ul>
+</div>

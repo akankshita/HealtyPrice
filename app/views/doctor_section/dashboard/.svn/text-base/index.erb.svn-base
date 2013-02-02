@@ -1,0 +1,88 @@
+			<div id="page_header_box">
+				<div id="headerX">Provider Dashboard </div>
+				<div id="help"><span class="help"><a href="javascript:ShowPopUp();">Help</a></span></div>                        
+			</div>
+<% if @error != nil && @error != "" -%>
+	<% if @show_error_as_javascript == true -%>
+<script>alert('<%= @error %>');</script>
+	<% else -%>
+<div id="error"><!--img src="/images/provider_signup/error.gif" style="float:left;" /--><%= @error %></div>
+	<% end -%>
+<% end -%>
+			<div id="details_2">
+				<% if session[:doctor].onhold == 1 %>
+				<div style="color:#FF0000; margin-left:8px; margin-bottom:10px; font-weight:bold;">Your account is currently on hold.
+				<a href="/doctor_section/account_status">Click here for more information.</a></div>
+				<% end %>
+				<table width="880" border="0" cellspacing="5" cellpadding="2">
+					<tr>
+						<td width="362" rowspan="3">
+							<span class="subheat_text_style">Manage Your Orders</span><br/>
+<%=link_to 'Manage Orders', "/doctor_section/orders/context/all/page1" %><br/>
+<%=link_to 'View Payments', "/doctor_section/payments/page1" %><br/>
+							<br />
+							<span class="subheat_text_style">Manage Your Account</span><br/>
+<%=link_to 'Manage Procedures and Services', "/doctor_section/procedures" %><br/>
+<%=link_to 'Manage Profile', "/doctor_section/profile" %> | <a href="/doctors/<%= session[:doctor].id.inspect %>" target="_blank">View Public Profile</a><br/>
+<%=link_to 'Place Account On Hold or Close Account', "/doctor_section/account_status" %><br/>
+							<br />
+							<span class="subheat_text_style">Fulfill an Order</span><br/>
+							<%= form_tag({ :action => "index" }, :method => "post") %>
+								Enter Billing Code: <input type="text" name="billing_code" size="15" style="vertical-align:middle;" /> &nbsp;
+								<input type="submit" value="" style="background-image:url('/images/provider_signup/submit_button_18.jpg'); width:72px; height:21px; border:0px; vertical-align:middle;" />
+							</form>
+							<br />
+							<span class="subheat_text_style">Share HealthyPrice</span>
+							<div style="line-height:20px;">
+							Do you have a website? Let your customers know about HealthyPrice.
+							Simply copy this segment of HTML to your website. When your customer
+							clicks on it, it will open your provider profile on HealthyPrice.<br/>
+								<div style="float:left;">
+									&nbsp;<br/><textarea style="font-family:arial; font-size:10px; width:160px; height:50px;" onclick="this.select();" readonly><a href="https://www.healthyprice.com/doctors/<%= session[:doctor].id.inspect %>" target="_blank"><img src="https://www.healthyprice.com/images/promotional_button.jpg" style="border:0px;" /></a></textarea>
+								</div>
+								<div style="float:left; margin-left:20px;">
+									&nbsp;<br/><a href="/doctors/<%= session[:doctor].id.inspect %>" target="_blank"><img src="/images/promotional_button.jpg" style="border:0px;" /></a>
+								</div>
+							</div>
+						<td colspan="2" align="left" style="padding-left:55px;">
+							<span class="subheat_text_style" >Total Earnings YTD <%= @Earnings %></span><br/>
+							<br />
+							<img src="/images/provider_signup/question_mark.gif" style="margin-top:-3px;" onmouseover="ShowToolTip('Prices shown are amount the provider collects (HealthyPrice fees have already been deducted).', this);" hspace="5" />
+							<span class="subheat_text_style">Recent Orders:</span>
+	<table cellpadding="0" cellspacing="0" style="margin-top:6px;">
+		<%	@RowsFound = 0
+			@orders.each do |ss| -%>
+			<tr><td align="right" style="text-align:right;"><span style="line-height:16px;"><%= number_to_currency(ss.doctor_price) %></span></td>
+			<td width="8"></td><%#= shorten(ss.Srv_Name + " (" + ss.Spc_Name + ")", 75) %>
+			<td style="padding-bottom:10px;"><a style="line-height:16px;" href="/doctor_section/order/<%= ss.id %>"><%= ss.Srv_Name %> (<%= ss.Spc_Name %>)</a></td></tr>
+		<%		@RowsFound += 1
+			end
+			if @RowsFound == 0 -%>
+			<tr><td width="20"></td><td colspan="2" align="center"><i>You have no new orders. Click below to view past orders.</i></td><td width="20"></td><tr>
+		<% end -%>
+	</table>
+<% if @show_more_link == "true" -%>
+	<%=link_to 'View More', "/doctor_section/orders/context/all/page1" %>
+<% end %>
+							<br/><br/>
+							<span class="subheat_text_style">Order Sheets - Click on the links to open a PDF and Print Out:</span><br/>
+							<% 	@path = Dir.pwd + '/public/download/practice_area_documents/'
+								@selected_specialties.each do |ss|
+									@ssid = ss.id.inspect %>
+									<% if File::exists?(@path + @ssid + '_document.pdf') %>
+									<a href="/download/practice_area_documents/<%= @ssid %>_document.pdf" style="display:block; margin-top:8px;" target="_blank">
+										<img src="/images/pdf.gif" style="margin-top:-4px; margin-left:12px; border:0px;" border="0">
+										<%= ss.name %>
+									</a>
+									<% end %>
+							<% 	end %>
+						</td>
+					</tr><!--tr>
+						<td width="90" height="144" align="right"></td>
+						<td width="466"></td>
+					</tr><tr>
+						<td style="color:#ff9900; font-weight:bold; text-align:right;"></td>
+						<td></td>
+					</tr-->
+				</table>
+			</div>

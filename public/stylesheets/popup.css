@@ -1,0 +1,46 @@
+
+div.NestedClose{
+	float:right;
+	background-color:#FF8888;
+	border:1px solid #888888;
+	color:#FFFFFF;
+	height:15px;
+	width:15px;
+	margin:5px;
+	cursor:pointer;
+	line-height:15px;
+	text-align:center;
+	vertical-align:middle;
+}
+
+div#PopUp{
+	text-align:left;
+	/*text-align:justify;*/
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:10pt;
+	line-height:20pt;
+	width:450px;
+	/* - */
+	position:absolute;
+	/*background-color:#FDFDF0;*/
+	background-color:#FFFFFF;
+	/*border:5px solid #888888;*/
+	/*border:2px solid #DCEEFA;*/
+	border:2px solid #2D8DC9;
+}
+
+div#PopUpMessage{
+	margin:12px;
+}
+
+div#ToolTip{
+	position:absolute;
+	background-color:lightyellow;
+	border:1px solid #888888;
+	padding:4px;
+	max-width:280px;
+	font-size:10pt;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	text-align:left;
+	text-align:justify;
+}

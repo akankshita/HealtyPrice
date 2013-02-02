@@ -1,0 +1,14 @@
+<%= form_tag({ :action => "update" }, :method => "post") %>
+	Name: <input type="text" name="file_name" />
+	<textarea name="file_content" style="width:950px; height:450px;"><% 
+@path = Dir.pwd + '/app/views/emailer/'
+File.open(@path + params[:file_name] + ".html.erb", 'r') do |f1|
+  while line = f1.gets
+    %><%= line %><%
+  end
+end
+%></textarea><br/>
+	<input type="hidden" name="file_name" value="<%= params[:file_name] %>" />
+	<input type="submit" value=" Save " />
+	<a href="/admin/mail_templates">Back</a>
+</form>

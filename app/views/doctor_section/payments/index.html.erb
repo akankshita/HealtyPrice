@@ -1,0 +1,94 @@
+<%= javascript_include_tag 'ajax' %>
+<%= stylesheet_link_tag 'doctor_orders' %>
+			<div id="page_header_box">
+				<div id="headerX">Payments</div>
+				<div id="help"><span class="help"><a href="javascript:ShowPopUp();">Help</a></span></div>                        
+			</div>
+
+			<div id="details_2">
+
+<div style="width:750px; text-align:justify; margin-bottom:10px;">
+	Payments made to the provider by HealthyPrice are listed below.  To find a specific payment use the search box.<br/>
+	You can search by: payment reference #, order #, payment amount or date (mm/dd/yy).
+</div>
+<div class="search_by_keyword">
+	<%= form_tag({ :action => "index" }, :method => "post") %>
+		<input type="text" name="search[query]" value="<%= session[:query] %>" style="vertical-align:middle;" />
+		<input name="find" type="submit" value="" style="background-image:url('/images/doctor_section/search.jpg'); width:69px; height:21px; border:0px; vertical-align:middle;" />
+		<input name="clear" type="submit" value="" style="background-image:url('/images/doctor_section/clear.jpg'); width:69px; height:21px; border:0px; vertical-align:middle;" />
+	</form>
+</div>
+
+<br style="clear:left;"/><br/>
+
+<form name="form0" method="post">
+	<div class="pagination" style="margin-bottom:10px;"><%= @pagination_code %></div>
+	<br style="clear:left;"/>
+	<table cellpadding="0" cellspacing="0" class="orderstbl" style="width:860px;">
+			<tr>
+				<th><p>Payment Reference</p></th>
+				<th><p>Date Processed</p></th>
+				<th><p>Amount</p></th>
+				<th><p>...</p></th>
+			<tr>
+		<% @RowClass="odd-record"
+		@RowsFound = 0
+		@orders.each do |ss| -%>
+			<tr id="ParentRow<%= ss.id %>" class="<%=@RowClass %>" style="cursor:arrow;" xonclick="LoadNested('<%= ss.id %>');">
+				<td><%= ss.id %></td>
+				<td><%= ss.created_at.strftime("%m/%d/%Y") %></td>
+				<td align="right" style="text-align:right;"><%= number_to_currency(ss.total_amount) %> &nbsp; &nbsp; </td>
+				<td><a href="javascript:LoadNested('<%= ss.id %>');">Payment Details</a></td>
+			</tr>
+			<tr id="HiddenRow<%= ss.id %>" class="HiddenRow" style="display:none;">
+				<td colspan="4">
+					<div class="NestedClose" onclick="CloseNested('<%= ss.id %>');"> X </div>
+					<div id="NestedSpace<%= ss.id %>" class="NestedSpace"></div>
+				</td>
+			</tr>
+		<%	if @RowClass == "odd-record"
+				@RowClass = "even-record"
+			else
+				@RowClass = "odd-record"
+			end
+			@RowsFound += 1
+		end
+		if @RowsFound == 0 -%>
+			<tr style="height:40px;">
+				<td colspan="7" style="text-align:center;"><i>No results found</i></td>
+			<tr>
+		<% end -%>
+	</table>
+	<div class="pagination" style="margin-top:10px;"><%= @pagination_code %></div>
+</form>
+
+<script>
+window.onload = OpenNestedIfLinked;
+
+function LoadNested(id){
+	document.getElementById('HiddenRow'+id).style.display = '';
+	document.getElementById('ParentRow'+id).style.display = 'none';
+	AjaxLoad('/doctor_section/payment/'+id, 'NestedSpace'+id);
+}
+function CloseNested(id){
+	document.getElementById('HiddenRow'+id).style.display = 'none';
+	document.getElementById('ParentRow'+id).style.display = '';
+}
+var OriginalColor;
+function GlowCloseButton(elem){
+	OriginalColor = elem.style.background;
+	elem.style.background = "#DDDDDD;";
+}
+function DimCloseButton(elem){
+	elem.style.background = OriginalColor;
+}
+function OpenNestedIfLinked(){
+	var URL = document.location.href;
+	if(URL.indexOf("#") > -1){
+		LoadNested(URL.substring(URL.indexOf("#")+1));
+	}
+}
+</script>
+
+<%#=@sql %>
+			</div>

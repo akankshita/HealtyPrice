@@ -1,0 +1,22 @@
+<h4><b><%= @admin.name %></b></h4>
+<div class="form_section" xstyle="width:300px">
+	<div style="inline-adapter-cell" xclass="show-view admin/configurations-view view">
+		<div style="color:red;"><b>Are you sure that you want to delete this Administrator?</b><br/>
+		<%	if session[:error] != nil %><%= session[:error] %>
+		<%		session[:error] = nil
+			end %></div>
+		<%= form_tag({ :action => "delete_admin" }, :method => "post") %>
+		<% #:onsubmit => "AjaxSubmit(this, 7, '/admin/admins/update', 'inline-adapter-cell" + @admin.id.inspect + "');" %>
+		<input type="hidden" name="id" value="<%= @admin.id %>" />
+		<table>
+			<tr><td width="120">Name</td><td><%= @admin.name %></td></tr>
+			<tr><td>Email</td><td><%= @admin.email %></td></tr>
+		</table>
+		<p class="form-footer">
+		<input type="submit" value=" Delete " />
+		<a href="/admin/admins">Back</a>
+		<img id="admin__configurations-create-0-loading-indicator" class="loading-indicator" style="visibility: hidden;" src="/images/active_scaffold/default/indicator.gif?1262145270" alt="loading indicator"/>
+		</p>
+		</form>
+	</div>
+</div>

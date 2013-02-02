@@ -1,0 +1,107 @@
+<div id="dr_more_info" style="padding:0px;">
+<style>
+.dr_name_x{
+	font-size:14pt;
+}
+p{
+	font-size:10pt;
+}
+li{
+	font-size:10pt;
+}
+</style>
+	<!-- need to use tables for layout:   colorbox + floated divs + auto sizing based on content = not good -->
+	<table style="width:700px; margin:20px;">
+		<tr>
+			<td style="width:300px; vertical-align:top;" valign="top">
+				<h4><%= @doctor.name %></h4>
+				<p style="margin-top:5px; margin-bottom:0px;"><%= @doctor.company %></p>
+				<p style="margin-top:5px; margin-bottom:0px;"><%= @doctor.address %><% if @doctor.address2 != nil && @doctor.address2 != "" %>, <%= @doctor.address2 %><% end %>,</p>
+				<p style="margin-top:5px; margin-bottom:0px;"><%= @doctor.city %>, <%= @doctor.state %> <%= @doctor.zipcode %></p>
+				<p style="margin-top:5px; margin-bottom:0px;"><%= @doctor.public_phone %></p>
+				<br/>
+				<% @MapParams = "'"+@doctor.full_address+"', '"+@doctor.first_name+" "+@doctor.last_name+"'" %>
+				<p><%=link_to 'View Map', {}, {:class => 'dr_map', :onclick => 'showMap('+@MapParams+'); return false;'} %></p>
+
+				<div class="specialties">
+					<p style="margin-bottom:5px;"><strong>Practice Areas</strong></p>
+					<% @specialties.each do |s| -%>
+					<p><%=s.s_name%></p>
+					<ul style="margin-top:0px;">
+						<% @services.each do |srv| -%>
+							<% if srv.specialty_id == s.id.inspect %><li><%=srv.service_name%></li><% end %>
+						<% end -%>
+					</ul>
+					<% end -%>
+				</div>
+
+			<% if @doctor.spanish == 1 || (@doctor.other_languages != nil && @doctor.other_languages != "") %>
+				<div class="specialties">
+					<p><strong>Languages Spoken</strong></p>
+					<ul style="margin-top:5px;">
+						<li>English</li>
+				<% if @doctor.spanish == 1 %>
+						<li>Spanish</li>
+				<% end %>
+				<% if @doctor.other_languages != nil && @doctor.other_languages != "" %>
+					<% @doctor.other_languages.split(',').each do |lang| -%>
+						<% if lang != "English" && lang != "Spanish" && lang != "" && lang != " " %>
+							<li><%= lang %></li>
+						<% end %>
+					<% end -%>
+				<% end %>
+					</ul>
+				</div>
+			<% end %>
+
+				<div class="specialties">
+					<p style="margin-bottom:5px;"><strong>References</strong></p>
+					<ul style="margin-top:0px;">
+					<% @references.each do |ref| -%>
+						<li><%=ref.first_name%> <%=ref.last_name%></li>
+					<% end -%>
+					</ul>
+				</div>
+
+				<% if @doctor.display_training_to_public == 1 && ((@doctor.residency_training != nil && @doctor.residency_training != "") || (@doctor.fellowship_training != nil && @doctor.fellowship_training != "")) %>
+				<div class="specialties">
+					<p style="margin-bottom:5px;"><strong>Training</strong></p>
+					<ul style="margin-top:0px;">
+						<% if @doctor.residency_training != nil && @doctor.residency_training != "" %><li>Residency training: <%= @doctor.residency_training %></li><% end %>
+						<% if @doctor.fellowship_training != nil && @doctor.fellowship_training != "" %><li>Fellowship training: <%= @doctor.fellowship_training %></li><% end %>
+					</ul>
+				</div>
+				<% end %>
+
+				<p><%=link_to 'Select this Doctor/Provider', doctor_path(@doctor.id), {:class => 'dr_select'} %></p>
+			</td><td style="width:400px; vertical-align:top;" valign="top">
+				<% @path = Dir.pwd + '/public/images/uploads/' %>
+				<table>
+					<tr>
+						<td>
+							<% if File::exists?(@path + @doctor.id.inspect + '_headshot.jpg') %>
+								<img src="/images/uploads/<%= @doctor.id.inspect %>_headshot.jpg" height="150" />
+							<% end %>
+						</td><td>
+							<% if File::exists?(@path + @doctor.id.inspect + '_practice.jpg') %>
+								<img src="/images/uploads/<%= @doctor.id.inspect %>_practice.jpg" height="150" />
+							<% end %>
+						</td>
+					</tr>
+				</table>
+				<div style="height:40px;"></div>
+				<% if @doctor.description != nil %>
+					<p style="text-align:left;"><%= @doctor.description.gsub(/\n/, '<br/>') %></p>
+				<% end %>
+				<% if File::exists?(@path + @doctor.id.inspect + '_video.flv') && @doctor.video_code == "Show" %>
+					<embed src="/images/player.swf"
+					width="320" height="240"
+					allowscriptaccess="always" allowfullscreen="true"
+					flashvars="file=/images/uploads/<%= @doctor.id.inspect %>_video.flv&controlbar=over&autostart=true&plugins=autostarter-1&autostarter.count=3&autostart=true" />
+					<!--div style="height:25px;"></div>
+					<p><%#= @doctor.video_code %></p-->
+				<% end %>
+			</td>
+		</tr>
+	</table>
+</div>

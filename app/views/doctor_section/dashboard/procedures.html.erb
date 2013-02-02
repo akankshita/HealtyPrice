@@ -1,0 +1,51 @@
+<%= stylesheet_link_tag 'active_scaffold/default/stylesheet' %>
+<%= stylesheet_link_tag 'admin' %>
+<%= stylesheet_link_tag 'doctor_orders' %>
+<div class="left25">
+	<%= form_tag({ :action => "index" }, :method => "post", :name=>"form1") %>
+		<table border="0">
+			<tr>
+				<td valign = "top">
+			<%	@specialties.each do |ss| %>
+					<table><tr>
+					<td><label><input type="checkbox" name="doctor[chk<%= ss.id %>]" <%
+					if @selected_specialties.include?(ss) %>checked<% end %> /><%= ss.name %></label></td>
+					<td><img src="/images/provider_signup/question_mark.gif" toolTip="<%= ss.description %>" /></td>
+					</tr></table>
+			<%	end %>
+				</td>
+			</tr>
+		</table>
+		<input name="save" type="submit" value=" Save " />
+	</form>
+</div>
+
+<div class="left50">
+	<table cellpadding="0" cellspacing="0" class="orderstbl" xstyle="width:250px; float:left;">
+			<tr>
+				<th><p>Service</p></th>
+				<th><p>Action</p></th>
+			<tr>
+		<% @services.each do |ss| -%>
+			<tr>
+				<td><%=ss.service %></td>
+				<td><input type="button" value=" Remove " name="chk<%=ss.id %>" onclick="RemoveSpeciality(this);"></td>
+			<tr>
+			<tr>
+				<td colspan="2" style="border-top:0px;"><%=ss.description %></td>
+			<tr>
+		<% end %>
+	</table>
+</div>
+
+<script>
+	function RemoveSpeciality(elem){
+		if (confirm("Are you sure that you want to remove this item?")){
+			alert(elem.name);
+		}
+	}
+
+	function AddSpeciality(id){
+		alert(id);
+	}
+</script>

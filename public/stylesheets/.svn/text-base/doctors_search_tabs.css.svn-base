@@ -1,0 +1,64 @@
+div#doctor_search_options li {
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+div#doctor_search_options ul {
+  padding: 0px;
+  margin: 0px;
+}
+
+div#doctor_search_options {
+  margin-top: 20px;
+  overflow: hidden;
+}
+
+div#doctor_search_options ul#tabs li {
+  border: 1px #bbbbbb solid;
+  float:left;
+  border-bottom: none;
+  margin-right: 5px;
+  padding: 2px 15px;
+  position: relative;
+  top: 1px;
+  background-color: #EFEFEF;
+}
+
+div#doctor_search_options ul#tabs li a {
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+  outline: none;
+}
+
+div#doctor_search_options ul#tabs li.active {
+  background-color: white;
+  padding-bottom: 3px;
+  top: 1px;
+}
+
+div#doctor_search_options ul#tabs li.active a {
+}
+
+div#doctor_search_options ul#tabs_content {
+  display: block;
+  border: 1px #bbbbbb solid;
+  clear:both;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: white;
+}
+
+div#doctor_search_options input[type=textarea] {
+  margin: 0px;
+  padding: 0px;
+}
+
+div#doctor_search_options input#city {
+  margin-right: 20px;
+}
+
+div#doctor_search_options input[type=submit] {
+  margin-left: 20px;
+}

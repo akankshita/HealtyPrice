@@ -1,0 +1,30 @@
+<div class="span-7 last" id="right-col">
+	<div id="right-promo" class="span-7 last">
+		<%=link_to (image_tag 'home/right-promo-top.png',:alt => "Quality Doctors, and quality healthcare is our number one concern"),page_path(:slug => 'quality') %>
+		<hr>
+		<div class="span-6 prepend-1 append-1 last right-promo-section">
+			<% link_to page_path(:slug => 'doctor') do -%>
+				<h3>Are You a Doctor or Healthcare Provider?</h3>
+				<p>Become a member now.<br/>It’s easy and free.</p>
+			<% end -%>
+		</div>
+		<hr>
+		<div class="span-6 prepend-1 append-1 last right-promo-section">
+			<% link_to page_path(:slug => 'business') do -%>
+			<h3>Are You a Business?</h3>
+			<p>An attractive benefit for your employees - completely free to you!</p>
+			<% end -%>
+		</div>
+		<hr>
+		<div class="span-6 prepend-1 append-1 last right-promo-section">
+			<% link_to page_path(:slug => 'hsa') do -%>
+				<h3>Have an HSA?</h3>
+				<p class="subhead">(Health Savings Account)</p>
+				<p>Your account can be used here at HealthyPrice.</p>
+			<% end -%>
+		</div>
+	</div>
+	<div id="right-col-footer-nav" class="span-7 last">
+		<%=render :partial => '/common/right_col_footer'%>
+	</div>	
+</div>

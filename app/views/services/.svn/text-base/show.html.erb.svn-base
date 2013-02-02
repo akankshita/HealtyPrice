@@ -1,0 +1,4 @@
+<h2><%=h @service.name %></h2>
+
+<p id="description"><%=h @service.description %></p>
+

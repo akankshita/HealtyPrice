@@ -1,0 +1,94 @@
+<style>
+	table.as_data_table tr td{
+		color:#555555;
+		font-family:verdana,sans-serif;
+		font-size:11px;
+		font-weight:normal;
+		line-height:16px;
+		vertical-align:top;
+		padding:3px;
+	}
+</style>
+
+<% if true %>
+
+<table class="as_data_table">
+	<tbody>
+		<tr>
+			<td width="140">Practice Area: </td>
+			<td><%= @record.specialty.name %> &nbsp;</td>
+		</tr><tr>
+			<td>Procedure or Service: </td>
+			<td><%= @record.service_name %> &nbsp;</td>
+		</tr><tr>
+			<td>Description: </td>
+			<td><%= @record.service_description %> &nbsp;</td>
+		</tr><tr>
+			<td>Provider Price: </td>
+			<td><%= number_to_currency(@record.doctor_price) %> &nbsp;</td>
+		</tr><tr>
+			<td>Customer Price: </td>
+			<td><%= number_to_currency(@record.customer_price) %> &nbsp;</td>
+		</tr><tr>
+			<td>Sort Order: </td>
+			<td><%= @record.sort_order %> &nbsp;</td>
+		</tr><tr>
+			<td>Display Note: </td>
+			<td>
+				<% if @record.note_id != -1 %>
+					<% @note = Note.find_by_sql("SELECT content FROM notes WHERE id = 0" + @record.note_id.inspect) %>
+					<% if @note.size == 1 %>
+						<%= @note[0].content %>
+					<% end %>
+				<% end %> &nbsp;
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<% else %>
+
+<table class="as_data_table">
+<% columns.each :for => @record do |column| %>
+  <% if column.is_a? ActiveScaffold::DataStructures::ActionColumns -%>
+  <tr>
+    <td><%= column.label -%>: </td>
+    <td><%= render :partial => 'show_columns', :locals => {:columns => column} %></td>
+  </tr>
+  <% elsif column.label == "Doctor price" -%>
+  <tr>
+    <td><%= column.label -%>: </td>
+    <td><%= number_to_currency(show_column_value(@record, column)) %> &nbsp;</td>
+  </tr>
+  <% elsif column.label == "Customer price" -%>
+  <tr>
+    <td><%= column.label -%>: </td>
+    <td><%= number_to_currency(show_column_value(@record, column)) %> &nbsp;</td>
+  </tr>
+  <% elsif column.label == "Specialty" -%>
+  <tr>
+    <td width="120"><%= column.label -%>: </td>
+    <td><%= Specialty.find(@record.specialty_id).name %> &nbsp;</td>
+  </tr>
+  <% elsif column.label == "Note" -%>
+  <tr>
+    <td><%= column.label -%>: </td>
+    <td>
+	<% if @record.note_id != -1 %>
+		<% @note = Note.find_by_sql("SELECT content FROM notes WHERE id = 0" + @record.note_id.inspect) %>
+		<% if @note.size == 1 %>
+			<%= @note[0].content %>
+		<% end %>
+	<% end %> &nbsp;
+    </td>
+  </tr>
+  <% else -%>
+  <tr>
+    <td><%= column.label -%>: </td>
+    <td><%= show_column_value(@record, column) -%> &nbsp;</td>
+  </tr>
+  <% end -%>
+<% end -%>
+</table>
+
+<% end %>

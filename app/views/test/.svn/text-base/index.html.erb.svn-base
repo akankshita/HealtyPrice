@@ -1,0 +1,30 @@
+<html>
+	<head>
+		<%= javascript_include_tag 'auto_fill' %>
+	<head>
+	<body>
+		<div style="position:absolute; top:100px; left:200px;">
+			<%= form_tag({ :action => "index" }, :method => "post") %>
+			<!--form name="form1"-->
+				<input type="text" name="Doctors" value="<%= params[:Doctors] %>" />
+				<!--onkeyup="GetSugesstions(this, event);" onblur="HideSuggestions();" /-->
+				<input type="submit" value="Test String" />
+			</form>
+			::<%= @output %>::
+		</div>
+		<div id="Sugesstions" style="display:none;" onfocus="CancelHideSuggestions();" onblur="HideSuggestions();"></div>
+		<style>
+		div#Sugesstions{
+			border:1px solid #666666;
+			background-color:#FFFFFF;
+			overflow:auto;
+			position:absolute;
+		}
+		div.Suggestion{
+			cursor:pointer;
+			height:20px;
+			/*background-color:#FFFFFF;*/
+		}
+		</style>
+	</body>
+</html>

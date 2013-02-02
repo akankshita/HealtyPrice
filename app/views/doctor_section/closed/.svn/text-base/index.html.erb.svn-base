@@ -1,0 +1,11 @@
+<div class="look_up_box" style="width:550px; margin-bottom:30px;">
+<% blue_box "Account Disabled" do -%>
+<p style="font-size:10pt; margin-top:0px; padding-top:0px; width:510px; text-align:left; color:#666666;">
+	Your account is currently not active. If you have not requested this, please <a href="/page/contact_us">contact us</a> and we will be happy to assist you.
+	<br/><br/>
+	If you recently completed your application to join HealthyPrice, your account is in review. We will contact you once the review process has been completed.
+</p>
+<!--br/><br/>
+<a href="/user_session/destroy">Log Out</a-->
+<% end -%>
+</div>

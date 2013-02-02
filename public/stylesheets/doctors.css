@@ -1,0 +1,76 @@
+div#other_search {
+  border: 1px #bbbbbb solid;
+  padding: 4px;
+  background-color: white;
+  float: right;
+}
+
+div#other_search a {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+div#results {
+  clear: both;
+  border: 1px #bbbbbb solid;
+  padding: 3px;
+  height: 300px;
+  overflow: auto;
+}
+
+
+div#dr_more_info p {
+  margin: 0px;
+}
+
+div#dr_more_info {
+  padding: 50px;
+}
+
+div#dr_more_info td {
+ vertical-align: top;
+}
+
+div.specialties {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+img#headshot {
+ float: left;
+ margin-right: 10px;
+}
+
+img#clinic_photo, img#headshot {
+  border: 1px #bbbbbb solid;
+}
+
+div#results li {
+  list-style: none;
+  padding: 4px;
+  font-size:10pt;
+}
+
+div#results li.odd_row {
+  background-color:#F0F8FF;
+  border-bottom:1px solid #D0D8FF;
+}
+div#results li.even_row {
+  background-color:#FFFFFF;
+  border-bottom:1px solid #D0D8FF;
+}
+
+div#results ul {
+  margin: 0px;
+  padding:0px;
+}
+
+div#results {
+  position: relative;
+}
+
+div#spinner {
+  position: absolute;
+  left: 453px;
+  top: 130px;
+}

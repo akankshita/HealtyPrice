@@ -1,0 +1,154 @@
+<% content_for :head do %>
+	<%= stylesheet_link_tag 'order_show' %>
+	<%#= javascript_include_tag 'doctors' %>
+<% end %>
+<script>
+	//$('a.dr_more_info').click(showDrMoreInfo);
+	function showDrMoreInfo(id) {
+		var doctor_id = id;	//$(this).attr("rel");
+		var url = Routing.doctor_path({id: doctor_id, format: 'js'});
+		$.fn.healthybox({href: url, open:true});	//, maxWidth: '50%'
+		//return false;
+	}
+</script>
+<div class="service_order_mid">
+	<% if !@error.nil? %>
+		<div class="error"><%=@error%></div>
+	<% end %>
+
+	<% if @order == nil %>
+	Not Found
+	<% else %>
+
+	<div class="service_order_blue_bg">
+                <table width="135" border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td class="service_order_head">HealthyPrice<br />Service Order</td>
+                  </tr><tr>
+                    <td height="10"></td>
+                  </tr><tr>
+                    <td class="service_order_sub_head">Order Number:</td>
+                  </tr><tr>
+                    <td class="service_order_no"><%= @order.id %></td>
+                  </tr><tr>
+                    <td height="20"></td>
+                  </tr><tr>
+                    <td><img src="/images/service_order_arrow.jpg" width="42" height="26" /></td>
+                  </tr><tr>
+                    <td height="15"></td>
+                  </tr><tr>
+                    <td class="service_order_text">Please contact the<br />provider within 48<br />hours to schedule <br />the service. </td>
+                  </tr>
+                </table>
+		<br style="clear:both;" />
+		<% if @order.orderstatus == "New" && Time.now - @order.created_at < 172800 %>
+			<%= form_tag({ :action => "cancel_order" }, :method => "post", :onsubmit => "return confirm('Are you sure you want to cancel this order?');") %>
+				<input type="hidden" name="order_id" value="<%= @order.id %>" />
+				<input style="background-image:url('/images/btn_cancel.jpg'); height:22px; width:126px; border:0px;" type="submit" value="" />
+			</form>
+		<% elsif @order.orderstatus == "Cancelled" || @order.orderstatus == "cancelled" %>
+			<p align="center"><b>This order has been cancelled.</b></p>
+		<% end %>
+	</div>
+            <div class="procedure_payment">
+            	<div class="blue_box_big">
+            		<div class="blue_box_big_top_bg">Procedure &amp; Payment Information</div>
+                    	<div class="procedure_payment_inside">
+                        	<table width="315" border="0" cellspacing="0" cellpadding="0">
+                              <tr>
+                                <td valign="top" class="service_order_text_small"><strong>Procedure / Service</strong>:</td>
+                              </tr><tr>
+                                <td height="3" valign="top" class="service_order_text_small"></td>
+                              </tr><tr>
+                                <td valign="top" class="service_order_text_small"><%= @order.specialty_service.service_name %> (<%= @order.specialty_service.specialty.name %>)</td>
+                              </tr><tr>
+                                <td height="15" valign="top"></td>
+                              </tr><!--tr>
+                                <td valign="top" class="service_order_text_small"><strong>Order #:</strong> <%= @order.id.inspect %></td>
+                              </tr--><tr>
+                                <td height="15" valign="top"></td>
+                              </tr><tr>
+                                <td valign="middle" class="service_order_text_small"><strong>Order Total:</strong> <%= number_to_currency(@order.customer_price,{:precision => 2}) %></td>
+                              </tr><tr>
+                                <td height="15" valign="top"></td>
+                              </tr><tr>
+                                <td valign="top" class="service_order_text_small"><strong>Name:</strong> <%= @order.name %></td>
+                              </tr><tr>
+                                <td height="15" valign="top"></td>
+                              </tr><tr>
+                                <td valign="top"><span class="service_order_text_small"><strong>Patient Name:</strong> <%= @order.patient_name %></span></td>
+                              </tr><tr>
+                                <td height="15" valign="top"></td>
+                              </tr><tr>
+                                <td valign="top" class="service_order_text_small"><strong>Address:</strong><br />
+                                  <%= @order.address %><br />
+                                  <%= @order.city %>, <%= @order.state %> <%= @order.zipcode %><br />
+                                  <%= @order.phone %><br />
+                                  <%= @order.email %></td>
+                              </tr><tr>
+                                <td height="15" valign="top"></td>
+                              </tr><tr><% @ccnum =@order.credit_card %>
+                                <td valign="top" class="service_order_text_small"><strong>Credit Card:</strong> XXXX-XXXX-XXXX-<%= @ccnum[@ccnum.size-4, @ccnum.size-1] %></td>
+                              </tr><tr>
+                                <td height="15" valign="top"></td>
+                              </tr><tr>
+                                <td valign="top" class="service_order_text_small"><strong>Expiration Date:</strong> <%= @order.expiration.strftime("%m/%y") %></td>
+                              </tr>
+                            </table>
+                  </div>
+  	            </div>
+            </div><% @doctor = @order.doctor %>
+<% if @doctor == nil %>
+This doctor has deleted the account.
+<% else %>
+            <div class="provider_info">
+            	<div class="blue_box_big">
+            		<div class="blue_box_big_top_bg">Provider Information</div>
+                    <div class="provider_info_content">
+                    	<table width="270" border="0" cellspacing="0" cellpadding="0">
+                          <tr>
+                            <td width="203" class="service_order_text_small"><strong><%= @doctor.name %></strong></td>
+                            <td width="97" align="right" class="service_order_text_small">
+			<span class="blue_box_big_link">
+				<a href="javascript:showDrMoreInfo(<%= @doctor.id.inspect %>);" onclick="showDrMoreInfo(<%= @doctor.id.inspect %>);">View Profile</a>
+				<!-- class="dr_more_info" rel="<%= @doctor.id.inspect %>"-->
+			</span>
+                            </td>
+                          </tr><tr>
+                            <td height="15" colspan="2"></td>
+                          </tr><tr>
+                            <td colspan="2" class="service_order_text_small"><%= @doctor.company %><br />
+			<%= @doctor.address %><% if @doctor.address2 != "" && @doctor.address2 != nil %>, <%= @doctor.address2 %><% end %><br />
+			<%= @doctor.city %>, <%= @doctor.state %> <%= @doctor.zipcode %><br />
+			<%= @doctor.public_phone %></td>
+                          </tr><tr>
+                            <td colspan="2" class="service_order_text_small"><span class="blue_box_big_link"><%=link_to 'Map', {}, {:class => 'dr_map'} %></span></td>
+                          </tr><tr>
+                            <td height="15" colspan="2"></td>
+                          </tr><tr>
+                            <td colspan="2"><img src="/images/uploads/<%= @doctor.id.inspect %>_headshot.jpg" class="headshot" height="150" /><!--img src="/images/uploads/<%= @doctor.id.inspect %>_practice.jpg" class="clinic_photo" height="150" /--></td>
+                          </tr>
+                        </table>
+                  </div>
+                </div>
+            </div>
+<% end %>
+        </div>
+        <div class="provider_info_content_br"></div>
+
+	<% end %>
+
+<script type="text/javascript" charset="utf-8">
+$(function(){
+
+	$('a.dr_map').click(showDrMap);
+	
+});
+
+showDrMap = function() {
+	var address = "<%= @doctor.address + ', ' + @doctor.city + ', ' + @doctor.state + ' ' + @doctor.zipcode %>";
+	var drname = "<%= @doctor.name %>";
+	showMap(address,drname);
+	return false;
+}
+</script>

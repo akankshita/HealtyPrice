@@ -1,0 +1,191 @@
+<style>
+	input.text-input, select.text-input{
+		margin-top:-4px;
+	}
+	li.form-element dt{
+		/*width:12em;*/
+		/*background-color:#dddddd;*/
+	}
+</style>
+
+<% if true %>
+
+<% if @Error != "" && @Error != nil %><div class="error" style="margin-bottom:1em; padding:0.8em;"><%= @Error %></div><br/><% end %>
+
+<ol class="form"><%
+=begin
+	<li class="form-element">
+		<dl>
+			<dt>
+				<label>Practice Area: </label>
+			</dt>
+			<dd>
+				<select class="text-input" style="width: 465px;" name="record[specialty_id]">
+					<option value="-1">- None -</option>
+					%# @specialties = Specialty.find(:all) %
+					%# @specialties.each do |specialty| %
+					<option %# if specialty.id == @record.specialty_id  %selected%# end % value="%#= specialty.id %">%#= specialty.name %</option>
+					%# end %
+				</select>
+			</dd>
+		</dl>
+	</li>
+=end
+%>	<li class="form-element">
+		<dl class="">
+			<dt>
+				<label for="record_service_name_1">Procedure or Service: </label>
+			</dt>
+			<dd>
+				<input type="hidden" name="record[id]" value="<%= @record.id %>"/>
+				<input id="record_service_name_1" class="service_name-input text-input" type="text" autocomplete="off" maxlength="255" name="record[service_name]" style="width: 460px;" xsize="60" value="<%= @record.service_name.gsub("\"", "&quot;") %>"/>
+				<span class="description"> </span>
+			</dd>
+		</dl>
+	</li>
+	<li class="form-element">
+		<dl class="">
+			<dt>
+				<label for="record_service_description_1">Procedure or Service Description: </label>
+			</dt>
+			<dd>
+				<textarea id="record_service_description_1" class="service_description-input text-input" autocomplete="off" style="width: 780px; margin-top: -2px;" cols="30" rows="20" name="record[service_description]"><%= @record.service_description %></textarea>
+				<span class="description"> </span>
+			</dd>
+		</dl>
+	</li>
+	<li class="form-element">
+		<dl class="">
+			<dt>
+				<label for="record_doctor_price_1">Provider Price: </label>
+			</dt>
+			<dd>
+				<input id="record_doctor_price_1" class="doctor_price-input text-input" type="text" value="<% if @record.doctor_price != nil %><%= number_to_currency(@record.doctor_price, :unit => "").gsub(",", "") %><% end %>" autocomplete="off" name="record[doctor_price]" size="30"/>
+				<span class="description"> </span>
+			</dd>
+		</dl>
+	</li>
+	<li class="form-element">
+		<dl class="">
+			<dt>
+				<label for="record_customer_price_1">Customer Price: </label>
+			</dt>
+			<dd>
+				<input id="record_customer_price_1" class="customer_price-input text-input" type="text" value="<% if @record.customer_price != nil %><%= number_to_currency(@record.customer_price, :unit => "").gsub(",", "") %><% end %>" size="30" name="record[customer_price]" autocomplete="off"/>
+				<span class="description"> </span>
+			</dd>
+		</dl>
+	</li>
+	<li class="form-element">
+		<dl class="">
+			<dt>
+				<label for="record_sort_order_1">Sort Order: </label>
+			</dt>
+			<dd>
+				<input id="record_sort_order_1" class="sort_order-input text-input" type="text" value="<%= @record.sort_order %>" size="30" name="record[sort_order]" autocomplete="off"/>
+				<span class="description"> </span>
+			</dd>
+		</dl>
+	</li>
+	<li class="form-element">
+		<dl>
+			<dt>
+				<label>Display Note: </label>
+			</dt>
+			<dd>
+				<select class="text-input" style="width: 180px;" name="record[note_id]">
+					<option value="-1">- None -</option>
+					<% @notes = Note.find(:all) %>
+					<% @notes.each do |note| %>
+					<option <% if note.id == @record.note_id  %>selected<%end%> value="<%= note.id %>"><%= note.slug %></option>
+					<% end %>
+				</select>
+			</dd>
+		</dl>
+	</li>
+</ol>
+
+<% else %>
+
+<ol class="form" <%= 'style="display: none;"' if columns.collapsed -%>>
+  <% columns.each :for => @record do |column| -%>
+  <% if is_subsection? column -%>
+  <li class="sub-section">
+    <h5><%= column.label %> (<%= link_to_visibility_toggle(:default_visible => !column.collapsed) -%>)</h5>
+    <%= render :partial => 'form', :locals => { :columns => column } %>
+  </li>
+  <% elsif is_subform? column and !override_form_field?(column) -%>
+  <li class="sub-form <%= active_scaffold_config_for(column.association.klass).subform.layout %>-sub-form" id="<%= sub_form_id(:association => column.name) %>">
+    <%= render :partial => form_partial_for_column(column), :locals => { :column => column } -%>
+  </li>
+  <% elsif column.label == "Note" -%>
+	<% @notes = Note.find(:all) %>
+  <li class="form-element">
+	<dl>
+	    <dt><label>Display Note</label></dt>
+	    <dd>
+		<select name="record[note_id]" style="width:180px;" class="text-input">
+		  <option value="-1" >- None -</option>
+		<% @notes.each do |note| %>
+		  <option <% if note.id == @record.note_id  %>selected<%end%> value="<%= note.id %>"><%= note.slug %></option>
+		<% end %>
+		</select>
+	    </dd>
+	</dl>
+  </li>
+  <% elsif column.label == "Specialty" -%>
+	<% @specialties = Specialty.find(:all) %>
+  <li class="form-element">
+	<dl>
+	    <dt><label>Practice Area</label></dt>
+	    <dd>
+		<select name="record[specialty_id]" style="width:365px;" class="text-input">
+		  <option value="-1" >- None -</option>
+		<% @specialties.each do |specialty| %>
+		  <option <% if specialty.id == @record.specialty_id  %>selected<%end%> value="<%= specialty.id %>"><%= specialty.name %></option>
+		<% end %>
+		</select>
+	    </dd>
+	</dl>
+  </li>
+  <% elsif column.label == "Service name" -%>
+  <li class="form-element">
+	<dl class="">
+	  <dt><label for="record_service_name_1">Procedure or Service</label></dt>
+	  <dd>
+	    <input type="text" value="<%= @record.service_name %>" xsize="60" style="width:360px;" name="record[service_name]" maxlength="255" id="record_service_name_1" class="service_name-input text-input" autocomplete="off"/><span class="description"/>
+	  </dd>
+	</dl>
+  </li>
+  <% elsif column.label == "Service description" -%>
+  <li class="form-element">
+	<dl class="">
+		<dt><label for="record_service_description_1">Procedure or Service Description</label></dt>
+		<dd><textarea id="record_service_description_1" class="service_description-input text-input" name="record[service_description]" rows="20" cols="30" style="width:780px; margin-top:-2px;" autocomplete="off"><%= @record.service_description %></textarea><span class="description"/></dd>
+	</dl>
+  </li>
+  <% elsif column.label == "Doctor price" -%>
+  <li class="form-element">
+	<dl class="">
+		<dt><label for="record_doctor_price_1">Provider price</label></dt>
+		<dd>
+			<input id="record_doctor_price_1" class="doctor_price-input text-input" type="text" value="<%= @record.service_name %>" size="30" name="record[doctor_price]" autocomplete="off"/><span class="description"/>
+		</dd>
+	</dl>
+  </li>
+  <% else -%>
+  <li class="form-element <%= 'required' if column.required? %>">
+    <%= render :partial => form_partial_for_column(column), :locals => { :column => column } -%>
+  </li>
+	<!--dl>
+	    <dt><label>col</label></dt>
+	    <dd>
+		<select name="record[xox]">
+		</select>
+	    </dd>
+	</dl-->
+  <% end -%>
+  <% end -%>
+</ol>
+
+<% end %>

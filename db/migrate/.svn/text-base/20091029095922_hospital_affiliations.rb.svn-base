@@ -1,0 +1,13 @@
+class HospitalAffiliations < ActiveRecord::Migration
+  def self.up
+	create_table :hospital_affiliations do |t|
+		t.integer	:doctor_id
+		t.string	:hospital
+		t.integer	:usage_percentage
+	end
+  end
+
+  def self.down
+	drop_table :hospital_affiliations
+  end
+end

@@ -1,0 +1,9 @@
+<%= javascript_include_tag 'doctor_service' %>
+
+	<% blue_box 'Doctor Not Found' do -%>
+<p style="font-weight:bold; color:#FF0000;">
+The doctor or provider that you were looking for no longer provides services through HealthyPrice, inc.<br/>
+<br/>
+Please click Search by Doctor or Provider on the footer (below) to locate another doctor/provider.<br/>
+<br/><br/><br/></p>
+	<% end %>

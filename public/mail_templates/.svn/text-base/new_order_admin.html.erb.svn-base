@@ -1,0 +1,67 @@
+<h3 style="margin-top:10px;">Order # {order_number}</h3>
+<h4>Procedure: {procedure}</h4>
+<table border="0" cellspacing="0" cellpadding="0" width="800" style="width:800px;">
+	<tr>
+		<td width="50%" valign="top" style="vertical-align:top; width:400px;">
+			Provider: {doctor.name} ({doctor.id})
+			<br/>
+			Price: {customer_price} (Customer) | {doctor_price} (Provider)
+			<br/>
+		</td><td width="50%" valign="top" style="vertical-align:top; width:400px;">
+			Billing Code: {billing_code}
+			<br/>
+			PIN: {pin}
+			<br/>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+Ordered On: {created_at}
+<br/><br/>
+<b>Order Status: {orderstatus}</b>
+&nbsp; &nbsp; &nbsp;
+<b>Payment Reference: {doctor_payments_id}</b>
+<br/><br/>
+<b>Order Notes</b>
+<br/>{order_notes}
+<br/><br/>
+		</td>
+	</tr>
+	<tr>
+		<td width="50%" style="vertical-align:top;">
+			<h4>Patient Information</h4>
+			Patient Name: {patient_name}
+			<br/>
+			Name: {order_name}
+			<br/>
+			Phone: {phone}
+			<br/>
+			Email: <a href="mailto:{email}">{email}</a>
+			<br/>
+			Address: {address}
+		</td><td width="50%" style="vertical-align:top;">
+			<h4>Payee Information</h4>
+			Payment Method: {payment_method}
+			<br/>
+			PayPal Email: {paypal_email}
+			<br/>
+			Payee Name: {payee_name}
+			<br/>
+			Payee Phone Number: {payee_phone_number}
+			<br/>
+			Payee Email Address: <a href="mailto:{payee_email_address}">{payee_email_address}</a>
+			<br/>
+			Payee Address: {payee_address}
+			<br/>
+			City: {payee_city}
+			<br/>
+			State: {payee_state}
+			<br/>
+			Zip: {payee_zip}
+			<br/>
+			Payee Tax ID: {payee_tax_id_type} {payee_tax_id}
+		</td>
+	</tr>
+</table>
+<br/>
+How did the customer hear about us: {market_survey}

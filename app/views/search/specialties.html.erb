@@ -1,0 +1,45 @@
+<% content_for :head do %>
+  <%= stylesheet_link_tag 'specialties' %>
+  <%= javascript_include_tag 'specialties' %>
+  <%= javascript_include_tag 'auto_fill' %>
+  <title>HealthyPrice, Inc. - Search by Practice Area.</title>
+<% end %>
+
+<div class="tell_us" style="width:400px; float:left; margin-top:0px;">Search by Practice Area</div>
+<br style="clear:both;" />
+
+<div style="float:right; margin-top:-5px;">
+	<span style="font-size:10pt;">More search options: </span>
+	<%=link_to 'Search by Service / Procedure', "/search/services" %> | 
+	<%=link_to 'Search by Doctor / Provider',search_doctors_path %>
+</div><br style="clear:both;" /><br/>
+
+<div id="specialties">
+	<ul>
+		<% @specialties.each do |s| -%>
+			<li>
+			<span class="blue_box_link">
+			<%=link_to s.name,search_services_path(:specialty_id => s.id) %> <img src="/images/provider_signup/question_mark.gif" onmouseover="ShowToolTip('<%= s.description %>', this);" style="vertical-align:-4px;" /><span style="font-size:12px;"> (<%=s.services_count%> services)</span>
+			</span>
+			<span title="Practice Area Description Practice Area Description Practice Area Description Practice Area Description Practice Area Description Practice Area Description Practice Area Description" class="ss_sprite ss_help">&nbsp;</span>
+			</li>
+		<% end -%>
+	</ul>
+</div>
+		<!-- *** -->
+		<div id="Sugesstions" style="display:none;" onfocus="CancelHideSuggestions();" onblur="HideSuggestions();"></div>
+		<style>
+		div#Sugesstions{
+			border:1px solid #666666;
+			background-color:#FFFFFF;
+			overflow:auto;
+			position:absolute;
+		}
+		div.Suggestion{
+			cursor:pointer;
+			height:20px;
+			overflow:hidden;
+			background-color:#FFFFFF;
+		}
+		</style>
+		<!-- *** -->

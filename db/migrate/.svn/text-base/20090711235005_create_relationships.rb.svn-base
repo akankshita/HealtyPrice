@@ -1,0 +1,29 @@
+class CreateRelationships < ActiveRecord::Migration
+  def self.up
+    create_table :specialty_services, :force => true do |t|
+      t.integer :specialty_id
+      t.integer :service_id
+      t.integer :doctor_price
+      t.integer :customer_price
+      t.timestamps
+    end
+    
+    create_table :doctor_specialties, :id => false, :force => true do |t|
+      t.integer :specialty_id
+      t.integer :doctor_id
+      t.timestamps
+    end
+    
+    create_table :doctor_services, :force => true do |t|
+      t.integer :doctor_id
+      t.integer :specialty_service_id
+      t.timestamps
+    end
+  end
+
+  def self.down
+    drop_table :doctor_services
+    drop_table :doctor_specialties
+    drop_table :specialty_services
+  end
+end

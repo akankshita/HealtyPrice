@@ -1,0 +1,28 @@
+<table cellpadding="0" cellspacing="0" class="heading_font" style="margin-bottom:10px;">
+  <tr>
+<td class="headtd"> <div  style="background-image:url('/images/top_l.jpg');height:31px;width:3px;border:0px; float:left;"></div><div class="headmiddiv"><div class="headmidtext">New Payment </div></div> <div  style="background-image:url('/images/top_r.jpg');height:31px;width:3px;border:0px; float:left;"></div></td>
+  </tr>
+</table>
+
+<table>
+  <% if !@error.nil? %>
+		<div class="error"><%= @error %></div>
+	<% end %>
+
+<%= form_tag({ :action => "pending_orders" }, :method => "post" ) %>
+<tr>
+		<td class="subhead_font">Provider:</td>
+                <td>
+                  <span style="vertical-align:middle;">
+                  <select name="doctor[id]" style="width:650px;">
+			<option value="-1" >Please select a provider</option>
+		<% @all_doctors.each do |pa| -%>
+			<option value="<%= pa.id %>" ><%= pa.last_name %>, <%= pa.first_name %> (<%= pa.company %>) (<%= pa.id %>)</option>
+		<% end %>
+		</select>  <input class="heading_font" style="margin:0px;" name="continue" type="submit" value="Retrieve Pending Orders" />
+                 </span>
+                 </td>
+	</tr>
+</form>
+</table>
+<div  class="paginationfoter" ></div>

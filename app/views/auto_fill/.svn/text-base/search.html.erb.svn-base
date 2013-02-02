@@ -1,0 +1,5 @@
+<%	@id = 0
+	@List.each do |sugg| %>
+<div class="Suggestion" id="<%= @id %>" onclick="FillSuggestion('<%= sugg.Text1.gsub("/", "") %>');" onmouseover="Highlight(this);" onmouseout="RemoveHighlight(this);"><%= sugg.Text1.gsub("/", "") %></div>
+<%		@id += 1
+	end %>

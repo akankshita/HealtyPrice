@@ -1,0 +1,9 @@
+<% @file = File.open(Dir.pwd + "/public/mail_templates/new_account_email.html.erb") %>
+<% @template = @file.read %>
+
+<%	@template = @template.gsub("{full_name}", @full_name) %>
+<%	@template = @template.gsub("{provider_id}", @provider_id.inspect) %>
+<%	@template = @template.gsub("{user_id}", @user_id) %>
+<%	@template = @template.gsub("{password}", @password) %>
+
+<%= @template %>

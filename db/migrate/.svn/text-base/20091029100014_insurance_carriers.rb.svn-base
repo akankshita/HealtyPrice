@@ -1,0 +1,12 @@
+class InsuranceCarriers < ActiveRecord::Migration
+  def self.up
+	create_table :insurance_carriers do |t|
+		t.integer	:doctor_id
+		t.string	:insurance_company_name
+	end
+  end
+
+  def self.down
+	drop_table :insurance_carriers
+  end
+end

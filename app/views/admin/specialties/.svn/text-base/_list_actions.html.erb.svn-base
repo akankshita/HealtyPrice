@@ -1,0 +1,51 @@
+<%#= params[:nested] %>
+<table cellpadding="0" cellspacing="0">
+  <tr>
+      <!--td>
+      </td-->
+    <td class="indicator-container">
+      <%= loading_indicator_tag(:action => :record, :id => record.id) %>
+    </td>
+      <%	if !params[:nested] %>
+      <!--td><a position="after" id="admin__services-nested-1-link" class="nested action" href="/admin/specialty_services/<%= record.id %>">Procedures &amp; Services</a></td-->
+      <td><a href="/admin/specialty_services/<%= record.id %>" xtarget="_blank">Procedures &amp; Services</a></td>
+      <td><a position="after" id="admin__services-nested-1-link" class="nested action" href="/admin/doctors_n/<%= record.id %>">Doctors</a></td>
+      <%	else %>
+      <!--td><a position="after" id="admin__services-nested-1-link" class="nested action" href="/admin/specialty_services_doc/<%= record.id %>/<%= @doc_id %>">Procedures &amp; Services</a></td-->
+      <td><a href="/admin/specialty_services_doc/<%= record.id %>/<%= @doc_id %>" xtarget="_blank">Procedures &amp; Services</a></td>
+      <%	end %>
+    <% active_scaffold_config.action_links.each :record do |link| -%>
+      <% next if controller.respond_to? link.security_method and !controller.send(link.security_method) -%>
+      <td>
+	<% if link.label == "Delete"
+sql = "FROM doctors, doctor_services, specialty_services "
+sql += "WHERE doctors.id = doctor_services.doctor_id" +
+	" AND doctor_services.specialty_service_id = specialty_services.id" +
+	" AND specialty_services.specialty_id = " + record.id.inspect
+@doctors = Order.find_by_sql("SELECT COUNT(*) AS RowCount " + sql)
+sql = "FROM specialty_services "
+sql += "WHERE specialty_id = " + record.id.inspect
+@specialty_services = Order.find_by_sql("SELECT COUNT(*) AS RowCount " + sql) %>
+		<% if params[:nested] %>
+			<% @row_id_x = element_row_id(:action => :list, :id => record.id) %>
+			<a onclick="return confirm('Are you sure?');" href="/admin/specialties/disable_for_provider/<%= @doc_id %>/<%= record.id %>/<%= @row_id_x %>">Disable for this Provider</a>
+			<!--a onclick="return confirm('Are you sure?');" href="javascript:AjaxLoad('/admin/specialties/disable_for_provider/<%= @doc_id %>/<%= record.id %>/<%= @row_id_x %>', '<%= @row_id_x %>_space');">Disable for this Provider</a-->
+			<span id="<%= @row_id_x %>_space" style="display:none;"></span>
+		<% elsif @specialty_services[0].RowCount.to_i > 0 %>
+			<a href="javascript:alert('This practice area has <%= @specialty_services[0].RowCount %> procedures associated with it and cannot be deleted.');">Delete</a>
+		<% elsif @doctors[0].RowCount.to_i > 0 %>
+			<a href="javascript:alert('<%= @doctors[0].RowCount %> providers have selected this practice area. It cannot be deleted.');">Delete</a>
+		<% else %>
+			<%= record.authorized_for?(:action => link.crud_type) ? render_action_link(link, url_options) : "<a class='disabled'>#{link.label}</a>" -%>
+		<% end %>
+	<% elsif link.label == "Show" %>
+	<!--Show-->
+	<% else %>
+		<% if !(params[:nested] && link.label == "Edit") %>
+			<%= record.authorized_for?(:action => link.crud_type) ? render_action_link(link, url_options) : "<a class='disabled'>#{link.label}</a>" -%>
+		<% end %>
+	<% end %>
+      </td>
+    <% end -%>
+  </tr>
+</table>

@@ -1,0 +1,76 @@
+<% if current_user == nil %>
+	<html><body>
+		<h2>Access Unauthorized</h2>
+		You have no access to this section of the website. Please <a href="/user_session/new">Login</a>.
+	</body></html>
+<% elsif current_user.user_type != "Admin" %>
+	<html><body onload="document.location='/doctor_section';">
+		<h2>Access Unauthorized</h2>
+		You have no Permission to  access to this section. Please go to <a href="/doctor_section">Doctor Section</a>.
+	</body></html>
+<% else %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <link href="favicon.ico" rel='shortcut icon' type='image/x-icon'/>
+  <title>HealthyPrice: <%= controller.controller_name.titleize + ' ' + controller.action_name.titleize %></title>
+       
+  	<%= javascript_include_tag 'prototype','effects','dragdrop','controls' %>
+	<%= stylesheet_link_tag 'blueprint/screen', 'jquery.tooltip', 'site', :media => 'screen, projection' %>
+	<%= stylesheet_link_tag 'blueprint/print',:media => 'print' %>
+        <%#= stylesheet_link_tag 'provider_signup_admin' %>
+        <%#= stylesheet_link_tag 'admin_doctor' %>
+
+	<!--[if lt IE 8]><%= stylesheet_link_tag 'blueprint/ie',:media => 'screen, projection' %><![endif]-->
+
+	<%= active_scaffold_includes %>
+	<%= stylesheet_link_tag 'admin', :media => 'screen, projection' %>
+         <%= stylesheet_link_tag 'admin_doctor' %>
+	 <script src="/javascripts/ajax.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div id="header" class="span-24">
+                  <h2 style="padding-bottom:10px;"><%#=image_tag("/images/hp_admin_logo.jpg")%>
+                  <%= link_to image_tag("/images/hp_admin_logo.jpg", :border=>0), :controller => "/home", :action => "index" %>
+                  </h2>
+			<% if current_user -%>
+				<div id="nav2">
+					<ul>
+						<li style="text-align:left"><%= link_to "Logout", "/user_session/destroy" %></li>
+						<li style="text-align:left">Logged in as <%=current_user.email%></li>
+					</ul>
+				</div>
+				<div id="nav">
+					<ul>
+						<li><%= link_to_unless_current "Orders", admin_orders_path %></li>
+						<li><%= link_to_unless_current "Payments", :controller => "admin/doctor_payments", :action => "payments" %></li>
+						<li><%= link_to_unless_current "Providers", admin_doctors_path %></li>
+						<li><%= link_to_unless_current "Practice Areas", admin_specialties_path %></li>
+						<!--li><%= link_to_unless_current "Procedures & Services", admin_services_path %></li-->
+						<li><%= link_to_unless_current "Pages", admin_pages_path %></li>
+						<li><%= link_to_unless_current "Configuration", admin_configurations_path %></li>
+						<li><%= link_to_unless_current "Admins", "/admin/admins" %></li>
+						<li><%= link_to_unless_current "Notes", "/admin/notes" %></li>
+						<li><%= link_to_unless_current "Email Templates", "/admin/mail_templates" %></li>
+					</ul>
+				</div>
+			<% end -%>
+		</div>
+		<p style="color: green" class="span-24"><%= flash[:notice] %></p>
+		<div id="body" class="span-24">
+			<%= yield %>
+		</div>
+	</div>
+	<script>
+		function Load_and_display(Page, Destination){
+			AjaxLoad(Page, Destination);
+			document.getElementById(Destination).style.display='';
+		}
+	</script>
+</body>
+</html>
+<% end %>

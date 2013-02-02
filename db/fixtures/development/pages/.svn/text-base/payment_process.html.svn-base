@@ -1,0 +1,35 @@
+<h3>Overview of the Customer Order and Doctor Payment Process</h3>
+
+<p>The following is an overview of how the process works once a customer places an order online at HealthyPrice for a service or procedure from a doctor or healthcare provider.</p>
+
+<p>
+	<a href="#order">An Order is Placed by a Customer</a><br/>
+	<a href="#call">Customer Calls the Doctor to Schedule an Appointment</a><br/>
+	<a href="#appointment">Customer Goes to the Appointment to See the Doctor</a><br/>
+	<a href="#notifies">Doctor Notifies HealthyPrice that He or She has Seen the Patient</a><br/>
+	<a href="#pays">HealthyPrice Pays the Doctor</a><br/>
+</p>
+
+<p><a name="order"></a><i>An Order is Placed by a Customer.</i>  Once a customer places an order for a service or procedure on the website, HealthyPrice will have collected the entire fee from the customer.  Also at the time the customer places the order, an order confirmation email is sent to both the customer and the doctor.  The email contains information, or links to information, regarding the selected service or procedure made by the customer and an order number used to identify and track the order.  The customer’s email contains an additional "billing code" number and a customer "look up" number, both of which are not included on the doctor’s initial email.  Finally, the doctor’s profile account online is updated for the new order so that the doctor can see the order status and information online each time he or she logs into their account.</p>
+
+<p><a name="order"></a><i>Customer Calls the Doctor to Schedule an Appointment.</i>  It is the obligation of the customer to then contact the doctor to schedule an appointment.  Depending on the type of service or procedure the customer ordered, the doctor is obligated to see the patient within specified time frames, as follows:</p>
+
+<ul>
+	<li><u>"Standard" Service or Procedure</u>:  The doctor must see the customer within 10 business days of receiving the later of 1) the order confirmation email, or 2) the phone call from the customer to the doctor to schedule the appointment.  Most services and procedures are "Standard" unless otherwise designated as "Urgent".</li>
+
+	<li><u>"Urgent" Service or Procedure:</u>  The doctor must see the customer by the end of the next business day if the later of 1) the order confirmation email, or 2) the phone call from the customer to the doctor to schedule, occurs before 3pm local time, or, the doctor must see the customer by the end of the second business day after the day in which the later of 1) the order confirmation email, or 2) the phone call from the customer to the doctor to schedule, occurs after 3pm local time.  A service or procedure is considered "Urgent" if it is designated as "Urgent" in the official HealthyPrice online listing of services and procedures.  Additionally, the doctor’s order confirmation email will notate that the service or procedure is "Urgent".</li>
+</ul>
+
+<p><a name="appointment"></a><i>Customer Goes to the Appointment to See the Doctor.</i>  When the customer goes to the scheduled doctor’s appointment, he or she must bring with them the "billing code" number from the order confirmation email.  The doctor’s office should request the "billing code" number from the patient as part of the check-in process at the doctor’s office.  The doctor sees the patient and performs the service or procedure.</p>
+
+<p><a name="notifies"></a><i>Doctor Notifies HealthyPrice that He or She has Seen the Patient.</i>  The doctor logs into his or her doctor profile account online and finds the customer’s order.  The doctor then enters the "billing code" number received from the patient, which signifies to HealthyPrice that the doctor has seen the patient and has performed the service or procedure and is now ready to be paid.  Alternatively, the doctor may call into HealthyPrice at 800-455-2797 to notify HealthyPrice of the "billing code" number for the order.  Once the "billing code" number is entered into the doctor’s profile account for the order, the order in the doctor’s profile account will transfer from a new and active status to a payment pending status.</p>
+
+<p><a name="pays"></a><i>HealthyPrice Pays the Doctor.</i>  Within five business days, HealthyPrice will commence the payment process.  Depending on the type of payment process the doctor profile account is set up with (established initially during the sign up process), the doctor will be paid as follows:</p>
+
+<ul>
+	<li><u>Electronic Payment Method</u>:  HealthyPrice will pay the doctor no later than five business days after the doctor has completed notifying HealthyPrice properly that the doctor has seen the patient.</li>
+
+	<li><u>Physical Check Method</u>:  HealthyPrice will process the physical check and put it into the mail on the first HealthyPrice physical check processing date (15th or 30th of the month, or next business day if the 15th or 30th falls on a non-business day) that falls no later than five business days after the doctor has completed notifying HealthyPrice properly that the doctor has seen the patient.</li>
+</ul>
+
+<p>Once HealthyPrice completes processing the payment to the doctor, the order in the doctor’s profile account will transfer from a payment pending status to a closed and paid status.</p>

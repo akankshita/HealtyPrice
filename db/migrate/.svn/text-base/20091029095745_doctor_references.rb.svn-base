@@ -1,0 +1,14 @@
+class DoctorReferences < ActiveRecord::Migration
+  def self.up
+	create_table :doctor_references do |t|
+		t.integer	:doctor_id
+		t.string	:first_name
+		t.string	:last_name
+		t.string	:phone
+	end
+  end
+
+  def self.down
+	drop_table :doctor_references
+  end
+end

@@ -1,0 +1,35 @@
+<style type="text/css" media="screen">
+table {
+	margin-bottom: 0px;
+}
+
+div.page-body blockquote {
+	margin-bottom: 3em;
+	font-style: normal;
+	font-weight: bold;
+}
+
+</style>
+
+<h3>CONTACT US</h3>
+
+<p><strong>Email Contacts</strong></p>
+
+<blockquote>
+	<table>
+		<tr><td>General Information:</td><td><a href="mailto:info@healthyprice.com">info@healthyprice.com</a></td></tr>
+		<tr><td>Customer Service</td><td><a href="mailto:customersupport@healthyprice.com">customersupport@healthyprice.com</a></td></tr>
+		<tr><td>Doctor/Provider Support</td><td><a href="mailto:doctorsupport@healthyprice.com">doctorsupport@healthyprice.com</a></td></tr>
+		<tr><td>Employee Benefit Options for Businesses</td><td><a href="mailto:benefits@healthyprice.com">benefits@healthyprice.com</a></td></tr>
+	</table>
+</blockquote>
+
+<p><strong>Phone Contact</strong></p>
+<blockquote>1-800-455-2797</blockquote>
+
+<p><strong>Address</strong></p>
+<blockquote>
+	HealthyPrice, Inc.<br/>
+	4601 West Alameda, Suite 416<br/>
+	Burbank, CA  91505<br/>
+</blockquote>

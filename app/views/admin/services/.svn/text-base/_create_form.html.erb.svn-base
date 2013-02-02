@@ -1,0 +1,48 @@
+
+
+  <h4><%= active_scaffold_config.create.label -%></h4>
+
+  <% if request.xhr? -%>
+    <div id="<%= element_messages_id(:action => :create) %>" class="messages-container"><%= error_messages_for :record, :object_name => @record.class.human_name.downcase %></div>
+  <% else -%>
+    <%= render :partial => 'form_messages' %>
+  <% end -%>
+
+    <% @specialty = Specialty.find(:all) %>
+    <% form_for :services, @services, :url => { :action => "addnew"  } do |f| %>
+
+<table>
+  <tr>
+<td><%= f.label :Service_Name %></td>
+<td><%= f.text_field :service_name  %></td> </tr>
+<tr> <td><%= f.label :Service_Description %></td>
+    <td><%= f.text_area :service_description , :style=>"width:345px;height:70px;.*width:370px;" %></td> </tr>
+<tr>
+<td><%= f.label :Doctor_Price %></td>
+<td><%= f.text_field :doctor_price  %></td> </tr>
+<tr>
+<td><%= f.label :Customer_Price %></td>
+<td><%= f.text_field :customer_price  %></td> </tr>
+<tr>
+<td><%= f.label :Practice_Area %></td>
+
+  <td>
+<select name="services[specialty_id]">
+  <% @specialty.each do |drprice| %>
+  <option  value=<%= drprice.id %> > <%=  drprice.name %> </option>
+	<% end %>
+</select>
+
+<%#=  select_tag("doctor[orderstatus]", options_for_select(   @specialty.each do |drprice|  { :drprice.id => drprice.name }  end  )) %>
+
+</td> </tr>
+</table>
+  <%#= render :partial => 'form', :locals => { :columns => active_scaffold_config.create.columns } %>
+
+  <p class="form-footer">
+    <%= submit_tag as_(:create), :class => "submit" %>
+    <%= link_to as_(:cancel), params_for(:controller => params[:parent_controller] ? params[:parent_controller] : params[:controller], :action => 'list', :eid => params[:parent_controller] ? params[:parent_controller] : params[:eid]), :class => 'cancel' %>
+    <%#= loading_indicator_tag(:action => :create, :id => params[:id]) %>
+  </p>
+<% end %>
+  </form>

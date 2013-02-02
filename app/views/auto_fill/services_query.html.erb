@@ -1,0 +1,23 @@
+<% 
+	def shorten (string, count = 30)
+		if string.length >= count
+			shortened = string[0, count]
+			splitted = shortened.split(/\s/)
+			words = splitted.length
+			if words == 1
+				words = 2
+			end
+			#"<span class=\"tt_tip\" onmouseover=\"ShowToolTip('"+string+"', this);\">" + splitted[0, words-1].join(" ") + "...</span>"
+			splitted[0, words-1].join(" ") + "..."
+		else
+			string
+		end
+	end
+
+	@id = 0
+	@List.each do |sugg| %>
+<div class="Suggestion" id="<%= @id %>" onclick="FillSuggestion('<%= sugg.Text2.gsub("/", "") %>');" meta="<%= sugg.Text2.gsub("/", "") %>" onmouseover="Highlight(this);" onmouseout="RemoveHighlight(this);">
+	<span class="tt_tip" onmouseover="ShowToolTip('<%= sugg.Text0 %> (<%= sugg.Text1 %>)', this);"><%= shorten(sugg.Text0.gsub("/", ""), 30) %> (<%= shorten(sugg.Text1.gsub("/", ""), 25) %>)</span>
+</div>
+<%		@id += 1
+	end %>

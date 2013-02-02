@@ -1,0 +1,67 @@
+<div class="signup_header_text">
+	<span class="subheat_text_style">
+		Create Your Account
+	</span>
+</div>
+
+<% if @error != nil && @error != "" -%>
+	<% if @show_error_as_javascript == true -%>
+<script>alert('<%= @error %>');</script>
+	<% else -%>
+<div id="error"><!--img src="/images/provider_signup/error.gif" style="float:left;" /--><%= @error %></div>
+	<% end -%>
+<% else -%>
+<div id="error" style="display:none;"></div>
+<% end -%>
+
+<!--div id="message1">Did you already create an account?<br/>
+<a href="/user_session/new">Click here</a> to login and complete the<br/>
+signup process.</div-->
+
+<div style="float:left; margin-left:40px; margin-top:12px; clear:both;">
+<%= form_tag({ :action => "index" }, :method => "post") %>
+	<table border="0" cellspacing="0" cellpadding="2" style="width:408px; border-spacing:0px;">
+		<tr>
+			<td style="width:120px; text-align:left;">First Name</td>
+			<td style="width:200px; text-align:left;"><%= text_field "doctor", "first_name", :value => @first_name, :style => "width:190px;" %></td>
+			<td style="width:19px; text-align:right;"> MI</td>
+			<td style="text-align:right;"><%= text_field "doctor", "middle_name", :value => @middle_name, :style => "width:45px; margin-right:3px;" %></td>
+		</tr><tr>
+			<td style="width:120px; text-align:left;">Last Name</td>
+			<td colspan="3" style="text-align:left;"><%= text_field "doctor", "last_name", :value => @last_name, :style => "width:280px;" %></td>
+		</tr><tr>
+			<td style="width:120px; text-align:left;">Email:</td>
+			<td colspan="3" style="text-align:left;"><%= text_field "doctor", "email", :value => @email, :style => "width:280px;" %></td>
+		</tr><tr>
+			<td style="width:120px; text-align:left;">Password:</td>
+			<td colspan="3" style="text-align:left;"><%= password_field "doctor", "password", :style => "width:280px;" %></td>
+		</tr><tr>
+			<td style="width:120px; text-align:left;">Verify Password:</td>
+			<td colspan="3" style="text-align:left;"><%= password_field "doctorx", "password_confirm", :style => "width:280px;" %></td>
+		</tr><tr>
+			<td></td>
+			<td colspan="3" align="right" style="text-align:left;">
+				<input name="save" type="submit" value="" style="background-image:url('/images/provider_signup/strart_signup.jpg');height:26px;width:177px;margin-left:109px;border:0px;" />
+				<%#= submit_tag " Start Signup Process " %>
+			</td>
+		</tr>
+	</table>
+</form>
+</div>
+
+<div id="banner_1">
+	<div id="banner_text">Did you already <br/>create an account ? <br/> <br/> <br/> <a href="/user_session/new" style="font-family:'Times New Roman',Times,serif; font-size:20px;font-weight:bold;">Click here</a> to login and complete the signup process.</div>
+</div>
+
+<div style="float:left; text-align:left; width:860px; margin-left:40px;">
+
+<h4>Information</h4>
+Welcome to HealthyPrice!  You are about to begin the application process. 
+As you fill out the application you are also building your HealthyPrice profile.
+To begin, just follow our step-by-step instructions which will walk you through the process from start to finish.
+Don't worry, if you cannot complete the process today, you can easily save your entries and come back to complete the rest of your profile when you are ready.
+Your services, however, will not be visible to customers on the HealthyPrice website until you have completed your entire application.
+So the sooner you finish, the sooner HealthyPrice will start working for you!
+<br/><br/>
+If you have any questions, please contact Customer Service at 1-800-455-2797 or via email at <a href="mailto:customersupport@healthyprice.com">customersupport@healthyprice.com</a>.
+</div>

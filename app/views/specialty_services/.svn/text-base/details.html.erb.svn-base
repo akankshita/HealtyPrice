@@ -1,0 +1,52 @@
+<%= javascript_include_tag 'specialty_service' %>
+
+      <div class="mid_container_inner_1">
+       	  <div class="inner_blue_bg"><span class="inner_blue_bg_head"><%=h @specialty_service.specialty.name %> (<%=h @specialty_service.service.name %>)</span><br />
+        	  <span class="inner_blue_bg_content"><%=h @specialty_service.specialty.description %></span>
+          </div>
+   	    <div class="inner_bg_area">
+		  <div class="inner_bg_area_left">
+          	<table width="260" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td class="inner_bg_area_left_head">HealthyPrice: <%=number_to_currency(@specialty_service.customer_price) %></td>
+              </tr><tr>
+                <td height="25"></td>
+              </tr><tr>
+                <td class="inner_bg_area_left_content">Accepted payment methods:</td>
+              </tr><tr>
+                <td height="8"></td>
+              </tr><tr>
+                <td><a href="#"><img src="/images/payment_methods.jpg" width="145" height="25" /></a></td>
+              </tr>
+            </table>
+
+          </div>
+          <div class="inner_bg_area_mid"><img src="/images/inner_bg_mid.jpg" /></div>
+          <div class="inner_bg_area_right">
+          	<div class="inner_bg_area_right_text_1">
+            	<div class="inner_arrow"><img src="/images/inner_arrow.jpg" /></div>
+            	<div class="inner_text_1">Enter at least one field below to find a health care specialist for a:<br />
+            	<span class="inner_text_2"><%=h @specialty_service.specialty.name %> (<%=h @specialty_service.service.name %>)</span></div>
+            	<div class="serach_fields">
+                	<table width="450" border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <td colspan="2" align="left"><span class="left_search_text">Zip Code:</span><br />
+                        <input type="text" name="textfield" id="textfield" class="left_search_fields" /></td>
+                      </tr><tr>
+                        <td height="8" colspan="2" align="left"></td>
+                      </tr><tr>
+                        <td colspan="2" align="left"><span class="left_search_text">City:</span><br />
+                        <input type="text" name="textfield2" id="textfield2" class="left_search_fields" /></td>
+                      </tr><tr>
+                        <td height="8" colspan="2" align="left"></td>
+                      </tr><tr>
+                        <td width="333" align="left"><span class="left_search_text">Doctor:</span><br />
+                        <input type="text" name="textfield3" id="textfield3" class="left_search_fields" /></td>
+                        <td width="117" align="left" valign="bottom"><input type="image" src="/images/btn_submit.jpg" width="70px" height="22px" name="button" id="button" value="Submit" /></td>
+                      </tr>
+                    </table>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>

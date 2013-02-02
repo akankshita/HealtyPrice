@@ -1,0 +1,130 @@
+<div class="signup_header_text" style="display:inline;">
+	<span class="subheat_text_style">
+		Select Procedures &amp; Services
+	</span>
+	<br/>
+	<br/>Check the box next to each service and procedure you would like to offer through HealthyPrice.
+	<br/>The prices listed are the actual amount you will receive for performing that service or procedure.
+	<br/>
+	<br/><a href="mailto:providersupport@healthyprice.com" style="font-family:Verdana,Arial,Helvetica,sans-serif;">Don't see your procedure?  Request it!</a>
+</div><br/>&nbsp;<br/>
+
+<% if @error != nil && @error != "" -%>
+	<% if @show_error_as_javascript == true -%>
+<script>alert('<%= @error %>');</script>
+	<% else -%>
+<div id="error"><!--img src="/images/provider_signup/error.gif" style="float:left;" /--><%= @error %></div>
+	<% end -%>
+<% else -%>
+<div id="error" style="display:none;"></div>
+<% end -%>
+
+<%= form_tag({ :action => "index" }, :method => "post", :name => 'form1') %>
+	<!--script>var CheckBoxLists = new Array();</script-->
+	<% @OnLoadScript = "" %>
+		<%	@selected_specialties.each do |ss|
+				@ssid = ss.id.inspect %>
+	<% @OnLoadScript += "CheckFromEach('"+@ssid+"');" %>
+	<div class="procedures_box" style="display:inline;">
+		<label style="float:right; display:relative; margin-top:4px;">
+			<input type="checkbox" name="check_all_<%= @ssid %>" onclick="CheckUncheckFromEach('<%= @ssid %>', this.checked)" />
+			 Select / De-select All &nbsp; 
+		</label>
+		<h5><%= ss.name %></h5>
+		<input type="hidden" name="check[<%= @ssid %>]" value="NotSelected" />
+		<div class="procedures_scroll"><% @JSCode = "<script>var CheckBoxes"+@ssid+" = new Array(" %>
+			<%	@services.each do |srv|
+					if srv.specialty_id == @ssid
+						@JSCode += "'chk"+srv.specialty_service_id+"', " %>
+				<label><input type="checkbox" name="doctor[chk<%= srv.specialty_service_id %>]" <%
+						if @selected_services.include?(srv.specialty_service_id)
+							%>checked<%
+						end %> onclick="CheckFromEach('<%= @ssid %>');" /> $<%= srv.doctor_price %> - <%= srv.service_name %></label>
+				<img src="/images/provider_signup/question_mark.gif" onmousemove="ShowToolTip('<%= srv.service_description.gsub("'", "`").gsub("\n", "").gsub("\r", "") %>', this);" /><br/>
+				<%	end
+				end %><%= @JSCode + "'eoa');</script>" %>
+		</div>
+	</div>
+		<%	end %>
+	<script>
+		window.onload = OnLoadCheck;
+		function OnLoadCheck(){
+			<%= @OnLoadScript %>
+		}
+	</script>
+	<input type="hidden" name="doctor[id]" value="<%= session[:doctor].id.inspect %>">
+	<div style="float:left;clear:both;width:800px;">
+		<table class="bottom_buttons">
+			<tr>
+				<td height="5"><input name="continue" type="submit" value="" style="width:0px; height:0px; background-color:white; border:0px;" /></td>
+			</tr><tr>
+				<td class="left_column">
+					<input name="back" type="submit" value="" style="background-image:url('/images/provider_signup/back_2.jpg');height:26px;width:177px;border:0px;" />
+				</td><td class="right_column">
+					<input name="continue" type="submit" value="" style="background-image:url('/images/provider_signup/continue_4.jpg');height:26px;width:206px;border:0px;" /><br/>
+				</td>
+			</tr>
+<% if session[:doctor].signup_step == 5 && false %>
+			<tr>
+				<td height="8"></td>
+			</tr><tr>
+				<td></td>
+				<td class="right_column">
+					<input name="continue_6" type="submit" value="" style="background-image:url('/images/provider_signup/continue_6.jpg');height:26px;width:206px;border:0px;" />
+				</td>
+			</tr>
+<% end %>
+			<tr>
+				<td height="8"></td>
+			</tr><tr>
+				<td></td>
+				<td class="right_column">
+					<input name="save" type="submit" value="" style="background-image:url('/images/provider_signup/saveandcompleate.jpg');height:26px;width:206px;border:0px;" />
+				</td>
+			</tr>
+		</table>
+	</div>
+</form>
+
+<script>
+function CheckFromEach(ssid){
+	var ArrayX = eval("CheckBoxes"+ssid);
+	var CheckedAny = false;
+	for(var i=0; i < ArrayX.length-1; i++){
+		if(document.form1.elements["doctor["+ArrayX[i]+"]"].checked){
+			CheckedAny = true;
+		}
+	}
+	if(CheckedAny){
+		document.form1.elements["check["+ssid+"]"].value = "Selected";
+	}
+	else{
+		document.form1.elements["check["+ssid+"]"].value = "NotSelected";
+	}
+	//alert(document.form1.elements["check["+ssid+"]"].value);
+}
+
+function CheckUncheckFromEach(ssid, value){
+	var ArrayX = eval("CheckBoxes"+ssid);
+	for(var i=0; i < ArrayX.length-1; i++){
+		document.form1.elements["doctor["+ArrayX[i]+"]"].checked = value;
+	}
+	if(value){
+		document.form1.elements["check["+ssid+"]"].value = "Selected";
+	}
+	else{
+		document.form1.elements["check["+ssid+"]"].value = "NotSelected";
+	}
+	//alert(value);
+}
+/*function Validate(){
+	var Form = document.form1;
+	var ElemCou = Form.elements.length;
+	for(var i = 0; i < ElemCou; i++){
+		if(Form.elements[i].checked){
+			return true;
+		}
+	}
+	return false;
+}//*/
+</script>

@@ -1,0 +1,79 @@
+<div id="body" class="span-24">
+	<div id="admin__configurations-active-scaffold" class="active-scaffold active-scaffold-admin__configurations admin/configurations-view blue-theme">
+		<div class="active-scaffold-header">
+			<div class="actions">
+				<a href="/admin/configurations/new?_method=get" class="new action" id="admin__configurations-new--link" position="top">Create New</a>
+				<a href="/admin/configurations/show_search?_method=get" class="show_search action" id="admin__configurations-show_search--link" position="top">Search</a>
+				<img alt="loading indicator" class="loading-indicator" id="admin__configurations-table-loading-indicator" src="/images/active_scaffold/default/indicator.gif?1262145270" style="visibility:hidden;" />
+			</div>
+			<h2>Configurations</h2>
+		</div>
+		<table cellpadding="0" cellspacing="0">
+			<tbody class="before-header" id="admin__configurations-search-container">
+			</tbody>
+		</table>
+		<div id="admin__configurations-content">
+			<table cellpadding="0" cellspacing="0">
+				<thead>
+					<tr>
+						<th id="admin__configurations-config_name-column" class=" ">
+							<a href="/admin/configurations/update_table?page=1&amp;sort=config_name&amp;sort_direction=ASC" onclick="addActiveScaffoldPageToHistory('/admin/configurations/update_table?page=1&amp;sort=config_name&amp;sort_direction=ASC', 'admin__configurations'); new Ajax.Updater('admin__configurations-content', '/admin/configurations/update_table?page=1&amp;sort=config_name&amp;sort_direction=ASC', {asynchronous:true, evalScripts:true, method:'get', onFailure:function(request){ActiveScaffold.report_500_response('admin__configurations-active-scaffold')}, onLoading:function(request){Element.addClassName('admin__configurations-config_name-column','loading');}, parameters:'authenticity_token=' + encodeURIComponent('ySVx2dIUTgJ4lkzTEfp7tmpYC8JvkKFjtKXE+T0Mb6k=')}); return false;" title="">Configuration Name</a>
+						</th>
+						<th id="admin__configurations-config_value-column" class=" ">
+							<a href="/admin/configurations/update_table?page=1&amp;sort=config_value&amp;sort_direction=ASC" onclick="addActiveScaffoldPageToHistory('/admin/configurations/update_table?page=1&amp;sort=config_value&amp;sort_direction=ASC', 'admin__configurations'); new Ajax.Updater('admin__configurations-content', '/admin/configurations/update_table?page=1&amp;sort=config_value&amp;sort_direction=ASC', {asynchronous:true, evalScripts:true, method:'get', onFailure:function(request){ActiveScaffold.report_500_response('admin__configurations-active-scaffold')}, onLoading:function(request){Element.addClassName('admin__configurations-config_value-column','loading');}, parameters:'authenticity_token=' + encodeURIComponent('ySVx2dIUTgJ4lkzTEfp7tmpYC8JvkKFjtKXE+T0Mb6k=')}); return false;" title="">Configuration Value</a>
+						</th>
+						<th class="actions">
+						</th>
+					</tr>
+				</thead>
+				<tbody class="messages">
+					<tr>
+						<td colspan="3" class="messages-container">
+							<div id="admin__configurations-messages">
+							</div>
+							<p class="filtered-message"  style="display:none;" >(Filtered)</p>
+							<p id="admin__configurations-empty-message" class="empty-message"  style="display:none;" >No Entries</p>
+						</td>
+					</tr>
+				</tbody>
+				<tbody class="records" id="admin__configurations-tbody">
+					<tr class="record " id="admin__configurations-list-0-row">
+						<td class="config_name-column " >popular_specialty_services_csv</td>
+						<td class="config_value-column " >10,110,25,80,25,62,35,50</td>
+						<td class="actions">
+							<table cellpadding="0" cellspacing="0">
+								<tr>
+									<td class="indicator-container">
+										<img alt="loading indicator" class="loading-indicator" id="admin__configurations-record-0-loading-indicator" src="/images/active_scaffold/default/indicator.gif?1262145270" style="visibility:hidden;" />
+									</td>
+									<td>
+										<a href="/admin/configurations/0/edit?_method=get" class="edit action" id="admin__configurations-edit-0-link" position="replace">Edit</a>
+									</td>
+									<td>
+										<a href="/admin/configurations/0?_method=delete&amp;authenticity_token=ySVx2dIUTgJ4lkzTEfp7tmpYC8JvkKFjtKXE%2BT0Mb6k%3D" class="destroy action" id="admin__configurations-destroy-0-link" onclick="return confirm('Are you sure?');">Delete</a>
+									</td>
+									<td>
+										<a href="/admin/configurations/0?_method=get" class="show action" id="admin__configurations-show-0-link" position="replace">Show</a>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+<script type="text/javascript"> 
+actions = new ActiveScaffold.Actions.Record(
+  $$('#admin__configurations-list-0-row a.action'),
+  $('admin__configurations-list-0-row'),
+  $('admin__configurations-record-0-loading-indicator'),
+  {refresh_url: '/admin/configurations/0/row?_method=get'}
+);
+  
+</script>
+				</tbody>
+			</table>
+			<div class="active-scaffold-footer">
+				<div class="active-scaffold-found"><span class="active-scaffold-records">6</span> Found</div>
+				<div class="active-scaffold-pagination"></div>
+				<br clear="both" />
+			</div>
+		</div>
+	</div>

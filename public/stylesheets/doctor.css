@@ -1,0 +1,17 @@
+p {
+  margin: 0px;
+}
+
+div#doctor_details {
+  float: left;
+}
+
+div#doctor_photos img {
+  margin: 30px;
+  border: 1px black solid;
+}
+
+div.specialties {
+  clear: both;
+  margin-top: 30px;
+}

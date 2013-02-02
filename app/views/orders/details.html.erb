@@ -1,0 +1,154 @@
+
+<%#= stylesheet_link_tag 'order_show' %>
+<%= javascript_include_tag 'order_show' %>
+<style>
+	p{
+		font-size:10pt;
+		margin-top:0px;
+		margin-bottom:2px;
+		color:#666666;
+	}
+</style>
+
+<% @blue_box_title = "HealthyPrice Procedure / Service Order"
+	if !@order.submitted
+		@blue_box_title += " - Confirm Order"
+	end
+
+	def mask_number(number)
+	  #number.to_s.size < 5 ? number.to_s : (('X' * number.to_s[0..-5].length) + number.to_s[-4..-1])
+	  "XXXX-XXXX-XXXX-" + number[number.size-4, number.size-1]
+	end
+
+	def CardType(number)
+		if number =~ /^3/
+			"AMEX"
+		elsif number =~ /^4/
+			"Visa"
+		elsif number =~ /^5/
+			"MasterCard"
+		elsif number =~ /^6/
+			"Discover"
+		else
+			""
+		end
+	end
+%>
+<% blue_box @blue_box_title do %>
+
+		<% if @Error != nil && @Error != "" %>
+			<div class="errorExplanation" id="error"><%= @Error %></div><br style="clear:both;" />
+		<% end %>
+
+		<div id="left_col" style="width:450px; margin-left:20px; float:left;">
+			<div id="doctor_service">
+				<div id="service" class="order_content">
+					<p><strong>Procedure / Service</strong><br/>
+					<%= @order.doctor_service.specialty_service.service_name %> (<%= @order.doctor_service.specialty_service.specialty.name %>)</p>
+					<br/>
+
+				</div>
+                     
+				<div id="price" class="order_content">
+					 
+                            
+					<p><strong>HealthyPrice: </strong><%= number_to_currency(@order.doctor_service.specialty_service.customer_price) %></p>
+					<br/>
+					<p><strong>Patient Name</strong>: <%= @order.patient_name %></p>
+					<br/>
+				</div>
+                          
+                          <div id="price" class="order_content">
+                          	<%if  @price_change.nil? and session[:test].blank?%>
+                                        <p style="color: red"><strong>Your HealthyPrice Promocode in invalid</p>
+                                        <%end%>
+			
+					<%if (@price_change.nil?) == false and session[:test].blank? %>
+                                       <p style="color: green"><strong>Your HealthyPrice after discount: </strong><%= number_to_currency(@price_change) %></p>
+					
+					<br/>
+                    <%end%>
+					<p><strong>Patient Name</strong>: <%= @order.patient_name %></p>
+					<br/>
+				</div>
+                          
+			</div>
+			<div id="billing" class="order_content">
+				<p><strong>Payment Details:</strong></p>
+				<p style="margin-bottom:10px;">Name: <%= @order.name %></p>
+				<p>Address: <%= @order.address %>, <%= @order.address2 %></p>
+				<p style="margin-bottom:10px;"><%= @order.city %>, <%= @order.state %> <%= @order.zipcode %></p>
+				<p style="margin-bottom:10px;">Phone: <%= @order.phone %></p>
+				<p style="margin-bottom:10px;">Email: <%= @order.email %></p>
+				<p style="margin-bottom:10px;">Payment Method: <%= CardType(@order.credit_card) %></p>
+				<p style="margin-bottom:10px;">Credit Card: <%= mask_number(@order.credit_card) %></p>
+				<p style="margin-bottom:10px;">Expiration Date: <%= @order.expiration.strftime("%m/%y") %></p>
+				<p>Verification (CCV): <%= @order.ccv %></p>
+				<p style="margin-bottom:10px;"><span class="large_box_link"><a href="/orders/edit">Edit Payment Details</a></span></p><!--orders/<%= @order.doctor_service_id %>/edit-->
+				<p>How Did You Hear About Us: <%= @order.market_survey %></p>
+			</div>
+		</div>
+
+		<div id="right_col" style="border-left:0px; width:390px; float:left; margin-left:20px;">
+			<div id="doctor" class="order_content">
+
+				<% @doctor = @order.doctor_service.doctor %>
+				<div id="doctor_details">
+					<p><strong>Doctor / Provider</strong></p>
+					<p id="doctorName"><%= @doctor.name %></p>
+					<p><%= @doctor.company %></p>
+					<p id="address"><%= @doctor.address %><% if @doctor.address2 != nil && @doctor.address2 != "" %>, <%= @doctor.address2 %><% end %>,</p>
+					<p id="citystate"><%= @doctor.city %>, <%= @doctor.state %> <%= @doctor.zipcode %></p>
+					<p><span class="large_box_link"><%=link_to 'Map', {}, {:class => 'dr_map', :onclick => 'showDrMap(); return false;'} %></span></p>
+					<p><%= @doctor.public_phone %></p>
+					<br/>
+					<!--p><%=link_to  @doctor.website,  @doctor.website %></p-->
+				</div>
+				<br/>
+
+				<!--div id="doctor_photos">
+					<img src="/images/uploads/<%= @doctor.id.inspect %>_headshot.jpg" class="headshot" height="150" />
+					<img src="/images/uploads/<%= @doctor.id.inspect %>_practice.jpg" class="clinic_photo" height="150" />
+				</div-->
+
+
+			</div>
+		</div>
+
+<br style="clear:both;" />
+<%# if @order.submitted != 1 -%>
+	<% form_for @order, :url => submit_orders_path(), :style => "margin-top:50px; margin-bottom:20px;" do |f| -%>
+		<%#= submit_tag "SUBMIT ORDER", :id => "submit", :name => "submit", :class => "form_submit" %>
+		<br/>
+		<div style="font-weight:bold;color:red; margin-left:20px; width:800px;">After you place your order, you will receive an email confirming your order and containing a Billing Code.<br/>You must bring this Billing Code with you to your doctor's/provider's appointment.</div>
+		<br/>
+		<table>
+			<tr>
+				<td>
+		<input style="background-image:url('/images/btn_submit_order.jpg'); height:22px; width:126px; border:0px; margin-left:18px;" id="submit" name="submit" type="submit" value="" />
+				</td><td>
+		<p>(Your credit card will be charged)</p>
+				</td>
+			</tr>
+		</table>
+		<br/>&nbsp;
+		<!--, :disabled => false, :disable_with => "Please wait..."-->
+	<% end -%>
+<%# end -%>
+
+<% end %>
+
+<script type="text/javascript" charset="utf-8">
+$(function(){
+	$('a.dr_map').click(showDrMap);
+});
+
+showDrMap = function() {
+	//alert('XOX');
+	var address = $("p#address").text() + ", " + $("p#citystate").text();
+	var drname = $("p#doctorName").text();
+	showMap(address,drname);
+	//alert(address+":"+drname);
+	return false;
+}
+</script>

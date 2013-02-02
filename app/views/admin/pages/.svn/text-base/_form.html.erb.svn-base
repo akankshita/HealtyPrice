@@ -1,0 +1,38 @@
+<ol class="form">
+	<li class="form-element">
+		<table>
+		<tr>
+			<td style="vertical-align:top;">
+				<dt style="width:70px;"><label for="record_title_27">Title</label></dt>
+			</td>
+			<td align="left">
+				<input id="record_title_27" style="width:650px;" class="title-input text-input" type="text" value="<% if @record.title != nil %><%= @record.title.gsub("\"", "&quot;") %><% end %>" name="record[title]" maxlength="255" autocomplete="off"/>
+			</td>
+		</tr>
+		</table>
+	</li>
+	<li class="form-element">
+		<table>
+		<tr>
+			<td style="vertical-align:top;">
+				<dt style="width:70px;"><label for="record_slug_27">Slug</label></dt>
+			</td>
+			<td align="left">
+				<input id="record_slug_27" style="width:650px;" class="slug-input text-input" type="text" value="<% if @record.slug != nil %><%= @record.slug.gsub("\"", "&quot;") %><% end %>" name="record[slug]" maxlength="255" autocomplete="off"/>
+			</td>
+		</tr>
+		</table>
+	</li>
+	<li class="form-element">
+		<table>
+		<tr>
+			<td style="vertical-align:top;">
+				<dt style="width:70px;"><label for="record_body_27">Body</label></dt>
+			</td>
+			<td align="left">
+				<textarea style="width:650px;" id="record_body_27" class="body-input text-input" rows="20" name="record[body]" cols="40" autocomplete="off"><%= @record.body %></textarea>
+			</td>
+		</tr>
+		</table>
+	</li>
+</ol>

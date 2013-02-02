@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!--meta name="description" content="Healthy Price offers fair prices for your healthcare needs. You can search doctor services, select a doctor, and pay online." /-->
+    <meta name="keywords" content="Health,Doctor,Appointment" />
+    <!--title>HealthyPrice, Inc.</title-->
+    <link href="/favicon.ico" rel="shortcut icon" />
+    <link href="/stylesheets/hp_styles.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+<!--
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+
+function MM_findObj(n, d) { //v4.01
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+  if(!x && d.getElementById) x=d.getElementById(n); return x;
+}
+
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+
+function Redirect_To_SSL(){
+	document.location=document.location.href.replace("http://", "https://");
+}
+//-->
+    </script>
+  <%= javascript_include_tag '/js_routes','jquery-1.3.2.min','jquery.equalheights','jquery.hint','jquery.dimensions.min','jquery.bgiframe.min','jquery.tooltip.min','jquery.glow','jquery.colorbox-min','application', :cache => true %>
+  <%= yield :head %>
+  <%= stylesheet_link_tag 'colorbox' %>
+  </head>
+
+<body onload="MM_preloadImages('/images/btn_learn_about_over.jpg','/images/btn_health_care_over.jpg','/images/btn_business_over.jpg','/images/btn_health_saving_over.jpg');">
+<!-- main container start -->
+<div class="main_container">
+    <!-- header start -->
+    <div class="header">
+    	<div class="logo_img"><a href="/"><img src="/images/healthy_price_logo.jpg" /></a></div>
+        <div class="top_navi">
+       	  <div class="top_navi_1">
+            <table width="200" border="0" cellspacing="0" cellpadding="0" bgcolor="white">
+                  <tr>
+                    <td width="12" align="left" valign="middle"><!--img src="/images/question_mark.jpg" width="10" height="14" style="padding-right:5px;" /--></td>
+                    <td width="35" align="left" valign="middle"><!--span class="help"><a href="#">Help</a></span--></td>
+                    <td width="14" align="left" valign="middle"><img src="/images/arrow.jpg" width="9" height="11" style="padding-right:5px;" /></td>
+                    <td width="139" align="left" valign="middle"><span class="help"><a href="/orders/lookup">Look Up Your Order</a></span></td>
+                  </tr>
+            </table>
+          </div>
+            <div class="top_navi_2_1">
+                <table width="567" border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td align="left"><a href="/" onmouseout="MM_swapImgRestore()" 			onmouseover="MM_swapImage('Image23','','/images/btn_home_over.jpg',1)">	<img src="/images/btn_home.jpg" name="Image23" width="96" height="31" border="0" id="Image23" /></a></td>
+                    <td align="left"><a href="/search/services" onmouseout="MM_swapImgRestore()" 	onmouseover="MM_swapImage('Image24','','/images/btn_service_over.jpg',1)">	<img src="/images/btn_service.jpg" name="Image24" width="193" height="31" border="0" id="Image24" /></a></td>
+                    <td align="left"><a href="/page/faq" onmouseout="MM_swapImgRestore()" 		onmouseover="MM_swapImage('Image25','','/images/btn_faq_over.jpg',1)">	<img src="/images/btn_faq.jpg" name="Image25" width="71" height="31" border="0" id="Image25" /></a></td>
+                    <td align="left"><a href="/page/about_us" onmouseout="MM_swapImgRestore()" 	onmouseover="MM_swapImage('Image26','','/images/btn_about_us_over.jpg',1)"><img src="/images/btn_about_us.jpg" name="Image26" width="103" height="31" border="0" id="Image26" /></a></td>
+                    <td align="left"><a href="/page/contact_us" onmouseout="MM_swapImgRestore()" 	onmouseover="MM_swapImage('Image27','','/images/btn_contact_over.jpg',1)">	<img src="/images/btn_contact.jpg" name="Image27" width="104" height="31" border="0" id="Image27" /></a></td>
+                  </tr>
+                </table>
+                <!--span class="top_main_select"><a href="/">Home</a></span>
+                <span class="top_navi_seperater"> | </span>
+                <span class="top_main"><a href="/search/services">Services &amp; Procedures</a></span>
+                <span class="top_navi_seperater"> | </span>
+                <span class="top_main"><a href="/page/faq">FAQ</a></span>
+                <span class="top_navi_seperater"> | </span>
+                <span class="top_main"><a href="/page/about_us">About Us</a></span>
+                <span class="top_navi_seperater"> | </span>
+                <span class="top_main"><a href="/page/contact_us">Contact</a></span-->
+            </div>
+        </div>
+    </div>
+    <!-- header end -->
+
+	<p style="color: green" class="span-22 last"><%= flash[:notice] %></p>
+
+    <div class="mid_container">
+	<%= yield %>
+    </div>
+
+    <!-- footer start -->
+<script>
+$(function(){
+	$('#footer_terms').healthybox({width: '750px', href: Routing.page_path({slug: 'terms__conditions', format: 'js'})})
+})
+</script>
+    <% if params[:controller] == "pages" %>
+    <div class="inner_footer">
+        <div class="footer_logo">
+            <table width="200" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td width="53"><img src="/images/footer_logo.jpg" width="46" height="46" /></td>
+                <td width="147">&copy; 2010 HealthyPrice, Inc.</td>
+              </tr>
+            </table>
+        </div>
+        <div class="inner_footer_right"><span class="inner_footer_link"><a href="/page/terms__conditions" id="footer_terms">Privacy Policy and<br/>Terms &amp; Conditions</a></span></div>
+  </div>
+    <% else %>
+    <div class="footer">
+    	<div class="footer_logo">
+        	<table width="200" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td width="53"><img src="/images/footer_logo.jpg" width="46" height="46" /></td>
+                <td width="147">&copy; 2010 HealthyPrice, Inc.</td>
+              </tr>
+              <tr>
+                <td height="19">&nbsp;</td>
+                <td valign="bottom"><span class="inner_footer_link"><a href="/page/terms__conditions" id="footer_terms">Privacy Policy and<br/>Terms &amp; Conditions</a></span></td>
+              </tr>
+            </table>
+        </div>
+        <div class="footer_content">
+        	<table width="690" border="0" cellspacing="0" cellpadding="0">
+              <!--tr>
+                <td width="230" class="footer_heading">Customers:</td>
+                <td width="230" class="footer_heading">Doctors/Providers:</td>
+                <td width="230" class="footer_heading">Business Owners:</td>
+              </tr-->
+              <tr>
+                <td width="230" class="footer_heading"><img src="/images/inner_right_customers.jpg" width="111" height="18" /></td>
+                <td width="230" class="footer_heading"><img src="/images/inner_right_doctors.jpg" width="184" height="18" /></td>
+                <td width="230" class="footer_heading"><img src="/images/inner_right_business.jpg" width="172" height="18" /></td>
+              </tr>
+              <tr>
+                <td height="5" colspan="3"></td>
+              </tr>
+              <tr>
+                <td><span class="footer_link"><a href="/search/services" style="margin-left:2px;">Find a Procedure or Service</a></span></td>
+                <td><span class="footer_link"><a href="/page/doctor">Get Info</a></span></td>
+                <td><span class="footer_link"><a href="/page/business">Get Info</a></span></td>
+              </tr>
+              <tr>
+                <td><span class="footer_link"><a href="/search/doctors">Search by Doctor or Provider</a></span></td>
+                <td><span class="footer_link"><% if current_user_session == nil %><a href="/doctor_section/signup/step1">Join HealthyPrice</a><% else %><%=link_to 'Log Out', '/user_session/destroy' %><% end %></span></td>
+                <td><!--span class="footer_link"><a href="/page/faq">FAQ</a></span-->
+                </td>
+              </tr>
+              <tr>
+                <td><span class="footer_link"><a href="/search/practice_areas">Search by Practice Area</a></span></td>
+<% if current_user_session.nil? %>
+                <td><span class="footer_link"><a href="/login">Log In</a></span></td>
+<% elsif current_user.user_type == "Admin" %>
+                <td><span class="footer_link"><%=link_to 'Admin Console', '/admin' %></span></td>
+<% else %>
+                <td><span class="footer_link"><%=link_to 'Manage My Account', '/doctor_section' %></span></td>
+<%end%>
+                <td>&nbsp;</td>
+              </tr>
+            </table>
+
+        </div>
+    </div>
+    <% end %>
+	<!-- footer end -->
+</div>
+
+<div style="width:290px; margin:auto; margin-top:50px;">
+	<div style="float:left;">
+		<!--img src="/HP.PNG"-->
+		<!-- GeoTrust True Site [tm] Smart Icon tag. Do not edit. -->
+		<!--SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript" 
+		SRC="//smarticon.geotrust.com/si.js"></SCRIPT-->
+		<img src="/images/geo_trust.jpg" style="cursor:pointer;" onclick="window.open('https://smarticon.geotrust.com/smarticonprofile?Referer=https://www.healthyprice.com','GeoTrust','width=383,height=600,toolbar=0,resizable=0,location=0,status=0');" />
+		<!-- end GeoTrust Smart Icon tag -->
+	</div>
+	<div style="float:left; margin-left:75px;" xostyle="border:3px solid #BBBBBB;">
+		<a href="https://www.securitymetrics.com/site_certificate.adp?s=174%2e129%2e1%2e49&amp;i=498314" target="_blank" ><img src="https://www.securitymetrics.com/images/sm_ccsafe_check2.gif" alt="SecurityMetrics for PCI Compliance, QSA, IDS, Penetration Testing, Forensics, and Vulnerability Assessment" border="0"></a>
+	</div>
+	<br/>&nbsp;
+</div>
+
+<div id="ToolTip" style="position:absolute; display:none; background-color:lightyellow; border:1px solid #888888; padding:3px; max-width:280px; font-size:10pt;">
+	<!--img src="/images/info.gif" style="float:left; margin-right:4px;" /-->
+	<div id="ToolTipTxt" style="float:left; text-align:left;"></div>
+</div>
+<script>
+var HideTimeout;
+var tempX = 0;
+var tempY = 0;
+var IE = document.all?true:false
+if (!IE) document.captureEvents(Event.MOUSEMOVE);
+
+document.onmousemove = getMouseXY;
+document.onclick =  HideToolTip;
+
+function ShowToolTip(tip, targ){
+	targ.onmouseout = StartHideToolTip;
+	var TTip = document.getElementById("ToolTip");
+	var TTxt = document.getElementById("ToolTipTxt");
+	TTip.style.display = 'inline';
+	TTxt.innerHTML = tip;
+	TTip.style.top = (tempY + 8) + 'px';
+	TTip.style.left = (tempX + 8) + 'px';
+	clearTimeout(HideTimeout);
+}
+
+function StartHideToolTip(){
+	clearTimeout(HideTimeout);
+	HideTimeout = setTimeout("HideToolTip();", 600)
+}
+
+function HideToolTip(){
+	var TTip = document.getElementById("ToolTip");
+	TTip.style.display = 'none';
+}
+
+function getMouseXY(e){
+  if (IE) { // grab the x-y pos.s if browser is IE
+    tempX = event.clientX + document.documentElement.scrollLeft;
+    tempY = event.clientY + document.documentElement.scrollTop;
+  } else {  // grab the x-y pos.s if browser is NS
+    tempX = e.pageX;
+    tempY = e.pageY;
+  }  
+  // catch possible negative values in NS4
+  if (tempX < 0){tempX = 0;}
+  if (tempY < 0){tempY = 0;}
+  return true;
+}
+</script>
+
+<div style="height:30px;"></div>
+<%# if request.protocol == "http://" && get_config("SSL") == "true" %><!--script>window.onload=Redirect_To_SSL;</script--><%# end %>
+<!-- main container end -->
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-11891327-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</body>
+</html>

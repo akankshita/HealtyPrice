@@ -1,0 +1,103 @@
+
+div#services-search-label {
+  padding-top: 10px;
+}
+
+div#services-search h3 {
+  padding: 1em;
+}
+
+div#services-search div.blue-box-header {
+  background-position: 0px 0em;
+}
+
+div#services-search-form input#services-query {
+  width: 15em;
+  height: 17px;
+  font-size: 14px;
+  padding-top: 1px;
+  position: relative;
+  top: 1px;
+}
+
+div#services-search-body td {
+  width: 48%;
+  vertical-align: top;
+}
+
+div#services-search-more {
+  padding-left: 10px;
+}
+
+td {
+  padding: 10px 10px;
+}
+
+div#specialties div.blue-box-body {
+  padding: 0px;
+}
+
+div#specialties ul {
+  padding: 0px;
+  margin: 20px 0px;
+  overflow: hidden;
+}
+ 
+div#specialties li {
+  list-style: none;
+  width: 123px;
+  margin: 5px;
+  float: left;
+  overflow: hidden;
+  white-space:nowrap;
+}
+
+div#specialties-more {
+  padding: 10px 10px;
+}
+
+
+/* promo slider */
+
+#promo-slider {
+  height: 263px;  
+  padding-bottom: 20px;
+}
+
+div#promo-slider-pager a {
+  border: 1px black solid;
+  background-color: white;
+  padding: 3px 15px;
+  margin-left: 10px;
+  font-size: 14px;
+  font-family: arial;
+  display: block;
+  float: left;
+}
+
+div#promo-slider-pager a:hover,
+div#promo-slider-pager a.activeSlide {
+  background-color: #E66615;
+  color: white;
+}
+
+div#promo-slider-pager {
+  position: absolute;
+  z-index: 1000;
+  top: 225px;
+  left: 10px;
+}
+
+div#left-col {
+  position: relative;
+}
+
+/* doctor search tabs customizations for homepage */
+div#doctor_search_options ul#tabs li a {
+  font-size: 11px;
+  font-weight: normal;
+}
+
+div#doctor_search_options ul#tabs li  {
+  padding: 2px 4px !important;
+}

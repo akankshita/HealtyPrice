@@ -1,0 +1,241 @@
+<table cellpadding="0" cellspacing="0" class="heading_font" style="margin-bottom:0;">
+	<tr>
+		<td class="headtd">
+			<div style="background-image:url('/images/top_l.jpg');height:31px;width:3px;border:0px; float:left; display:inline;"></div>
+			<div class="headmiddiv" style="width:985px; display:inline;">
+				<div class="headmidtext">New Payment </div>
+			</div>
+			<div  style="background-image:url('/images/top_r.jpg');height:31px;width:3px;border:0px; float:left; display:inline;"></div>
+		</td>
+	</tr>
+</table>
+
+<style>
+	table.heading_font tr.record td{
+		border-bottom:1px solid #C5DBF7;
+		border-left:1px solid #C5DBF7;
+		color:#333333;
+		font-family:Verdana,sans-serif;
+		font-size:11px;
+		padding:5px 4px;
+	}
+	table.heading_font tr.record td.foottd{
+		border-right:1px solid #C5DBF7;
+	}
+	table.heading_font tr.record td input{
+		margin:5px;
+		margin-top:-2px;
+	}
+	table.heading_font tr.record td input.text_boxx{
+		margin:0px;
+		text-align:right;
+	}
+</style>
+
+<%= form_tag({ :action => "add_payments" }, :method => "post", :name => "add_payments") %>
+	<table cellpadding="0" cellspacing="0" class="heading_font" style="margin-bottom:0;">
+		<tr><td colspan="99"><h6>Dr. <%= @docname %> (<%= @docid %>)</h6></td></tr>
+		<tr><th colspan="99">
+			<h4 style="float:left; display:inline;">Pending Orders</h4>
+			<span style="float:right; display:inline;">
+				Payment Date: <input type="text" name="docpayments[date]" value="<%= Time.now.strftime("%m/%d/%Y") %>" size="10" />
+			<span>
+		</th></tr>
+		<tr bgcolor="#555555" style="color:buttonface">
+			<th class="headth" width="30">Select</th>
+			<th class="headth">Order #</th>
+			<th class="headth">Date</th>
+			<th class="headth">Patient Name</th>
+			<th class="headth">Procedure</th>
+			<th class="headth">Std&nbsp;Amt</th>
+			<th class="headth">Pay</th>
+			<th class="headth">No&nbsp;Show</th>
+			<th class="headth"></th>
+		</tr>
+<%	name=['#ffffff','#E6F2FF']
+	j=0
+	@RowsFound = 0
+	@total_value = 0
+	@jsarray = "";
+	@constraints.each do |orderpay|
+		@doctor_price = Doctor.find_by_sql("SELECT * " +
+			"FROM specialty_services " +
+			"JOIN doctor_services " +
+			"ON specialty_services.id = doctor_services.specialty_service_id AND doctor_services.id = " + orderpay.doctor_service_id.inspect)
+		@doctor_price.each do |drprice|
+			#@services = Service.find(drprice.service_id)
+			@RowsFound += 1
+			@practices = Specialty.find(drprice.specialty_id)
+			@total_value += orderpay.doctor_price
+			@jsarray += "," if @jsarray != ""
+			@jsarray += orderpay.id.inspect
+			j = 1 - j %>
+		<tr bgcolor="<%= name[j] %>" class="record">
+			<td xclass="headtd"><input type="checkbox" name="order[chk<%= orderpay.id %>]" onclick="calculate_form();" checked /></td>
+			<td class="headtd"><%= orderpay.id %></td>
+			<td><%= orderpay.created_at.strftime("%B %d, %Y")%></td>
+			<td><%= orderpay.first_name << " " << orderpay.last_name %></td>
+			<td><%= shorten(drprice.service_name, 25) << " " %> (<%=  @practices.name %> )</td>
+			<td style="text-align:right;"><%= number_to_currency(orderpay.doctor_price) %></td>
+			<td>
+				<input type="hidden" name="hidden[amt<%= orderpay.id %>]" value="<%= orderpay.doctor_price %>" />
+				$<input type="text" name="pay[amt<%= orderpay.id %>]" value="<%= number_to_currency(orderpay.doctor_price, :unit => "") %>" onkeyup="calculate_form();" size="6" class="text_boxx" />
+			</td>
+			<td><input type="checkbox" name="no_show[chk<%= orderpay.id %>]" onclick="calculate_form();" /></td>
+			<td class="foottd"><a href="javascript:ASAjaxLoad('/admin/orders/<%= orderpay.id %>?_method=get&adapter=_list_inline_adapter', 'inline_space_<%= orderpay.id %>');" xtarget="_blank">Show</a></td>
+ 		</tr>
+		<tr class="inline-adapter" id="inline-adapter_<%= orderpay.id %>" style="display:none;">
+			<td colspan="99" class="inline-adapter-cell active-scaffold">
+				<a class="inline-adapter-close" title="Close" onclick="document.getElementById('inline-adapter_<%= orderpay.id %>').style.display='none';">Close</a>
+				<div id="inline_space_<%= orderpay.id %>" xstyle="display:none;" class="inline_space">
+				</div>
+			</td>
+		</tr>
+<%		end
+	end
+	if @RowsFound == 0 %>
+		<tr>
+			<td colspan="99">This provider does not have any pending orders.</td>
+		</tr>
+<% else %>
+		<tr bgcolor="#DDDDDD" class="record">
+			<td></td><td></td><td></td><td></td><td></td>
+			<td style="text-align:right;"><b>Total</b></td>
+			<td>$<input type="text" name="pay_total" value="<%= number_to_currency(@total_value, :unit => "") %>" size="6" class="text_boxx" readonly></td>
+			<td></td>
+			<td class="foottd"></td>
+		</tr>
+<% end %>
+	</table>
+
+	<div  class="paginationfoter" ></div>
+<%	if  @constraints.size ==0
+		@disstatus = "none"
+	end %>
+
+	<input type="hidden" name="docpay[doctor_id]" value="<%= @docid %>"  />
+	<!--table xstyle="display:<%= @disstatus %>; margin-top:-50px;" >
+		<tr>
+			<td colspan="2"><h4>Add an order to the payment</h4><br/></td>
+		</tr>
+		<tr>
+			<td width="90">Payment Date:</td>
+			<td>
+				<span style="vertical-align:middle;"><input type="text" name="docpayments[date]" value="<%= Time.now.strftime("%m/%d/%Y") %>" size="10"  /></span>
+			</td>
+		</tr>
+		<tr>
+			<td><span style="vertical-align:middle;">Order #:</span></td>
+			<td>
+				<span style="vertical-align:middle;"><input type="text" name="docpayments[order_no]" size="10"  />
+				<input class="heading_font" style="margin:0px;" name="continue" type="submit" value=" Add" /></span>
+			</td>
+		</tr>
+	</table>
+	<br><br-->
+	&nbsp;<br/>
+	<div align="left" style="float:left; display:inline;">
+		<input class="heading_font" style="margin:0px;" TYPE="button" VALUE="<< Back" onclick="history.go(-1);">
+	</div>
+	<div align="right" style="float:right; display:inline;">
+<%	if @RowsFound == 0 %>
+		<input class="heading_font" style="margin:0px;" name="continue" type="button" value=" Submit " onclick="alert('This provider does not have any pending orders.');" />
+<%	else %>
+		<input class="heading_font" style="margin:0px;" name="continue" type="submit" value=" Submit " />
+<%	end %>
+	</div>
+</form>
+
+<div id="hidden_tmp" xstyle="display:none;"></div>
+
+<style>
+table tr.inline-adapter td.inline-adapter-cell{ /* div.inline_space*/
+	background-color:#DAFFCD;
+	border:1px solid #7FCF00;
+	padding:4px;
+}
+</style>
+<script>
+	var ids = [<%= @jsarray %>];
+
+	var CurDest, xmlhttp;
+
+	function calculate_form(){
+		var form = document.add_payments;
+		var total_sum = 0;
+		var changed_amounts = "";
+		var sel_chk, hid_amt, pay_amt, no_show;
+		for (var i = 0; i < ids.length; i++){
+			sel_chk = form.elements["order[chk" + ids[i] + "]"];
+			hid_amt = form.elements["hidden[amt" + ids[i] + "]"];
+			pay_amt = form.elements["pay[amt" + ids[i] + "]"];
+			no_show = form.elements["no_show[chk" + ids[i] + "]"];
+			if (no_show.checked){
+				pay_amt.value = currency_format(hid_amt.value * 0.5);
+			}
+			else if (pay_amt.value == currency_format(hid_amt.value * 0.5)){
+				pay_amt.value = currency_format(hid_amt.value);
+			}
+			if (sel_chk.checked){
+				if (!IsPosNumeric(pay_amt.value.replace(",", ""))){
+					alert("Please enter a valid currency amount");
+					pay_amt.value = "0.00";
+				}
+				else{
+					total_sum += (pay_amt.value.replace(",", "") - 0);
+				}
+				// ----------------------------------------------
+				if (changed_amounts != "")
+					changed_amounts = changed_amounts + "|";
+				changed_amounts = changed_amounts + ids[i]+":"+(pay_amt.value.replace(",", "") - 0)+":"+(no_show.checked?"1":"0");
+				// ----------------------------------------------
+			}
+			else{
+				//pay_amt.value = "0.00";
+			}
+		}
+		document.add_payments.pay_total.value = currency_format(total_sum);
+		//alert(changed_amounts);
+	}
+	function currency_format(curr_value){
+		//curr_value += 0.000001;
+		var cents = parseInt(curr_value * 100).toString();
+		var formatted = cents.substr(0, cents.length-2) + "." + cents.substr(cents.length-2);
+		if (formatted == ".0"){
+			return "0.00";
+		}
+		else{
+			return formatted;
+		}
+	}
+
+	function ASAjaxLoad(Page, Destination){
+		CurDest = Destination;
+		try{
+			document.getElementById(Destination.replace('inline_space_', 'inline-adapter_')).style.display = '';
+			document.getElementById(Destination).innerHTML = '<img src="/images/loading.gif" style="vertical-align:middle;">Loading...';
+		}catch(e){}
+		xmlhttp = MakeXmlHttpRequest();
+		xmlhttp.onreadystatechange = ASReceiveAjax;
+		xmlhttp.open("GET", Page, true);
+		xmlhttp.send(null);
+	}
+
+	function ASReceiveAjax(){
+		if (xmlhttp.readyState==4){
+			if (xmlhttp.status==200){
+				document.getElementById('hidden_tmp').innerHTML = xmlhttp.responseText;
+				document.getElementById(CurDest).innerHTML = document.getElementById('special_ajax_container').innerHTML;
+				document.getElementById('hidden_tmp').innerHTML = '';
+				//document.getElementById(CurDest).innerHTML = xmlhttp.responseText.getElementById('body');
+			}
+			else{
+				document.getElementById(CurDest).innerHTML = "<div style='color:#FF4444;'>Internal Server Error!</div>";
+			}
+		}
+	}
+
+	function IsPosNumeric(input){
+	   return (input - 0) == input && input.length > 0 && !(input < 0);
+	}
+</script>

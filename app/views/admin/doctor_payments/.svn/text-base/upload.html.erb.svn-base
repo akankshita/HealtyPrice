@@ -1,0 +1,6 @@
+<script>
+parent.top.document.getElementById('UploadStatus').innerHTML = "<%= @message %>";
+<% if @errors == "" %>parent.top.document.getElementById('video_checkboxes').style.display = '';<% end %>
+</script>
+<div><%= @message %></div>
+Done.

@@ -1,0 +1,44 @@
+<style>
+	input.text-input{
+		border:1px solid #1F7F00;
+		font-family:Arial,sans-serif;
+		font-size:12px;
+		padding:1px;
+	}
+</style>
+<ol class="form" <%= 'style="display: none;"' if columns.collapsed -%>>
+  <% columns.each :for => @record do |column| -%>
+  <% if is_subsection? column -%>
+  <li class="sub-section">
+    <h5><%= column.label %> (<%= link_to_visibility_toggle(:default_visible => !column.collapsed) -%>)</h5>
+    <%= render :partial => 'form', :locals => { :columns => column } %>
+  </li>
+  <% elsif is_subform? column and !override_form_field?(column) -%>
+  <li class="sub-form <%= active_scaffold_config_for(column.association.klass).subform.layout %>-sub-form" id="<%= sub_form_id(:association => column.name) %>">
+    <%= render :partial => form_partial_for_column(column), :locals => { :column => column } -%>
+  </li>
+  <% elsif column.label == "Name" -%>
+  <li class="form-element">
+	<dl class="">
+		<dt style="width:55px;">
+			<label for="record_name_1" style="width:55px; margin-top:-2px;">Name</label>
+		</dt>
+		<dd>
+			<input id="record_name_1"style="margin-top:0px;" class="name-input text-input" type="text" value="<%= (@record.name==nil)?"":@record.name.gsub("\"", "&quot;") %>" size="120" name="record[name]" maxlength="255" autocomplete="off"/>
+		</dd>
+	</dl>
+  </li>
+  <% else -%>
+  <li class="form-element <%= 'required' if column.required? %>">
+    <%= render :partial => form_partial_for_column(column), :locals => { :column => column } -%>
+  </li>
+  <% end -%>
+  <% end -%>
+  <li class="form-element">
+  <% if @record.id == nil -%>
+    <b>PDF Document</b><br/>PDF document can be uploaded in the edit page after creating the practice area.
+  <% else -%>
+    <iframe src="/admin/upload_pdf?id=<%= @record.id.inspect %>" width="600" height="96" frameborder="0" style="border: 0px solid #ffffff;" allowtransparency="true"></iframe>
+  <% end -%>
+  </li>
+</ol>

@@ -1,0 +1,155 @@
+<div id="error" style="display:none;"></div>
+<div class="signup_header_text">
+	<span class="subheat_text_style">
+		Confirm Information
+	</span>
+</div><br/>&nbsp;<br style="clear:both;"/>
+
+<div style="margin-left:36px; width:850px; clear:both;">
+<table><tr><td width="400" valign="top" style="vertical-align:text-top;">
+
+	<div class="form_sectionx">
+		<hr class="confirm_info_box_sep" />
+		<h4>Personal Information</h4>
+		<div class="edit_link"><a href="/doctor_section/signup/step4#personal_information">Edit</a></div>
+<%= session[:doctor].title %> <%= session[:doctor].first_name %> <%= session[:doctor].middle_name %> <%= session[:doctor].last_name %><br/>
+<%= session[:doctor].email %><br/>
+<% if session[:doctor].notification_email != nil && session[:doctor].notification_email != "" %>
+	<%= session[:doctor].notification_email %> (notification email)<br/>
+<% end %>
+DOB: <%= session[:doctor].date_of_birth %><br/>
+<br/>
+Phone: <%= session[:doctor].phone %><br/>
+Fax: <%= session[:doctor].fax %><br/>
+<br/>
+<%= session[:doctor].tax_id_type %>: <%= session[:doctor].tax_id %>
+	</div>
+
+	<div class="form_sectionx">
+		<hr class="confirm_info_box_sep" />
+		<h4>Your Practice</h4>
+		<div class="edit_link"><a href="/doctor_section/signup/step4#your_practice">Edit</a></div>
+<b><%= session[:doctor].company %></b><br/>
+ &nbsp; &nbsp; <%= session[:doctor].address %><br/>
+ &nbsp; &nbsp; <%= session[:doctor].address2 %><br/>
+ &nbsp; &nbsp; <%= session[:doctor].city %>, <%= session[:doctor].state %> <%= session[:doctor].zipcode %><br/>
+<br/>
+<% if session[:doctor].website != nil && session[:doctor].website != "" %> &nbsp; &nbsp; <%= session[:doctor].website %><br/><br/><% end %>
+<b>Mailing Address:</b><br/>
+ &nbsp; &nbsp; <%= session[:doctor].mailing_address %><br/>
+ &nbsp; &nbsp; <%= session[:doctor].mailing_address2 %><br/>
+ &nbsp; &nbsp; <%= session[:doctor].mailing_city %>, <%= session[:doctor].mailing_state %> <%= session[:doctor].mailing_zipcode %><br/>
+<br/>
+Description (visible to the public):<br/>
+<% if session[:doctor].description != nil %>
+<%= session[:doctor].description.gsub(/\n/, '<br/>') %><br/>
+<% end %>
+<br/>
+Photos:<br/>
+<table width="100%"><tr><td width="50%" valign="top" align="center">
+	<img src="/images/uploads/<%= session[:doctor].id.inspect %>_headshot.jpg" class="confirm_photo" /><br/>Your Photo
+</td><td width="50%" valign="top" align="center">
+	<img src="/images/uploads/<%= session[:doctor].id.inspect %>_practice.jpg" class="confirm_photo" /><br/>Your Practice
+</td></tr></table>
+	</div>
+
+</td><td width="50">&nbsp;</td><td width="400" valign="top" style="vertical-align:text-top;">
+
+	<div class="form_sectionx">
+		<hr class="confirm_info_box_sep" />
+		<h4>Qualifications</h4>
+		<div class="edit_link"><a href="/doctor_section/signup/step4#qualifications">Edit</a></div>
+Medical School: <%= session[:doctor].medical_school %><br/>
+Type of Degree: <%= session[:doctor].type_of_degree %><br/>
+Year Graduated: <%= session[:doctor].graduated_year %><br/>
+Medical License Currently Issued In: <%= session[:doctor].medical_license_state %><br/>
+License #: <%= session[:doctor].license_no %><br/>
+License Type: <%= session[:doctor].medical_license_type %><br/>
+Languages Spoken: <% if session[:doctor].spanish == 1 %>Spanish<% if session[:doctor].other_languages != "" %>, <% end %><% end %><%= session[:doctor].other_languages %><br/>
+Residency Training: <%= session[:doctor].residency_training %><br/>
+Fellowship Training: <%= session[:doctor].fellowship_training %>
+	</div>
+
+	<div class="form_sectionx">
+		<hr class="confirm_info_box_sep" />
+		<h4>Insurance Information</h4>
+		<div class="edit_link"><a href="/doctor_section/signup/step4#insurance_information">Edit</a></div>
+Insurance Carriers You're an Approved Member of:
+<ul class="list_down">
+<% @insurance_carriers.each do |ic| %>
+	<li><%= ic.insurance_company_name %></li>
+<% end %>
+</ul>
+Malpractice Insurance:<br/>
+Carrier: <%= session[:doctor].insurance_carrier %><br/>
+Policy #: <%= session[:doctor].insurance_policy_no %><br/>
+Expires: <%= session[:doctor].insurance_expiry_date %>
+	</div>
+
+	<div class="form_sectionx">
+		<hr class="confirm_info_box_sep" />
+		<h4>Other Information</h4>
+		<div class="edit_link"><a href="/doctor_section/signup/step4#other_information">Edit</a></div>
+Hospital Affiliations:<ul class="list_down">
+<% @hospital_affiliations.each do |ha| %>
+	<li><%= ha.hospital %> (<%= ha.usage_percentage %>%)</li>
+<% end %>
+</ul>
+Doctor References:<ul class="list_down">
+<% @doctor_references.each do |dr| %>
+	<li><%= dr.first_name %> <%= dr.last_name %> (<%= dr.phone %>)</li>
+<% end %>
+</ul>
+	</div>
+
+	<div class="form_sectionx">
+		<hr class="confirm_info_box_sep" />
+		<h4>Practice Areas and Procedures</h4>
+		<div class="edit_link"><a href="/doctor_section/signup/step2">Edit</a></div>
+<% @selected_specialties.each do |ss| %>
+	<%= ss.name %><ul class="list_down">
+	<% @selected_services.each do |ssrv| %>
+		<% if ssrv.specialty_id == ss.id.inspect %>
+			<li><%= ssrv.service_name %></li>
+		<% end %>
+	<% end %></ul>
+<% end %>
+	</div>
+
+	<div class="form_sectionx">
+		<hr class="confirm_info_box_sep" />
+		<h4>How Do We Pay You?</h4>
+		<div class="edit_link"><a href="/doctor_section/signup/step5">Edit</a></div>
+Payment Method: <%= session[:doctor].payment_method %>
+<% if session[:doctor].payment_method == "PayPal" %>
+<br/>PayPal Email: <%= session[:doctor].paypal_email %>
+<% end %>
+<br/>Payee Name: <%= session[:doctor].payee_name %>
+<br/>Payee Phone Number: <%= session[:doctor].payee_phone_number %>
+<br/>Payee Email Address: <%= session[:doctor].payee_email_address %>
+<br/>Payee Address: <%= session[:doctor].payee_address1 %><% if session[:doctor].payee_address2 != "" || session[:doctor].payee_address2 != nil %>, <%= session[:doctor].payee_address2 %><% end %>
+<br/>City: <%= session[:doctor].payee_city %>
+<br/>State: <%= session[:doctor].payee_state %>
+<br/>Zip: <%= session[:doctor].payee_zip %>
+<br/>Tax ID (<%= session[:doctor].payee_tax_id_type %>): <%= session[:doctor].payee_tax_id %>
+	</div>
+
+</td></tr></table>
+</div>
+
+<form>
+	<input type="hidden" name="doctor[id]" value="<%= session[:doctor].id.inspect %>">
+	<div style="float:left;clear:both;width:800px;">
+		<table class="bottom_buttons">
+			<tr>
+				<td height="5"><input name="continue" type="submit" value="" style="width:0px; height:0px; background-color:white; border:0px;" /></td>
+			</tr><tr>
+				<td class="left_column">
+					<input name="back" type="submit" value="" style="background-image:url('/images/provider_signup/back_5.jpg');height:26px;width:177px;border:0px;" />
+				</td><td class="right_column">
+					<input name="continue" type="submit" value="" style="background-image:url('/images/provider_signup/continue_7.jpg');height:26px;width:206px;border:0px;" />
+				</td>
+			</tr>
+		</table>
+	</div>
+</form>

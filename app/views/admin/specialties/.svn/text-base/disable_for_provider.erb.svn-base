@@ -1,0 +1,1 @@
+<script>document.getElementById('<%= params[:row_id] %>').style.display='none';</script>

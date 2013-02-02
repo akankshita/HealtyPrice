@@ -1,0 +1,192 @@
+<%= javascript_include_tag 'ajax' %>
+<%= javascript_include_tag 'fader' %>
+
+<div class="signup_header_text">
+	<span class="subheat_text_style">
+		How Do We Pay You?
+	</span>
+</div><br/>&nbsp;<br/>
+
+<% if @error != nil && @error != "" -%>
+	<% if @show_error_as_javascript == true -%>
+<script>alert('<%= @error %>');</script>
+	<% else -%>
+<div id="error"><!--img src="/images/provider_signup/error.gif" style="float:left;" /--><%= @error %></div>
+	<% end -%>
+<% else -%>
+<div id="error" style="display:none;"></div>
+<% end -%>
+
+<% @States = "<option value=''>Select State</option><option value='Alabama'>Alabama</option><option value='Alaska'>Alaska</option><option value='American Samoa'>American Samoa</option><option value='Arizona'>Arizona</option><option value='Arkansas'>Arkansas</option><option value='California'>California</option><option value='Colorado'>Colorado</option><option value='Connecticut'>Connecticut</option><option value='Delaware'>Delaware</option><option value='District of Columbia'>District of Columbia</option><option value='Florida'>Florida</option><option value='Georgia'>Georgia</option><option value='Guam'>Guam</option><option value='Hawaii'>Hawaii</option><option value='Idaho'>Idaho</option><option value='Illinois'>Illinois</option><option value='Indiana'>Indiana</option><option value='Iowa'>Iowa</option><option value='Kansas'>Kansas</option><option value='Kentucky'>Kentucky</option><option value='Louisiana'>Louisiana</option><option value='Maine'>Maine</option><option value='Maryland'>Maryland</option><option value='Massachusetts'>Massachusetts</option><option value='Michigan'>Michigan</option><option value='Minnesota'>Minnesota</option><option value='Mississippi'>Mississippi</option><option value='Missouri'>Missouri</option><option value='Montana'>Montana</option><option value='Nebraska'>Nebraska</option><option value='Nevada'>Nevada</option><option value='New Hampshire'>New Hampshire</option><option value='New Jersey'>New Jersey</option><option value='New Mexico'>New Mexico</option><option value='New York'>New York</option><option value='North Carolina'>North Carolina</option><option value='North Dakota'>North Dakota</option><option value='Northern Mariana Islands'>Northern Mariana Islands</option><option value='Ohio'>Ohio</option><option value='Oklahoma'>Oklahoma</option><option value='Oregon'>Oregon</option><option value='Pennsylvania'>Pennsylvania</option><option value='Puerto Rico'>Puerto Rico</option><option value='Rhode Island'>Rhode Island</option><option value='South Carolina'>South Carolina</option><option value='South Dakota'>South Dakota</option><option value='Tennessee'>Tennessee</option><option value='Texas'>Texas</option><option value='US Virgin Islands'>US Virgin Islands</option><option value='Utah'>Utah</option><option value='Vermont'>Vermont</option><option value='Virginia'>Virginia</option><option value='Washington'>Washington</option><option value='West Virginia'>West Virginia</option><option value='Wisconsin'>Wisconsin</option><option value='Wyoming'>Wyoming</option>"
+def states(sel)
+	if sel == nil
+		return @States
+	else
+		return @States.gsub(sel + "'>", sel + "' selected>")
+	end
+end
+%>
+
+<%= form_tag({ :action => "index" }, :method => "post") %>
+
+<div style="clear:both; margin-left:40px; margin-top:0pt; float:left; text-align:left; width:630px;">
+	<span class="text_style">
+		<label>
+			<input type="radio" name="doctor[payment_method]" value="PayPal" onclick="ShowHideSubFields(this);" <% if session[:doctor].payment_method == "PayPal" %>checked<% end %> />
+			PayPal
+		</label>
+	</span>
+	<br style="clear:left;"/>
+	<span id="PayPalSub" <% if session[:doctor].payment_method != "PayPal" %>style="display:none;"<% end %> class="text_style_2">
+		<label>
+			PayPal Email: &nbsp;&nbsp;
+			<input type="text" name="doctor[paypal_email]" value="<%= session[:doctor].paypal_email %>" size="30" />
+		</label>
+		<br/><br/>
+	</span>
+	<br style="clear:left;" />
+	<span class="text_style">
+		<label>
+			<input type="radio" name="doctor[payment_method]" value="Checks" onclick="ShowHideSubFields(this);" <% if session[:doctor].payment_method == "Checks" %>checked<% end %> />
+			Regular checks mailed via postal mail
+		</label>
+	</span>
+
+
+	<br style="clear:left;"/><br/>
+	<style>
+		table.form_tbl tr td{
+			padding-top:4px;
+			padding-bottom:4px;
+			padding-right:15px;
+		}
+	</style>
+	<span class="text_style">
+	<!-- id="RegChqSub" <% if session[:doctor].payment_method != "Checks" %>style="display:none;"<% end %>-->
+	<table cellpadding="0" cellspacing="0" border="0" class="form_tbl">
+		<tr>
+			<td align="right">Payee Name: </td>
+			<td><input type="text" name="doctor[payee_name]" style="width:200px;" value="<%= session[:doctor].payee_name %>" /></td>
+		</tr><tr>
+			<td align="right">Payee Phone Number: </td>
+			<td><input type="text" name="doctor[payee_phone_number]" style="width:200px;" value="<%= session[:doctor].payee_phone_number %>" /> (123-123-1234)</td>
+		</tr><tr>
+			<td align="right">Payee Email Address: </td>
+			<td><input type="text" name="doctor[payee_email_address]" style="width:200px;" value="<%= session[:doctor].payee_email_address %>" /></td>
+		</tr><tr>
+			<td align="right">Payee Address: </td>
+			<td><input type="text" name="doctor[payee_address1]" style="width:200px;" value="<%= session[:doctor].payee_address1 %>" /></td>
+		</tr><tr>
+			<td align="right">Payee Address (line 2): </td>
+			<td><input type="text" name="doctor[payee_address2]" style="width:200px;" value="<%= session[:doctor].payee_address2 %>" /></td>
+		</tr><tr>
+			<td align="right">City: </td>
+			<td><input type="text" name="doctor[payee_city]" style="width:200px;" value="<%= session[:doctor].payee_city %>" /></td>
+		</tr><tr>
+			<td align="right">State: </td>
+			<td><select name="doctor[payee_state]" style="width:206px;"><%= states(session[:doctor].payee_state) %></select><!--input type="text" name="doctor[payee_state]" value="<%= session[:doctor].payee_state %>" /--></td>
+		</tr><tr>
+			<td align="right">Zip: </td>
+			<td><input type="text" name="doctor[payee_zip]" style="width:200px;" value="<%= session[:doctor].payee_zip %>" /> (12345-6789)</td>
+		</tr><tr>
+			<td align="right">Tax ID Type: </td>
+			<td>
+				<label><input type="radio" name="doctor[payee_tax_id_type]" value="EIN" <% if session[:doctor].payee_tax_id_type == "EIN" %>checked<% end %> />EIN</label> (12-1234567) &nbsp; 
+				<label><input type="radio" name="doctor[payee_tax_id_type]" value="SSN" <% if session[:doctor].payee_tax_id_type == "SSN" %>checked<% end %> />SSN</label> (123-12-1234)
+			</td>
+		</tr><tr>
+			<td align="right">Tax ID: </td>
+			<td><input type="text" name="doctor[payee_tax_id]" style="width:200px;" value="<%= session[:doctor].payee_tax_id %>" /></td>
+		</tr>
+	</table>
+	</span>
+	<br style="clear:left;" />
+
+
+	<br/><br/><br/>
+	<!--The fastest way to receive payments is through PayPal. Within five business days of HealthyPrice receiving notification that you have the performed a service or procedure purchased by the customer, HealthyPrice will electronically transfer payment to your PayPal account.  You can easily then send the funds in your PayPal account to your bank account.  PayPal is the fastest way to receive payment from HealthyPrice; however, you will be responsible for any fees associated with the use of PayPal (2.9% + $0.30 on every transaction).  If you don't have a PayPal account but would like to set one up please click here [insert: link to PayPal registration page].
+	<br/><br/>
+	Or, if you would prefer, we can mail you a check.  This payment method is equally popular because it requires no additional set-up and is entirely free.  The processing time, however, is slightly longer.  HealthyPrice will processes checks on the first HealthyPrice check processing date (which are the 15th and 30th of each month, or next business day if the 15th or 30th falls on a non-business day) that falls no later than five business days after receiving notification that you have the performed a service or procedure purchased by the customer.
+	<br/><br/>-->
+	The fastest way to receive payments is through PayPal.
+	Within five business days of HealthyPrice receiving notification that you have the performed a service or procedure purchased by the customer, HealthyPrice will electronically transfer payment to your PayPal account.
+	You can easily then transfer the funds in your PayPal account to your bank account.
+	PayPal is the fastest way to receive payment from HealthyPrice; however, you will be responsible for any PayPal fees associated with the use of PayPal (approximately the charge of a credit card fee).
+	If you don't have a PayPal account but would like to set one up please <a href="https://www.paypal.com/" target="_blank">click here</a> or contact us at <!--a href="callto:+800-455-2797"-->800-455-2797<!--/a--> or at <a href="mailto:providersupport@healthyprice.com">providersupport@healthyprice.com</a> and we'll gladly help you set it up.
+	Setting up a PayPal account is extremely easy to do.
+	<br/><br/>
+	Or, if you would prefer, we can mail you a check.
+	This payment method is equally popular because it requires no additional set-up and is entirely free.
+	The processing time, however, is slightly longer.
+	HealthyPrice will processes checks on the first HealthyPrice check processing date
+	(which usually is around the 15th and 30th of each month that falls no later than five business days after receiving notification that you have the performed a service or procedure purchased by the customer.
+	<br/><br/>
+</div>
+	<!--div style="float:left; clear:both; text-align:justify; width:630px; margin-left:40px;">Text</div-->
+	<div id="banner_2" style="margin-top:0px; height:150px;">
+		<div id="banner_text_1" style="line-height:24px; padding-top:40px;">
+			<!--a href="javascript:ShowMessage('/page/payment_options?format=js')">Click here</a> for more information on payment options.-->
+			<a href="https://personal.paypal.com/us/cgi-bin/marketingweb?cmd=_render-content&content_ID=marketing_us/Account_SetUp" target="_blank" style="font-family:'Times New Roman',Times,serif; font-size:20px;font-weight:bold;">Click here</a> to watch a short video on how to set-up your PayPal account.
+		</div>
+	</div>
+
+<div id="message" style="clear:both; margin-left:20px; margin-right:20px; text-align:left;" onclick="HideMessage();"></div>
+
+<script>
+	document.onclick=HideMessage;
+
+	function ShowHideSubFields(controller){
+		if(controller.value == 'PayPal'){
+			document.getElementById('PayPalSub').style.display = '';
+			//document.getElementById('RegChqSub').style.display = 'none';
+		}
+		else{
+			document.getElementById('PayPalSub').style.display = 'none';
+			//document.getElementById('RegChqSub').style.display = '';
+		}
+	}
+
+	function ShowMessage(msgPath){
+		//var msgcontainer=document.getElementById('msgContainer');
+		//msgcontainer.style.display = '';
+		document.getElementById('message').style.opacity=0;
+		AjaxLoad(msgPath, 'message');
+		document.getElementById('message').style.display='';
+		fadeIn('message');
+	}
+
+	function HideMessage(){
+		//fade('message');
+		document.getElementById('message').style.display='none';
+	}
+</script>
+
+	<input type="hidden" name="doctor[id]" value="<%= session[:doctor].id.inspect %>">
+	<div style="float:left;clear:both;width:800px;">
+		<table class="bottom_buttons">
+			<tr>
+				<td height="5"><input type="text" style="display:none; visibility:false; width:0px; height:0px;">
+				<input name="continue" type="submit" value="" style="width:0px; height:0px; background-color:white; border:0px;" /></td>
+			</tr><tr>
+				<td class="left_column">
+					<input name="back" type="submit" value="" style="background-image:url('/images/provider_signup/back_4.jpg');height:26px;width:177px;border:0px;" />
+				</td><td class="right_column">
+					<input name="continue" type="submit" value="" style="background-image:url('/images/provider_signup/continue_6.jpg');height:26px;width:206px;border:0px;" /><!--br/-->
+				</td>
+			</tr><tr>
+				<td height="8"></td>
+			</tr><tr>
+				<td></td>
+				<td class="right_column">
+					<input name="save" type="submit" value="" style="background-image:url('/images/provider_signup/saveandcompleate.jpg');height:26px;width:206px;border:0px;" />
+				</td>
+			</tr>
+		</table>
+	</div>
+
+</form>
+
+<div class="msgContainer" id="msgContainer" style="position:absolute; display:none; background-color:#FFFFFF; top:260px; left:200px;; width:250px;">
+	<div id="xmessage" style="float:left; position:absolute; width:250px; text-align:left; background-color:#FFFFFF;"></div>
+	<div style="float:right; position:absolute; left:225px; width:25px; height:25px; background-color:red; font-size:18pt;" onclick="document.getElementById('msgContainer').style.display='none';">X</div>
+</div>

@@ -1,0 +1,130 @@
+<!--tr class="inline-adapter" id="inline-adapter_<%= params[:id] %>">
+<td class="inline-adapter-cell" colspan="99" style="background-image: none; background-color: transparent;"-->
+<div class="nested-view specialties-view view" style="padding:8px;">
+<a onclick="document.getElementById('inline-adapter_<%= params[:spc_id] %>_<%= params[:id] %>').style.display='none';" class="inline-adapter-close" title="Close">Close</a>
+<br/>
+<div id="e186e5cc2ede54e4b62a3623dae60799-active-scaffold" class="active-scaffold active-scaffold-e186e5cc2ede54e4b62a3623dae60799 admin/doctors-view blue-theme">
+	<div style="padding-top: 0pt;" class="active-scaffold-header">
+		<!--div style="background-color: rgb(255, 255, 255);">
+			<span style="border-style: solid; border-color: rgb(236, 255, 230); border-width: 0px 1px; overflow: hidden; background-color: rgb(218, 255, 205); display: block; height: 1px; font-size: 1px; margin-left: 1px; margin-right: 1px;"></span>
+			<span style="border-style: solid; border-color: rgb(236, 255, 230); border-width: 0px 1px; overflow: hidden; background-color: rgb(218, 255, 205); display: block; height: 1px; font-size: 1px; margin-left: 0px; margin-right: 0px;"></span>
+		</div-->
+		<div class="actions">
+			<img alt="loading indicator" class="loading-indicator" id="e186e5cc2ede54e4b62a3623dae60799-table-loading-indicator" src="/images/active_scaffold/default/indicator.gif?1263786554" style="visibility: hidden;">
+		</div>
+		<%# if @specialty_name.size > 0 %>
+		<h2>Providers for <%= @service_name %> (<%= @specialty_name %>)</h2>
+		<%# end %>
+	</div>
+
+	<table cellpadding="0" cellspacing="0">
+		<tbody class="before-header" id="e186e5cc2ede54e4b62a3623dae60799-search-container">
+		</tbody>
+	</table>
+
+	<div id="e186e5cc2ede54e4b62a3623dae60799-content">
+		<table cellpadding="0" cellspacing="0">
+			<thead>
+				<tr>
+					<th id="e186e5cc2ede54e4b62a3623dae60799-id-column" class="sorted desc">
+						<p>Id</p>
+					</th><th id="e186e5cc2ede54e4b62a3623dae60799-name-column" class="">
+						<p>Name</p>
+					</th><th id="e186e5cc2ede54e4b62a3623dae60799-company-column" class="">
+						<p>Company</p>
+					</th><th id="e186e5cc2ede54e4b62a3623dae60799-city-column" class="">
+						<p>City</p>
+					</th><th id="e186e5cc2ede54e4b62a3623dae60799-state-column" class="">
+						<p>State</p>
+					</th><th id="e186e5cc2ede54e4b62a3623dae60799-zipcode-column" class="">
+						<p>Zipcode</p>
+					</th><th id="e186e5cc2ede54e4b62a3623dae60799-phone-column" class="">
+						<p>Phone</p>
+					</th><th id="e186e5cc2ede54e4b62a3623dae60799-Hold--column" class="">
+						<p>Hold?</p>
+					</th><th id="e186e5cc2ede54e4b62a3623dae60799-Enabled--column" class="">
+						<p>Enabled?</p>
+					</th><!--th id="e186e5cc2ede54e4b62a3623dae60799-m_date-column" class="">
+						<p>M date</p>
+					</th--><th class="actions"></th>
+				</tr>
+			</thead>
+			<tbody class="messages">
+				<tr>
+					<td colspan="11" class="messages-container">
+						<div id="e186e5cc2ede54e4b62a3623dae60799-messages">
+						</div>
+						<p class="filtered-message" style="display: none;">(Filtered)</p>
+						<p id="e186e5cc2ede54e4b62a3623dae60799-empty-message" class="empty-message" style="display: none;">No Entries</p>
+					</td>
+				</tr>
+			</tbody>
+			<tbody class="records" id="e186e5cc2ede54e4b62a3623dae60799-tbody">
+<% 	@even = ""
+	@count = 0 %>
+<% 	@doctors.each do |doctor| %>
+				<tr class="record <%= @even %>" id="e186e5cc2ede54e4b62a3623dae60799-list-10104-row">
+					<td class="id-column sorted numeric"><%= doctor.doctor_id %></td>
+					<td class="name-column"><%= doctor.name %></td>
+					<td class="company-column"><%= doctor.company %></td>
+					<td class="city-column"><%= doctor.city %></td>
+					<td class="state-column"><%= doctor.state %></td>
+					<td class="zipcode-column"><%= doctor.zipcode %></td>
+					<td class="phone-column"><%= doctor.phone %></td>
+					<td class="Hold?-column"><% if doctor.onhold == 1 %>Yes<% else %>-<% end %></td>
+					<td class="Enabled?-column"><% if doctor.enabled == 1 %>Yes<% else %>No<% end %></td>
+					<!--td class="m_date-column"><%#= doctor.m_date %></td-->
+					<td class="actions">
+						<table cellpadding="0" cellspacing="0">
+							<tbody>
+								<tr>
+									<td class="indicator-container">
+										<img alt="loading indicator" class="loading-indicator" id="e186e5cc2ede54e4b62a3623dae60799-record-10104-loading-indicator" src="/images/active_scaffold/default/indicator.gif?1263786554" style="visibility: hidden;">
+									</td><!--td>
+										<a href="/admin/doctors/10104/nested?_method=get&amp;associations=specialties&amp;eid=e186e5cc2ede54e4b62a3623dae60799&amp;nested=true&amp;parent_column=doctors&amp;parent_model=Specialty" class="nested action" id="e186e5cc2ede54e4b62a3623dae60799-nested-10104-link" position="after">Practice Areas</a>
+									</td><td>
+										<a href="/admin/doctors/10104/edit?_method=get&amp;eid=e186e5cc2ede54e4b62a3623dae60799&amp;nested=true&amp;parent_column=doctors&amp;parent_model=Specialty" class="edit action" id="e186e5cc2ede54e4b62a3623dae60799-edit-10104-link" position="replace">Edit</a>
+									</td><td>
+										<a href="/admin/doctors/10104?_method=delete&amp;authenticity_token=XRT0f4h0ByFCYKMJaxEADnk%2FfV8hMUqRcv3i2RN7nEQ%3D&amp;eid=e186e5cc2ede54e4b62a3623dae60799&amp;nested=true&amp;parent_column=doctors&amp;parent_model=Specialty" class="destroy action" id="e186e5cc2ede54e4b62a3623dae60799-destroy-10104-link" onclick="return confirm('Are you sure?');">Delete</a>
+									</td--><td>
+										<a href="/admin/doctors/<%= doctor.doctor_id %>" class="show action" id="e186e5cc2ede54e4b62a3623dae60799-show-10104-link" position="replace">Show</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+	<% 	if @even == "even-record"
+			@even = ""
+		else
+			@even = "even-record"
+		end
+		@count += 1 %>
+<% 	end %>
+	<% if @count == 0 %>
+				<tr class="record <%= @even %>" id="e186e5cc2ede54e4b62a3623dae60799-list-10104-row">
+					<td colspan="99" align="center">
+						<i>No results found</i>
+					</td>
+				</tr>
+	<% end %>
+			</tbody>
+		</table>
+		<div style="padding-bottom: 0pt;" class="active-scaffold-footer">
+			<div class="active-scaffold-found">
+				<span class="active-scaffold-records"><%= @count %></span>
+				Found
+			</div>
+			<div class="active-scaffold-pagination">
+			</div>
+			<br clear="both">
+			<div style="background-color: rgb(255, 255, 255);">
+				<span style="border-style: solid; border-color: rgb(236, 255, 230); border-width: 0px 1px; overflow: hidden; background-color: rgb(218, 255, 205); display: block; height: 1px; font-size: 1px; margin-left: 0px; margin-right: 0px;"></span>
+				<span style="border-style: solid; border-color: rgb(236, 255, 230); border-width: 0px 1px; overflow: hidden; background-color: rgb(218, 255, 205); display: block; height: 1px; font-size: 1px; margin-left: 1px; margin-right: 1px;"></span>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<!--/td>
+</tr-->

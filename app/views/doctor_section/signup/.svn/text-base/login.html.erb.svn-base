@@ -1,0 +1,19 @@
+<h3>Continue Signup</h3>
+
+<% if @error != nil && @error != "" -%>
+<div id="error"><!--img src="/images/provider_signup/error.gif" style="float:left;" /--><%= @error %></div>
+<% end -%>
+
+<%= form_tag({ :action => "index" }, :method => "post") %>
+	<table border="0">
+		<tr>
+			<td>Email:</td>
+			<td><%= text_field "doctor", "email", :value => @email, :size => 23 %></td>
+		</tr><tr>
+			<td>Password:</td>
+			<td><%= password_field "doctor", "password", :size => 25 %></td>
+		</tr>
+	</table>
+	<%= submit_tag " Continue Signup Process " %>
+	<%= @echo %>
+</form>

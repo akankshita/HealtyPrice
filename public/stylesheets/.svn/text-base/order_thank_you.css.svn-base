@@ -1,0 +1,26 @@
+h6 {
+  font-size: 18px;
+  background-color: white;
+  text-align: center;
+  border: 1px #bbbbbb solid;
+}
+
+p#order_submitted_info {
+  margin: 20px;
+  font-size: 13px;
+  /*text-align: center;*/
+  text-align: left;
+}
+
+div#print {
+  float: left;
+  padding: 10px 1px;;
+}
+
+div#order_actions {
+  padding-top: 10px;
+  float: left;
+}
+
+
+

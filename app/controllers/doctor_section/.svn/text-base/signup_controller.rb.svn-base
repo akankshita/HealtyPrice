@@ -1,0 +1,851 @@
+require 'rubygems'
+require 'active_record'
+include Geokit::Geocoders
+
+class DoctorSection::SignupController < ApplicationController
+
+	include SslRequirement
+
+	layout 'signup'
+
+	@show_error_as_javascript = true
+
+	def ssl_required?
+		if get_config("SSL") == "true"
+			true
+		else
+			false
+		end
+	end
+
+	def index
+		#=================================================
+		if session[:doctor] != nil && session[:doctor].enabled == 1
+			redirect_to '/doctor_section'
+		elsif params[:doctor] == nil				# Original Form Load
+			if session[:doctor] == nil && params[:step][0, 4] == 'step' && params[:step] != 'step1'	#once the step 1 is completed, one cannot go back to step 1
+				redirect_to '/user_session/new'
+			elsif session[:doctor] != nil && (session[:doctor].signup_step == 8 && params[:step] != 'pending')	#Users who completed the signup process cannot go back
+				redirect_to '/doctor_section/signup/pending'
+			elsif params[:step] == 'step1'
+				if session[:doctor] != nil
+					redirect_to '/doctor_section/signup/step' + session[:doctor].current_signup_step.inspect
+				else
+					render :action => 'step1'
+				end
+			elsif params[:step] == 'step2'
+				@specialties = Specialty.find_by_sql("SELECT id, name, description FROM specialties" +
+											" ORDER BY name")
+				@selected_specialties = Specialty.find_by_sql("SELECT id, name, description FROM specialties, doctor_specialties " +
+											"WHERE specialties.id = doctor_specialties.specialty_id " +
+											"AND doctor_id = " + session[:doctor].id.inspect)
+				render :action => 'step2'
+			elsif params[:step] == 'step3'
+				@selected_specialties = Specialty.find_by_sql("SELECT id, name, description FROM specialties, doctor_specialties " +
+													"WHERE specialties.id = doctor_specialties.specialty_id " +
+													"AND doctor_id = " + session[:doctor].id.inspect +
+													" ORDER BY name")
+				@services = Specialty.find_by_sql("SELECT specialty_services.id AS specialty_service_id, specialty_services.specialty_id AS specialty_id, service_id, service_name, service_description, doctor_price " +
+											"FROM specialty_services, doctor_specialties " +
+											"WHERE specialty_services.specialty_id = doctor_specialties.specialty_id " +
+											"AND doctor_specialties.doctor_id = " + session[:doctor].id.inspect +
+											" ORDER BY sort_order, service_name")
+				sel_services = Specialty.find_by_sql("SELECT specialty_service_id FROM doctor_services WHERE doctor_id = " + session[:doctor].id.inspect)
+				@selected_services = Array.new
+				sel_services.each do |sel_srv|
+					@selected_services << sel_srv.specialty_service_id
+				end
+				render :action => 'step3'
+				#render :action => 'debug'
+			elsif params[:step] == 'step4'
+				##--------------------------------------------------------------------------
+				@insurance_carriers = Array.new
+				carriers = Specialty.find_by_sql("SELECT insurance_company_name FROM insurance_carriers WHERE doctor_id = " + session[:doctor].id.inspect)
+				carriers.each do |carrier|
+					@insurance_carriers << carrier.insurance_company_name
+				end
+				##-------------------------------------------------
+				@hospital_affiliations = Array.new
+				affiliations = Specialty.find_by_sql("SELECT usage_percentage, hospital FROM hospital_affiliations WHERE doctor_id = " + session[:doctor].id.inspect)
+				affiliations.each do |affiliation|
+					tmp_array = Array.new
+					tmp_array << affiliation.usage_percentage
+					tmp_array << affiliation.hospital
+					@hospital_affiliations << tmp_array
+				end
+				@hospital_affiliations << Array.new
+				@hospital_affiliations << Array.new
+				@hospital_affiliations << Array.new
+				##-------------------------------------------------
+				@doctor_references = Array.new
+				references = Specialty.find_by_sql("SELECT first_name, last_name, phone FROM doctor_references WHERE doctor_id = " + session[:doctor].id.inspect)
+				references.each do |reference|
+					tmp_array = Array.new
+					tmp_array << reference.phone
+					tmp_array << reference.first_name
+					tmp_array << reference.last_name
+					@doctor_references << tmp_array
+				end
+				@doctor_references << Array.new
+				@doctor_references << Array.new
+				@doctor_references << Array.new
+				@doctor_references << Array.new
+				@doctor_references << Array.new
+				##--------------------------------------------------------------------------
+				render :action => 'step4'
+			elsif params[:step] == 'step5'
+				render :action => 'step5'
+			elsif params[:step] == 'step6'
+				@insurance_carriers = Specialty.find_by_sql("SELECT insurance_company_name " +
+												"FROM insurance_carriers " +
+												"WHERE doctor_id = " + session[:doctor].id.inspect)
+				@hospital_affiliations = Specialty.find_by_sql("SELECT usage_percentage, hospital " +
+												"FROM hospital_affiliations " +
+												"WHERE doctor_id = " + session[:doctor].id.inspect)
+				@doctor_references = Specialty.find_by_sql("SELECT first_name, last_name, phone " +
+												"FROM doctor_references " +
+												"WHERE doctor_id = " + session[:doctor].id.inspect)
+				@selected_services = Specialty.find_by_sql("SELECT specialty_id, service_name " +
+												"FROM doctor_services, specialty_services " +
+												"WHERE doctor_services.specialty_service_id = specialty_services.id " +
+												"AND doctor_id = " + session[:doctor].id.inspect)
+												#"AND specialty_services.service_id = services.id " +
+				@selected_specialties = Specialty.find_by_sql("SELECT id, name, description " +
+												"FROM specialties, doctor_specialties " +
+												"WHERE specialties.id = doctor_specialties.specialty_id " +
+												"AND doctor_id = " + session[:doctor].id.inspect)
+				render :action => 'step6'
+			elsif params[:step] == 'step7'
+				agreement = Page.find_by_sql("SELECT body FROM pages WHERE slug = 'provider_agreement'")
+				if agreement.size > 0
+					@agreement = agreement[0].body
+				else
+					@agreement = "Page Not Found. Please contact customer support."
+				end
+				render :action => 'step7'
+			elsif params[:step] == 'pending'
+				if session[:doctor].enabled == 1
+					redirect_to '/user_session/new'
+				else
+					render :action => 'pending'
+				end
+			elsif params[:step] == 'login'
+				redirect_to '/doctor_section'
+			end
+		else								#Form Submit
+			if params[:step] == 'step1'
+				# Validate
+				@error = "<ul>"
+				@first_name = params[:doctor][:first_name]
+				if @first_name == ""
+					@error += "<li>Please enter your first name.</li>"
+				end
+				@middle_name = params[:doctor][:middle_name]
+				@last_name = params[:doctor][:last_name]
+				if @last_name == ""
+					@error += "<li>Please enter your last name.</li>"
+				end
+				@email = params[:doctor][:email]
+				check_duplicate_email = Doctor.find_by_sql("SELECT COUNT(*) as count FROM doctors WHERE email = '" + params[:doctor][:email] + "'")
+				if @email == "" || !@email.match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i)
+					@error += "<li>Please enter a valid email address.</li>"
+				elsif check_duplicate_email[0].count != "0"
+					@error += "<li>The email address you entered has been registered with another HealthyPrice account. Please <a href='/user_session/new'>click here</a> to login.</li>"
+				end
+				@password = params[:doctor][:password]
+				if @password == "" || !@password.index(/[0-9]/) || !@password.index(/[a-z]/) || @password.size < 6
+					@error += "<li>Please enter a valid password. The password must be 6 characters or more in length and contain both letters and numbers.</li>"
+				end
+				if params[:doctorx][:password_confirm] != @password
+					@error += "<li>Password confirmation does not match.</li>"
+				end
+				@error += "</ul>"
+				@error = @error.gsub("<ul></ul>", "")
+				#==============================================
+				if @error == ""
+					# Create Record
+					@doctor = Doctor.new(params[:doctor])
+					@doctor.notification_email = params[:doctor][:email]
+					@doctor.signup_step = 2
+					@doctor.current_signup_step = 2
+					@doctor.single_access_token = Authlogic::Random.friendly_token
+					@Result = @doctor.save(false)
+					if @Result
+						session[:doctor] = @doctor
+						# Send Email
+						Emailer.deliver_new_account_email(@email, @first_name + " " + @last_name, @doctor.id, @email, params[:doctor][:password])
+						###############333
+						redirect_to '/doctor_section/signup/step2'
+					else
+						@error = "<ul><li>There occured an error while creating your account: " + @doctor.first_name+ "</li></ul>"
+						render :action => 'step1'
+					end
+					#==============================================
+				else
+					render :action => 'step1'
+				end
+			elsif params[:step] == 'step2'
+				# Validate
+				@error = "<ul>"
+				if params[:doctor].size == 1
+					@error += "<li>Please select one or more practice areas.</li>"
+				end
+				@error += "</ul>"
+				@error = @error.gsub("<ul></ul>", "")
+				#=======================================
+				#if @error == ""	# || params[:save] != nil
+					#Save Data
+					ActiveRecord::Base.connection.execute("DELETE FROM doctor_specialties WHERE doctor_id = " + session[:doctor].id.inspect)
+					params[:doctor].each do |speciality|
+						if speciality[0][0, 3] == "chk"
+							specialityid = speciality[0].gsub("chk", "")
+							sql = "INSERT INTO doctor_specialties(specialty_id, doctor_id) " +
+								"VALUES(" + specialityid + ", " + session[:doctor].id.inspect + ")"
+							ActiveRecord::Base.connection.execute(sql)
+						end
+					end
+					#if session[:doctor].signup_step < 2
+					#	session[:doctor].signup_step = 2
+					#end
+					session[:doctor].current_signup_step = 2
+					session[:doctor].save(false)
+					#=======================================
+					if params[:continue] != nil && @error == ""
+						redirect_to '/doctor_section/signup/step3'
+					elsif params[:save] != nil
+						redirect_to '/user_session/destroy'
+					end
+				#else
+				if @error != "" && params[:save] == nil
+					@specialties = Specialty.find_by_sql("SELECT id, name, description FROM specialties")
+					@selected_specialties = Specialty.find_by_sql("SELECT id, name, description FROM specialties, doctor_specialties " +
+												"WHERE specialties.id = doctor_specialties.specialty_id " +
+												"AND doctor_id = " + session[:doctor].id.inspect)
+					render :action => 'step2'
+				end
+			elsif params[:step] == 'step3'
+				# Validate
+				#fdgsdfh=gfhd
+				@error = "<ul>"
+				not_selected_on_any = "Maybe"
+				params[:check].each do |chk_group|
+					if chk_group[1] == "NotSelected"
+						not_selected_on_any = "Yes"
+					end
+				end
+				if not_selected_on_any == "Yes"
+					@error += "<li>Please select one or more procedures for each practice area. If necessary, you may return to the previous step and deselect a practice area.</li>"
+				elsif params[:doctor].size == 1
+					@error += "<li>Please select one or more procedures for each practice area. If necessary, you may return to the previous step and deselect a practice area.</li>"
+				end
+				@error += "</ul>"
+				@error = @error.gsub("<ul></ul>", "")
+				#=======================================
+				#if @error == ""	# || params[:back] != nil || params[:save] != nil
+					#Save Data
+					ActiveRecord::Base.connection.execute("DELETE FROM doctor_services WHERE doctor_id = " + session[:doctor].id.inspect)
+					params[:doctor].each do |service|
+						if service[0][0, 3] == "chk"
+							serviceid = service[0].gsub("chk", "")
+							sql = "INSERT INTO doctor_services(specialty_service_id, doctor_id) " +
+								"VALUES(" + serviceid + ", " + session[:doctor].id.inspect + ")"
+							ActiveRecord::Base.connection.execute(sql)
+						end
+					end
+					if session[:doctor].signup_step < 3
+						session[:doctor].signup_step = 3
+					end
+					session[:doctor].current_signup_step = 3
+					session[:doctor].save(false)
+				#end
+				if params[:continue] != nil && @error == ""
+					redirect_to '/doctor_section/signup/step4'
+				elsif params[:continue_6] != nil && @error == ""
+					redirect_to '/doctor_section/signup/step6'
+				elsif params[:back] != nil
+					redirect_to '/doctor_section/signup/step2'
+				elsif params[:save] != nil
+					redirect_to '/user_session/destroy'
+				else
+					@selected_specialties = Specialty.find_by_sql("SELECT id, name, description FROM specialties, doctor_specialties " +
+														"WHERE specialties.id = doctor_specialties.specialty_id " +
+														"AND doctor_id = " + session[:doctor].id.inspect +
+														" ORDER BY name")
+					@services = Specialty.find_by_sql("SELECT specialty_services.id AS specialty_service_id, specialty_services.specialty_id, service_id, service_name, service_description, doctor_price " +
+												"FROM specialty_services, doctor_specialties " +
+												"WHERE specialty_services.specialty_id = doctor_specialties.specialty_id " +
+												"AND doctor_specialties.doctor_id = " + session[:doctor].id.inspect +
+												" ORDER BY sort_order, service_name")
+					sel_services = Specialty.find_by_sql("SELECT specialty_service_id FROM doctor_services WHERE doctor_id = " + session[:doctor].id.inspect)
+					@selected_services = Array.new
+					sel_services.each do |sel_srv|
+						@selected_services << sel_srv.specialty_service_id
+					end
+					#params[:check].each do |def_sel_srv|
+					#	@selected_services << def_sel_srv[0].gsub("chk[", "").gsub("]", "")
+					#end
+					render :action => 'step3'
+				end
+			elsif params[:step] == 'step4'
+				tmp_full_address = session[:doctor].full_address
+				# Validate
+				@error = "<ul>"
+				@errors = {}
+				if params[:doctor].size == 0
+					@error += "<li></li>"
+				end
+				session[:doctor].title				= params[:doctor][:title]
+				if params[:doctor][:first_name] == ""
+					@error += "<li>Please enter your first name.</li>"
+					@errors["first_name"] = "Please enter your first name."
+				else
+					session[:doctor].first_name		= params[:doctor][:first_name]
+				end
+				session[:doctor].middle_name		= params[:doctor][:middle_name]
+				if params[:doctor][:last_name] == ""
+					@error += "<li>Please enter your last name.</li>"
+					@errors["last_name"] = "Please enter your last name."
+				else
+					session[:doctor].last_name		= params[:doctor][:last_name]
+				end
+				check_duplicate_email = Doctor.find_by_sql("SELECT COUNT(*) as count FROM doctors WHERE id <> " + session[:doctor].id.inspect + " AND email = '" + params[:doctor][:email] + "'")
+				if params[:doctor][:email] == "" || !params[:doctor][:email].match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i)
+					@error += "<li>Please enter a valid email address.</li>"
+					@errors["email"] = "Please enter a valid email address."
+				elsif check_duplicate_email[0].count != "0"
+					@error += "<li>The email address you entered has been registered with another HealthyPrice account. Please enter a unique email address.</li>"
+					@errors["email"] = "The email address you entered has been registered with another HealthyPrice account. Please enter a unique email address."
+				else
+					session[:doctor].email			= params[:doctor][:email]
+				end
+				if params[:doctor][:notification_email] == "" || !params[:doctor][:notification_email].match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i)
+					@error += "<li>Please enter a valid notification email address.</li>"
+					@errors["notification_email"] = "Please enter a valid notification email address."
+				else
+					session[:doctor].notification_email	= params[:doctor][:notification_email]
+				end
+				if !params[:doctor][:date_of_birth].match(/(0[1-9]|1[012])[- \/.](0[1-9]|[12][0-9]|3[01])[- \/.](19|20)[0-9]{2}/)
+					@error += "<li>Please enter a valid date of birth in mm/dd/yyyy format.</li>"
+					@errors["date_of_birth"] = "Please enter a valid date of birth in mm/dd/yyyy format."
+				end
+				session[:doctor].date_of_birth		= params[:doctor][:date_of_birth]
+				if !params[:doctor][:phone].match(/\(?[0-9]{3}\)?[-. ]?[0-9]{3}[-. ]?[0-9]{4}/)
+					@error += "<li>Please enter a valid phone number.</li>"
+					@errors["phone"] = "Please enter a valid phone number."
+				end
+				session[:doctor].phone				= params[:doctor][:phone]
+				if !params[:doctor][:fax].match(/\(?[0-9]{3}\)?[-. ]?[0-9]{3}[-. ]?[0-9]{4}/)
+					@error += "<li>Please enter a valid fax number.</li>"
+					@errors["fax"] = "Please enter a valid fax number."
+				end
+				session[:doctor].fax				= params[:doctor][:fax]
+				session[:doctor].tax_id_type			= params[:doctor][:tax_id_type]
+				if params[:doctor][:tax_id_type] == "EIN"
+					if !params[:doctor][:tax_id].match(/\b[0-9]{2}-[0-9]{7}\b/)
+						@error += "<li>Please enter a valid EIN.</li>"
+						@errors["tax_id"] = "Please enter a valid EIN."
+					end
+				elsif params[:doctor][:tax_id_type] == "SSN"
+					if !params[:doctor][:tax_id].match(/\b[0-9]{3}-[0-9]{2}-[0-9]{4}\b/)
+						@error += "<li>Please enter a valid SSN.</li>"
+						@errors["tax_id"] = "Please enter a valid SSN."
+					end
+				else
+					@error += "<li>Please select a valid Tax Id Type.</li>"
+					@errors["tax_id_type"] = "Please select a valid Tax Id Type."
+				end
+				session[:doctor].tax_id				= params[:doctor][:tax_id]
+				if params[:doctor][:medical_school] == ""
+					@error += "<li>Please enter a Medical School.</li>"
+					@errors["medical_school"] = "Please enter a Medical School."
+				else
+					session[:doctor].medical_school		= params[:doctor][:medical_school]
+				end
+				if params[:doctor][:type_of_degree] == ""
+					@error += "<li>Please enter a Type of Degree.</li>"
+					@errors["type_of_degree"] = "Please enter a Type of Degree."
+				else
+					session[:doctor].type_of_degree		= params[:doctor][:type_of_degree]
+				end
+				if !params[:doctor][:graduated_year].match(/\b[0-9]{4}\b/)
+					@error += "<li>Please enter a valid graduation year in yyyy format.</li>"
+					@errors["graduated_year"] = "Please enter a valid graduation year in yyyy format."
+				end
+				session[:doctor].graduated_year		= params[:doctor][:graduated_year]
+				if params[:doctor][:medical_license_state] == ""
+					@error += "<li>Please select the state where Medical License is issued.</li>"
+					@errors["medical_license_state"] = "Please select the state where Medical License is issued."
+				else
+					session[:doctor].medical_license_state	= params[:doctor][:medical_license_state]
+				end
+				if params[:doctor][:license_no] == ""
+					@error += "<li>Please enter Medical License Number.</li>"
+					@errors["license_no"] = "Please enter Medical License Number."
+				else
+					session[:doctor].license_no			= params[:doctor][:license_no]
+				end
+				session[:doctor].medical_license_type	= params[:doctor][:medical_license_type]
+				session[:doctor].spanish			= params[:doctor][:spanish]!=nil
+					#@error += "<li>" + session[:doctor].spanish.inspect + "</li>"
+				session[:doctor].other_languages		= params[:doctor][:other_languages]
+				session[:doctor].residency_training		= params[:doctor][:residency_training]
+				session[:doctor].fellowship_training		= params[:doctor][:fellowship_training]
+				session[:doctor].display_training_to_public	= params[:doctor][:display_training_to_public]!=nil
+				if params[:doctor][:company] == ""
+					@error += "<li>Please enter the Name of your Practice.</li>"
+					@errors["company"] = "Please enter the Name of your Practice."
+				else
+					session[:doctor].company			= params[:doctor][:company]
+				end
+				if params[:doctor][:address] == ""
+					@error += "<li>Please enter the Street Address.</li>"
+					@errors["address"] = "Please enter the Street Address."
+				else
+					session[:doctor].address			= params[:doctor][:address]
+				end
+				session[:doctor].address2			= params[:doctor][:address2]
+				if params[:doctor][:city] == ""
+					@error += "<li>Please enter the City.</li>"
+					@errors["city"] = "Please enter the City."
+				else
+					session[:doctor].city				= params[:doctor][:city]
+				end
+				if params[:doctor][:state] == ""
+					@error += "<li>Please select the State.</li>"
+					@errors["state"] = "Please select the State."
+				else
+					session[:doctor].state				= params[:doctor][:state]
+				end
+				if !params[:doctor][:zipcode].match(/\b[0-9]{5}(?:-[0-9]{4})?\b/)
+					@error += "<li>Please enter a valid ZIP in 12345-6789 format (you may enter just the first five digits).</li>"
+					@errors["zipcode"] = "Please enter a valid ZIP in 12345-6789 format (you may enter just the first five digits)."
+				end
+				session[:doctor].zipcode			= params[:doctor][:zipcode]
+				if params[:doctor][:mailing_address] == ""
+					@error += "<li>Please enter the Street Address (Mailing).</li>"
+					@errors["mailing_address"] = "Please enter the Street Address (Mailing)."
+				else
+					session[:doctor].mailing_address		= params[:doctor][:mailing_address]
+				end
+				session[:doctor].mailing_address2		= params[:doctor][:mailing_address2]
+				if params[:doctor][:mailing_city] == ""
+					@error += "<li>Please enter the City (Mailing).</li>"
+					@errors["mailing_city"] = "Please enter the City (Mailing)."
+				else
+					session[:doctor].mailing_city			= params[:doctor][:mailing_city]
+				end
+				if params[:doctor][:mailing_state] == ""
+					@error += "<li>Please select the State (Mailing).</li>"
+					@errors["mailing_state"] = "Please select the State (Mailing)."
+				else
+					session[:doctor].mailing_state		= params[:doctor][:mailing_state]
+				end
+				if !params[:doctor][:mailing_zipcode].match(/\b[0-9]{5}(?:-[0-9]{4})?\b/)
+					@error += "<li>Please enter a valid ZIP in 12345-6789 format (you may enter just the first five digits).</li>"
+					@errors["mailing_zipcode"] = "Please enter a valid ZIP in 12345-6789 format (you may enter just the first five digits)."
+				end
+				session[:doctor].mailing_zipcode		= params[:doctor][:mailing_zipcode]
+				if params[:doctor][:website] == nil || params[:doctor][:website] == ""
+					session[:doctor].website = ""
+				else
+					@TmpUrl = params[:doctor][:website].gsub("http://", "").gsub("https://", "")
+					#params[:doctor_payment][:website].match(/^(www).[a-z0-9]+([-.]{1}[a-z0-9]+)*.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$/ix)
+					#/[a-z0-9]+([-.]{1}[a-z0-9]+)*.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$/ix
+					if !@TmpUrl.match(/^(www).[a-z0-9]+([-.]{1}[a-z0-9]+)*.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$/ix)
+						@error += "<li>Please enter your website address in www.yourname.ext format where 'ext' is the domain extension (i.e., com, net, org, biz, etc.).</li>"
+						@errors["website"] = "Please enter your website address in www.yourname.ext format where 'ext' is the domain extension (i.e., com, net, org, biz, etc.)."
+					end
+					session[:doctor].website = @TmpUrl
+				end
+				@doctor_description = params[:doctor][:description]
+				while @doctor_description[@doctor_description.size - 1, 1] == " " || @doctor_description[@doctor_description.size - 1, 1] == "\n" || @doctor_description[@doctor_description.size - 1, 1] == "\r"
+					@doctor_description = @doctor_description[0, @doctor_description.size - 1]
+				end
+				while @doctor_description[0, 1] == " " || @doctor_description[0, 1] == "\n" || @doctor_description[0, 1] == "\r"
+					@doctor_description = @doctor_description[1, @doctor_description.size - 1]
+				end
+				if @doctor_description == "" || @doctor_description == nil
+					@error += "<li>Please enter a description of Your Practice.</li>"
+					@errors["description"] = "Please enter a description of Your Practice."
+					session[:doctor].description			= @doctor_description
+				elsif @doctor_description.length > 700
+					@error += "<li>You have entered a description longer than 700 characters. Any text after 700 characters will be truncated.</li>"
+					@errors["description"] = "You have entered a description longer than 700 characters. Any text after 700 characters will be truncated."
+					session[:doctor].description			= @doctor_description[0, 700].chomp
+				else
+					session[:doctor].description			= @doctor_description
+				end
+				#--------------------------------------------------------------------------------------------------------
+				if params[:headshot_photo] == nil
+					if params[:doctor][:headshot_photo_missing] == "missing"
+						@error += "<li>Please select a photo of yourself to be placed on your profile (it must be a JPEG image with a .jpg file extension).</li>"
+						@errors["headshot_photo"] = "Please select a photo of yourself to be placed on your profile (it must be a JPEG image with a .jpg file extension)."
+					end
+				else
+					upload = params[:headshot_photo]
+					if !(upload.content_type == "image/jpe" || upload.content_type == "image/jpeg" || upload.content_type == "image/jpg" || upload.content_type == "image/pjpeg")
+						@error += "<li>Please select a photo of yourself to be placed on your profile (it must be a JPEG image with a .jpg file extension). You have selected a(n) " + upload.content_type + " file.</li>"
+						@errors["headshot_photo"] = "Please select a photo of yourself to be placed on your profile (it must be a JPEG image with a .jpg file extension). You have selected a(n) " + upload.content_type + " file."
+					else
+						name =  upload.original_filename
+						filename = session[:doctor].id.inspect + "_headshot.jpg"
+						path = File.join("public/images/uploads", filename)
+						File.open(path, "wb") { |f| f.write(upload.read) }
+						filesize = File.size(path)
+						if filesize > 307200	#2097152
+							File.unlink(path)
+							@error += "<li>You have selected image files that exceed the maximum image size of 300KB for your photo. Please reduce the file size of your images and upload them again.</li>"	#The file you have selected is too large. (Larger than 2MB)
+							@errors["headshot_photo"] = "The file you have selected is too large. (Larger than 2MB)."
+						else
+							sql = "INSERT INTO doctor_photos(content_type, filename, size, width, height, doctor_id, photo_type) " +
+								"VALUES('"+upload.content_type+"', '"+filename+"', "+filesize.inspect+", 150, 75, "+session[:doctor].id.inspect+", 'headshot')"
+							ActiveRecord::Base.connection.execute(sql)
+						end
+					end
+				end
+				#--------------------------------------------------------------------------------------------------------
+				if params[:practice_photo] == nil
+					if params[:doctor][:practice_photo_missing] == "missing"
+						@error += "<li>Please select a photo of your practice to be placed on your profile (it must be a JPEG image with a .jpg file extension).</li>"
+						@errors["practice_photo"] = "Please select a photo of your practice to be placed on your profile (it must be a JPEG image with a .jpg file extension)."
+					end
+				else
+					upload = params[:practice_photo]
+					if !(upload.content_type == "image/jpe" || upload.content_type == "image/jpeg" || upload.content_type == "image/jpg" || upload.content_type == "image/pjpeg")
+						@error += "<li>Please select a photo of your practice to be placed on your profile (it must be a JPEG image with a .jpg file extension). You have selected a(n) " + upload.content_type + " file.</li>"
+						@errors["practice_photo"] = "Please select a photo of your practice to be placed on your profile (it must be a JPEG image with a .jpg file extension). You have selected a(n) " + upload.content_type + " file."
+					else
+						name =  upload.original_filename
+						filename = session[:doctor].id.inspect + "_practice.jpg"
+						path = File.join("public/images/uploads", filename)
+						File.open(path, "wb") { |f| f.write(upload.read) }
+						filesize = File.size(path)
+						if filesize > 307200	#2097152
+							File.unlink(path)
+							@error += "<li>You have selected image files that exceed the maximum image size of 300KB for the photo of your practice. Please reduce the file size of your images and upload them again.</li>"	#The file you have selected is too large. (Larger than 2MB)
+							@errors["practice_photo"] = "The file you have selected is too large. (Larger than 2MB)."
+						else
+							sql = "INSERT INTO doctor_photos(content_type, filename, size, width, height, doctor_id, photo_type) " +
+								"VALUES('"+upload.content_type+"', '"+filename+"', "+filesize.inspect+", 150, 75, "+session[:doctor].id.inspect+", 'practice')"
+							ActiveRecord::Base.connection.execute(sql)
+						end
+					end
+				end
+				#--------------------------------------------------------------------------------------------------------
+				insurance_carriers = params[:doctor][:insurance_carriers]
+				sql = "DELETE FROM insurance_carriers WHERE doctor_id = " + session[:doctor].id.inspect
+				ActiveRecord::Base.connection.execute(sql)
+				no_of_insurance_carriers = 0
+				@insurance_carriers = Array.new
+				insurance_carriers.each do |ic|
+					if ic[1] != ""
+						sql = "INSERT INTO insurance_carriers(doctor_id, insurance_company_name) " +
+							"VALUES(" + session[:doctor].id.inspect + ", '" + ic[1].gsub("'", "''") + "')"
+						ActiveRecord::Base.connection.execute(sql)
+						@insurance_carriers << ic[1]
+						no_of_insurance_carriers += 1
+					end
+				end
+				if no_of_insurance_carriers < 2
+					@error += "<li>Please enter at least two company names (Insurance Carriers).</li>"
+					@errors["insurance_carriers"] = "Please enter at least two company names (Insurance Carriers)."
+				end
+				#--------------------------------------------------------------------------------------------------------
+				if params[:doctor][:insurance_carrier] == ""
+					@error += "<li>Please enter your Malpractice Insurance Carrier.</li>"
+					@errors["insurance_carrier"] = "Please enter your Malpractice Insurance Carrier."
+				else
+					session[:doctor].insurance_carrier		= params[:doctor][:insurance_carrier]
+				end
+				if params[:doctor][:insurance_policy_no] == ""
+					@error += "<li>Please enter your Malpractice Insurance Policy Number.</li>"
+					@errors["insurance_policy_no"] = "Please enter your Malpractice Insurance Policy Number."
+				else
+					session[:doctor].insurance_policy_no	= params[:doctor][:insurance_policy_no]
+				end
+				if !params[:doctor][:insurance_expiry_date].match(/(0[1-9]|1[012])[- \/.](0[1-9]|[12][0-9]|3[01])[- \/.](19|20)[0-9]{2}/)
+					@error += "<li>Please enter a valid malpractice insurance expiration date in mm/dd/yyyy format.</li>"
+					@errors["insurance_expiry_date"] = "Please enter a valid malpractice insurance expiration date in mm/dd/yyyy format."
+				end
+				session[:doctor].insurance_expiry_date	= params[:doctor][:insurance_expiry_date]
+				#--------------------------------------------------------------------------------------------------------
+				hospital_affiliations = params[:doctor][:hospital_affiliations]
+				sql = "DELETE FROM hospital_affiliations WHERE doctor_id = " + session[:doctor].id.inspect
+				ActiveRecord::Base.connection.execute(sql)
+				no_of_hospital_affiliations = 0
+				@hospital_affiliations = Array.new
+				hospital_affiliations.each do |ha|
+					tmp_array = Array.new
+					ha[1].each do |row|
+						tmp_array << row[1]
+					end
+					tmp_array[0] = tmp_array[0].gsub("%", "")
+					@hospital_affiliations << tmp_array
+					if tmp_array[1] != ""
+						if (tmp_array[0] == tmp_array[0].to_i.inspect) && tmp_array[0].to_i <= 100 && tmp_array[0].to_i > 0
+						else
+							@error += "<li>Please enter a valid usage %. (" + tmp_array[1] + " => " + tmp_array[0].to_i.inspect + ").</li>"
+							@errors["hospital_affiliations"] = "Please enter a valid usage %. (" + tmp_array[1] + " => " + tmp_array[0].to_i.inspect + ")."
+						end
+						tmp_array[0] = tmp_array[0].to_i.inspect
+						sql = "INSERT INTO hospital_affiliations(doctor_id, hospital, usage_percentage) " +
+							"VALUES(" + session[:doctor].id.inspect + ", '" + tmp_array[1].gsub("'", "''") + "', " + tmp_array[0] + ")"
+						ActiveRecord::Base.connection.execute(sql)
+						no_of_hospital_affiliations += 1
+					elsif tmp_array[0] != ""
+						@error += "<li>Please enter both the hospital name and the usage % or leave both fields blank (however, at least one hospital affiliation is required).</li>"
+						@errors["hospital_affiliations"] = "Please enter both the hospital name and the usage % or leave both fields blank (however, at least one hospital affiliation is required)."
+					end
+				end
+				if no_of_hospital_affiliations < 1
+					@error += "<li>Please enter at least one hospital affiliation.</li>"
+					@errors["hospital_affiliations"] = "Please enter at least one hospital affiliation."
+				end
+				#--------------------------------------------------------------------------------------------------------
+				doctor_references = params[:doctor][:doctor_references]
+				sql = "DELETE FROM doctor_references WHERE doctor_id = " + session[:doctor].id.inspect
+				ActiveRecord::Base.connection.execute(sql)
+				no_of_doctor_references = 0
+				@doctor_references = Array.new
+				doctor_references.each do |dr|
+					tmp_array = Array.new
+					dr[1].each do |row|
+						tmp_array << row[1]
+					end
+					@doctor_references << tmp_array
+					if (tmp_array[0] + tmp_array[1] + tmp_array[2] != "")
+						if tmp_array[0] == "" || tmp_array[1] == "" || tmp_array[2] == ""
+							@error += "<li>Please enter both the name and phone number for the doctor reference or leave all three fields blank.</li>"
+							@errors["doctor_references"] = "Please enter both the name and phone number for the doctor reference or leave all three fields blank."
+						elsif !tmp_array[0].match(/\(?[0-9]{3}\)?[-. ]?[0-9]{3}[-. ]?[0-9]{4}/)
+							@error += "<li>Please enter a valid phone number. (" + tmp_array[0] + ").</li>"
+							@errors["doctor_references"] = "Please enter a valid phone number. (" + tmp_array[0] + ")."
+						else
+						end
+						if tmp_array[0] != "" || tmp_array[1] != "" || tmp_array[2] != ""
+							sql = "INSERT INTO doctor_references(doctor_id, first_name, last_name, phone) " +
+								"VALUES(" + session[:doctor].id.inspect + ", '" + tmp_array[1].gsub("'", "''") + "', '" + tmp_array[2].gsub("'", "''") + "', '" + tmp_array[0] + "')"
+							ActiveRecord::Base.connection.execute(sql)
+							no_of_doctor_references += 1
+						end
+					end
+				end
+				#--------------------------------------------------------------------------------------------------------
+				if tmp_full_address != session[:doctor].full_address
+					location = GoogleGeocoder.geocode(session[:doctor].full_address)
+					session[:doctor].lat = location.lat
+					session[:doctor].lng = location.lng
+				end
+				#--------------------------------------------------------------------------------------------------------
+				@error += "</ul>"
+				@error = @error.gsub("<ul></ul>", "")
+				@errors = {}
+				#@errors["nothing"] = "nothing"
+				#=======================================
+				#if params[:back] != nil || params[:save] != nil	# || @error == ""
+					#Save Data
+					if session[:doctor].signup_step < 4
+						session[:doctor].signup_step = 4
+					end
+					session[:doctor].current_signup_step = 4
+					session[:doctor].save(false)
+				#end
+				if params[:save] != nil
+					redirect_to '/user_session/destroy'
+				elsif params[:continue] != nil && @error == ""
+					redirect_to '/doctor_section/signup/step5'
+				elsif params[:continue_6] != nil && @error == ""
+					redirect_to '/doctor_section/signup/step6'
+				elsif params[:back] != nil
+					redirect_to '/doctor_section/signup/step3'
+				else
+					render :action => 'step4'
+				end
+			elsif params[:step] == 'step5'
+				@error = "<ul>"
+				if params[:doctor][:payment_method] == nil
+					@error += "<li>Please select a payment method.</li>"
+				else
+					session[:doctor].payment_method = params[:doctor][:payment_method]
+				end
+				session[:doctor].paypal_email = params[:doctor][:paypal_email]
+				if params[:doctor][:payment_method] == "PayPal"
+					if params[:doctor][:paypal_email] == nil || !params[:doctor][:paypal_email].match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i)
+						@error += "<li>Please enter a valid PayPal email address.</li>"
+					end
+				#else
+				end#
+					#session[:doctor].paypal_email = ""
+					#-----------------------------------------
+					if params[:doctor][:payee_name] == nil || params[:doctor][:payee_name] == ""
+						@error += "<li>Please enter the payee name.</li>"
+					end
+					session[:doctor].payee_name = params[:doctor][:payee_name]
+					#-----------------------------------
+					if !params[:doctor][:payee_phone_number].match(/\(?[0-9]{3}\)?[-. ]?[0-9]{3}[-. ]?[0-9]{4}/)
+						@error += "<li>Please enter a valid payee phone number.</li>"
+					end
+					session[:doctor].payee_phone_number = params[:doctor][:payee_phone_number]
+					#-----------------------------------
+					if params[:doctor][:payee_email_address] == "" || !params[:doctor][:payee_email_address].match(/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i)
+						@error += "<li>Please enter a valid payee email address.</li>"
+					end
+					session[:doctor].payee_email_address = params[:doctor][:payee_email_address]
+					#-----------------------------------
+					if params[:doctor][:payee_address1] == nil || params[:doctor][:payee_address1] == ""
+						@error += "<li>Please enter the payee address.</li>"
+					end
+					session[:doctor].payee_address1 = params[:doctor][:payee_address1]
+					#-----------------------------------
+					if params[:doctor][:payee_address2] == nil
+						@error += "<li>error</li>"
+					end
+					session[:doctor].payee_address2 = params[:doctor][:payee_address2]
+					#-----------------------------------
+					if params[:doctor][:payee_city] == nil || params[:doctor][:payee_city] == ""
+						@error += "<li>Please enter the city.</li>"
+					end
+					session[:doctor].payee_city = params[:doctor][:payee_city]
+					#-----------------------------------
+					if params[:doctor][:payee_state] == nil || params[:doctor][:payee_state] == ""
+						@error += "<li>Please enter the state.</li>"
+					end
+					session[:doctor].payee_state = params[:doctor][:payee_state]
+					#-----------------------------------
+					if !params[:doctor][:payee_zip].match(/\b[0-9]{5}(?:-[0-9]{4})?\b/)
+						@error += "<li>Please enter a valid zip code.</li>"
+					end
+					session[:doctor].payee_zip = params[:doctor][:payee_zip]
+					#-----------------------------------
+					if params[:doctor][:payee_tax_id_type] == "EIN"
+						if !params[:doctor][:payee_tax_id].match(/\b[0-9]{2}-[0-9]{7}\b/)
+							@error += "<li>Please enter a valid EIN.</li>"
+						end
+					elsif params[:doctor][:payee_tax_id_type] == "SSN"
+						if !params[:doctor][:payee_tax_id].match(/\b[0-9]{3}-[0-9]{2}-[0-9]{4}\b/)
+							@error += "<li>Please enter a valid SSN.</li>"
+						end
+					else
+						@error += "<li>Please select a tax id type.</li>"
+					end
+					session[:doctor].payee_tax_id_type = params[:doctor][:payee_tax_id_type]
+					session[:doctor].payee_tax_id = params[:doctor][:payee_tax_id]
+				#end
+				#--------------------------------------------------------------------------------------------------------
+				@error += "</ul>"
+				@error = @error.gsub("<ul></ul>", "")
+				#=======================================
+				#if @error == "" # || params[:back] != nil || params[:save] != nil
+					#Save Data
+					if session[:doctor].signup_step < 5
+						session[:doctor].signup_step = 5
+					end
+					session[:doctor].current_signup_step = 5
+					session[:doctor].save(false)
+				#end
+				if params[:save] != nil
+					redirect_to '/user_session/destroy'
+				elsif params[:continue] != nil && @error == ""
+					redirect_to '/doctor_section/signup/step6'
+				elsif params[:back] != nil
+					redirect_to '/doctor_section/signup/step4'
+				else
+					render :action => 'step5'
+				end
+			elsif params[:step] == 'step6'
+				if params[:save] != nil
+					redirect_to '/user_session/destroy'
+				elsif params[:continue] != nil
+					if session[:doctor].signup_step < 6
+						session[:doctor].signup_step = 6
+					end
+					session[:doctor].current_signup_step = 6
+					session[:doctor].save(false)
+					redirect_to '/doctor_section/signup/step7'
+				elsif params[:back] != nil
+					redirect_to '/doctor_section/signup/step5'
+				else
+					render :action => 'step6'
+				end
+			elsif params[:step] == 'step7'
+				@error = "<ul>"
+				if params[:agree_to_terms] == nil
+					#---------------------------------------
+					agreement = Page.find_by_sql("SELECT body FROM pages WHERE slug = 'provider_agreement'")
+					if agreement.size > 0
+						@agreement = agreement[0].body
+					else
+						@agreement = "Page Not Found. Please contact customer support."
+					end
+					#---------------------------------------
+					@error += "<li>You must agree to the HealthyPrice terms and conditions before you can proceed.<br/>Please check the box to accept the terms and conditions.</li>"
+				end
+				#--------------------------------------------------------------------------------------------------------
+				@error += "</ul>"
+				@error = @error.gsub("<ul></ul>", "")
+				#=======================================
+				if params[:save] != nil
+					redirect_to '/user_session/destroy'
+				elsif params[:continue] != nil
+					if @error != ""
+						render :action => 'step7'
+					else
+						session[:doctor].signup_step = 8
+						session[:doctor].current_signup_step = 8
+						#
+						#====================================================================================
+						#
+						#session[:doctor].enabled = 1
+						#
+						#====================================================================================
+						#
+						session[:doctor].save(false)
+						# Send Email
+						Emailer.deliver_signup_complete_email(session[:doctor].email, session[:doctor].title + " " + session[:doctor].first_name + " " + session[:doctor].last_name, session[:doctor].id)
+						###############333
+						redirect_to '/doctor_section/signup/pending'
+					end
+				elsif params[:back] != nil
+					redirect_to '/doctor_section/signup/step6'
+				else
+					render :action => 'step7'
+				end
+			elsif params[:step] == 'pending'
+				#current_user_session.destroy
+				#session[:doctor] = nil
+			elsif params[:step] == 'login'
+				redirect_to '/user_session/destroy'
+			end
+		end
+	end
+
+	def step1
+		#render :action => 'step2'
+	end
+
+	def step2
+		#@specialties = Specialty.find_by_sql("SELECT id, name, description FROM specialties")
+	end
+
+	def step3
+	end
+
+	def step4
+	end
+
+	def step5
+	end
+
+	def step6
+	end
+
+	def step7
+	end
+
+	def debug
+	end
+
+	def pending
+	end
+
+end

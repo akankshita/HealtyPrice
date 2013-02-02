@@ -1,0 +1,14 @@
+class Specialties < ActiveRecord::Migration
+  def self.up
+	create_table :specialties do |t|
+		t.string	:name
+		t.string	:description
+		t.datetime	:created_at
+		t.datetime	:updated_at
+	end
+  end
+
+  def self.down
+	drop_table :specialties
+  end
+end

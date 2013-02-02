@@ -1,0 +1,30 @@
+<html>
+	<head>
+	<style>Body { Background: transparent; padding:0px; margin:0px; font-family: Arial, Helvetica, sans-serif;} form{padding:0px; margin:0px;} td{color:#666666; font-size:10pt;}</style>
+	<script src="/javascripts/validate_video.js" ajaxrun="noexecute"></script>
+	</head>
+<% @path = Dir.pwd + '/public/images/uploads/' %>
+		<%= form_tag({ :action => "upload" }, :multipart => true, :method => "post", :style => "padding:0px;", :onsubmit => "return Validate_video(this);") %>
+			<table><!--:target => "uploadResult", -->
+			      <tr>
+				<td colspan="2"><b>Video</b><br/>
+					<div id="UploadStatus"><%= @message %><br/><% if File::exists?(@path + params[:id] + '_video.flv') %><a href="/images/uploads/<%= params[:id] %>_video.flv">https://www.healthyprice.com/images/uploads/<%= params[:id] %>_video.flv</a><% else %>No video file<% end %></div>
+				</td>
+			      </tr>
+			      <tr>
+				<td colspan="2">
+					Upload a new video: 
+					<input type="hidden" name="id" value="<%= params[:id] %>" />
+					<input type="file" size="20" name="doctor[video_code]" />
+					<input type="submit" value=" Upload " />
+				</td>
+			      </tr>
+			</table>
+		</form>
+		<iframe name="uploadResult" style="display:none; visibility:false; height:0px; width:0px;"></iframe>
+<script>
+<% if @errors == "" %>parent.top.document.getElementById('video_checkboxes').style.display = ''; parent.top.document.myform.show_video.checked=true;<% end %>
+<% if @message != "" %>parent.top.document.getElementById('UploadStatus').innerHTML = "<%= @message %>";<% end %>
+</script>
+
+<html>

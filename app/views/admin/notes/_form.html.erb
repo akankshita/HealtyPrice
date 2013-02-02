@@ -1,0 +1,29 @@
+<ol class="form">
+	<li class="form-element">
+		<table>
+		<tr>
+			<td style="vertical-align:top;">
+				<dt style="width:70px;"><label for="record_slug_27">Slug</label></dt>
+			</td>
+			<td align="left">
+				<%	@record_slug = ""
+					@record_slug = @record.slug.gsub("\"", "&quot;") if @record.slug != nil
+				%>
+				<input id="record_slug_27" style="width:650px;" class="slug-input text-input" type="text" value="<%= @record_slug %>" name="record[slug]" maxlength="255" autocomplete="off"/>
+			</td>
+		</tr>
+		</table>
+	</li>
+	<li class="form-element">
+		<table>
+		<tr>
+			<td style="vertical-align:top;">
+				<dt style="width:70px;"><label for="record_body_27">Content</label></dt>
+			</td>
+			<td align="left">
+				<textarea style="width:650px;" id="record_body_27" class="body-input text-input" rows="20" name="record[content]" cols="40" autocomplete="off"><%= @record.content %></textarea>
+			</td>
+		</tr>
+		</table>
+	</li>
+</ol>

@@ -1,0 +1,6 @@
+<%= form_tag({ :action => "index" }, :method => "post") %>
+	<textarea style="width:800px; height:250px;" name="commands"></textarea>
+	<input type="submit" value=" Run " />
+</form>
+
+<div style="width:800px; padding:4px; border:1px solid #888888;"><%= @output %></div>

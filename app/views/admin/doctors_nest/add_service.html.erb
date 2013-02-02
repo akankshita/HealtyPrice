@@ -1,0 +1,46 @@
+<style>
+	input.form_elem, textarea.form_elem, select.form_elem{
+		width:450px;
+	}
+</style>
+<div style="background-color:#DAFFCD; border:1px solid #7FCF00; padding:4px;">
+	<div class="error"><%= @error %></div>
+	<%= form_tag({ :action => "add_service" }, :method => "post") %>
+		<h4>Add a Procedure or Service</h4>
+		<input type="hidden" name="specialty_id" value="<%= params[:specialty_id] %>" />
+		<table class="active-scaffold">
+			<tr>
+				<td width="180"><label for="service_name">Procedure or Service: </label></td>
+				<td><input type="text" name="service_name" class="form_elem" value="<%= params[:service_name] %>" /></td>
+			</tr><tr>
+				<td><label for="service_name">Description: </label></td>
+				<td><textarea name="service_description" class="form_elem"><%= params[:service_description] %></textarea></td>
+			</tr><tr>
+				<td><label for="service_name">Provider Price: </label></td>
+				<td><input type="text" name="provider_price" class="form_elem" value="<%= params[:provider_price] %>" /></td>
+			</tr><tr>
+				<td><label for="service_name">Customer Price: </label></td>
+				<td><input type="text" name="customer_price" class="form_elem" value="<%= params[:customer_price] %>" /></td>
+			</tr><tr>
+				<td><label for="service_name">Sort Order: </label></td>
+				<td><input type="text" name="sort_order" class="form_elem" value="<%= params[:sort_order] %>" /></td>
+			</tr><tr>
+				<td><label for="service_name">Display Note: </label></td>
+				<td><% @notes = Note.find(:all) %>
+					<select name="display_note" class="form_elem">
+						<option value="-1"> - select - </option>
+					<% @notes.each do |note| %>
+						<option value="<%= note.id %>"><%= note.slug %></option>
+					<% end %>
+					</select>
+				</td>
+			</tr>
+		</table>
+		<p class="form-footer">
+			<input type="submit" value="Add" name="commit" class="submit"/>
+			<a class="cancel" href="/admin/specialty_services/<%= params[:specialty_id] %>">Cancel</a>
+			<img style="visibility: hidden;" src="/images/active_scaffold/default/indicator.gif?1266205735" id="40b0a82b037cb6143cfa1e4a9d92bc11-add_existing-loading-indicator" class="loading-indicator" alt="loading indicator"/>
+			<span id="add_new_return_<%= params[:specialty_id] %>" sstyle="display:none;"></span>
+		</p>
+	</form>
+</div>

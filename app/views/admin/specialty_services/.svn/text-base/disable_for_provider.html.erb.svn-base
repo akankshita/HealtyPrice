@@ -1,0 +1,2 @@
+<script>document.getElementById('spc_srv_row_<%= params[:doc_id] %>_<%= params[:spc_srv_id] %>').style.display='none';</script>
+<%#= @sql %>

@@ -1,0 +1,163 @@
+<% content_for :head do %>
+	<%= javascript_include_tag 'doctor' %>
+	<%= javascript_include_tag 'flowplayer-3.1.4.min' %>
+	<%#= stylesheet_link_tag 'doctor' %>
+	<title>HealthyPrice, Inc. - <%= @doctor.name %></title>
+	<meta name="description" content="<%= @doctor.description %>" />
+<% end %>
+<style>
+	ul{
+		margin-left:15px;
+		list-style-type:none;
+	}
+	li{
+		margin-bottom:5px;
+		font-size:10pt;
+	}
+	p{
+		font-size:10pt;
+		margin-top:5px;
+		margin-bottom:0px;
+	}
+</style>
+
+<div id="dr_more_info" style="width:425px; margin-left:20px; float:left;">
+
+	<h4><%= @doctor.name %></h4>
+	<p style="margin-top:0px;"><%= @doctor.company %></p>
+	<p><%= @doctor.address %><% if @doctor.address2 != nil && @doctor.address2 != "" %>, <%= @doctor.address2 %><% end %>,</p>
+	<p><%= @doctor.city %>, <%= @doctor.state %> <%= @doctor.zipcode %></p>
+	<p><%= @doctor.public_phone %></p>
+	<br/>
+	<!--p><span class="large_box_link"><%=link_to @doctor.website, @doctor.website%></span></p-->
+	<% @MapParams = "'"+@doctor.full_address+"', '"+@doctor.first_name+" "+@doctor.last_name+"'" %>
+	<p><%=link_to 'View Map', {}, {:class => 'dr_map', :onclick => 'showMap('+@MapParams+'); return false;'} %></p>
+	<br/>
+
+	<div class="specialties">
+		<p><strong>Procedures &amp; Services</strong></p>
+		<% @specialties.each do |s| -%>
+		<p> &nbsp; <%=s.s_name%></p>
+		<ul style="margin-top:5px;">
+		<% @services.each do |ss| -%>
+			<% if ss != nil && ss.specialty_id == s.id.inspect %>
+				<li><%=number_to_currency(ss.customer_price)%> - <%=ss.service_name%><%=tooltip_question(ss.service_description)%> - <span class="large_box_link"><%=link_to 'Select This Procedure', doctor_service_path(ss.ds_id)%></span></li>
+			<% end %>
+		<% end -%>
+		</ul>
+		<% end -%>
+	</div>
+
+<% if @doctor.spanish == 1 || (@doctor.other_languages != nil && @doctor.other_languages != "") %>
+	<div class="specialties">
+		<p><strong>Languages Spoken</strong></p>
+		<ul style="margin-top:5px;">
+			<li>English</li>
+	<% if @doctor.spanish == 1 %>
+			<li>Spanish</li>
+	<% end %>
+	<% if @doctor.other_languages != nil && @doctor.other_languages != "" %>
+		<% @doctor.other_languages.split(',').each do |lang| -%>
+			<% if lang != "English" && lang != "Spanish" && lang != "" && lang != " " %>
+				<li><%= lang %></li>
+			<% end %>
+		<% end -%>
+	<% end %>
+		</ul>
+	</div>
+<% end %>
+
+	<div class="specialties">
+		<p><strong>References</strong></p>
+		<ul style="margin-top:5px;">
+		</ul>
+	</div>
+
+	<% if @doctor.display_training_to_public == 1 && ((@doctor.residency_training != nil && @doctor.residency_training != "") || (@doctor.fellowship_training != nil && @doctor.fellowship_training != "")) %>
+	<div class="specialties">
+		<p style="margin-bottom:5px;"><strong>Training</strong></p>
+		<ul style="margin-top:5px;">
+			<% if @doctor.residency_training != nil && @doctor.residency_training != "" %><li>Residency training: <%= @doctor.residency_training %></li><% end %>
+			<% if @doctor.fellowship_training != nil && @doctor.fellowship_training != "" %><li>Fellowship training: <%= @doctor.fellowship_training %></li><% end %>
+		</ul>
+	</div>
+	<% end %>
+
+</div>
+
+<div id="dr_more_info" style="width:400px; float:left; margin-left:30px;">
+	<h4>&nbsp;</h4>
+	<% @path = Dir.pwd + '/public/images/uploads/' %>
+	<table border="0" cellspacing="0" cellpadding="0">
+		<tr>
+			<td valign="top">
+	<% if File::exists?(@path + @doctor.id.inspect + '_headshot.jpg') %>
+		<div style="border:1px solid #CCCCCC; padding:3px; float:left; margin-right:10px; margin-bottom:25px;">
+			<img src="/images/uploads/<%= @doctor.id.inspect %>_headshot.jpg" height="150" Xstyle="max-width:200px; width: expression(this.width > 200px ? 200px: true);" />
+		</div>
+	<% end %>
+			</td><td valign="top">
+	<% if File::exists?(@path + @doctor.id.inspect + '_practice.jpg')
+		@TotalWidth = 380
+		if File::exists?(@path + @doctor.id.inspect + '_headshot.jpg')
+			jpeg1 = JPEG.new(Dir.pwd + "/public/images/uploads/"+@doctor.id.inspect+"_headshot.jpg")
+			@width1 = jpeg1.width
+			@height1 = jpeg1.height
+			@ratio1 = Float.induced_from(@height1 / @width1)
+			@ratio_1 = Float.induced_from(@width1 / @height1)
+			@ratioWidth1 = Float.induced_from(150 * @width1 / @height1)
+		else
+			@width1 = 0
+			@height1 = 0
+			@ratio1 = 1
+			@ratio_1 = 1
+			@ratioWidth1 = 0
+		end
+		jpeg2 = JPEG.new(Dir.pwd + "/public/images/uploads/"+@doctor.id.inspect+"_practice.jpg")
+		@width2 = jpeg2.width
+		@height2 = jpeg2.height
+		@ratio2 = Float.induced_from(@height2 / @width2)
+		@ratio_2 = Float.induced_from(@width2 / @height2)
+		@ratioWidth2 = Float.induced_from(150 * @width2 / @height2)
+		@calcMaxWidth = @TotalWidth - @ratioWidth1 %>
+		<div style="border:1px solid #CCCCCC; padding:3px; float:left; margin-left:10px; margin-bottom:25px;">
+			<img src="/images/uploads/<%= @doctor.id.inspect %>_practice.jpg"
+			<% if @ratioWidth1 + @ratioWidth2 > @TotalWidth %>
+				height="<%= (@calcMaxWidth * @height2 / @width2).inspect %>"
+				width="<%= @calcMaxWidth.inspect %>"
+			<% else %>
+				height="150"
+			<% end %>
+			Xstyle="max-width:200px; width: expression(this.width > 200px ? 200px: true);" />
+		</div>
+	<% end %>
+			</td>
+		</tr>
+	</table>
+	<div style="clear:both;">&nbsp;</div>
+	<% if @doctor.description != nil %>
+		<div style="clear:both;">
+			<p style="margin-top:0px;"><%= @doctor.description.gsub(/\n/, '<br/>') %></p>
+		</div>
+	<% end %>
+	<% if File::exists?(@path + @doctor.id.inspect + '_video.flv') && @doctor.video_code == "Show" %>
+		<div style="clear:both; margin-top:25px;">
+			<embed src="/images/player.swf"
+			width="440" height="330"
+			allowscriptaccess="always" allowfullscreen="true"
+			flashvars="file=/images/uploads/<%= @doctor.id.inspect %>_video.flv&controlbar=over&autostart=true&plugins=autostarter-1&autostarter.count=3&autostart=true" />
+		</div>
+		<!--a href="/images/uploads/<%= @doctor.id.inspect %>_video.flv" style="display:block;width:440px;height:330px" id="player"> </a>
+		<script>flowplayer("player", "/images/flowplayer-3.1.5.swf");</script-->
+	<% end %>
+	<div style="clear:both;">&nbsp;</div>
+	<div style="clear:both;">&nbsp;</div>
+	<div id="keep_searching" style="float:left;">
+		<p><span class="large_box_link"><%=link_to 'Find a different doctor/provider', "/search/doctors" %></span></p>
+		<p><span class="large_box_link"><%=link_to 'Find a different procedure/service',"/search/services" %></span></p>
+	</div>
+</div>
+
+	<div id="services" style="width:750px; margin-left:20px; float:left;">
+
+	</div>

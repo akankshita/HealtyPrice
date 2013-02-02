@@ -1,0 +1,35 @@
+<html>
+	<head>
+		<script type="text/javascript" src="/flowplayer-3.1.4.min.js"></script>
+	</head>
+	<body>
+<% content_for :head do %>
+  <%= stylesheet_link_tag 'flowplayer-3.1.4.min' %>
+<% end %>
+		<% if @errors != nil && @errors != ""%>
+			<%= @errors %><br/>
+		<% end %>
+		<%= form_tag({ :action => "upload" }, :multipart => true, :method => "post") %><!--, :target => "uploadResult"-->
+			<input type="hidden" name="id" value="114" />
+			<input type="file" name="video" size="30" />
+			<input type="submit" value=" Upload " />
+		</form>
+		<%= @id %>
+
+		<a href="/images/uploads/114_video.flv"
+			 style="display:block;width:520px;height:330px" id="player"> 
+		</a>
+		<script>
+			flowplayer("player", "/flowplayer-3.1.5.swf");
+		</script>
+
+		<div id="viewResult"></div>
+		<iframe name="uploadResult" OnProgressChange="update();">
+		</iframe>
+		<script>
+			function update(){
+				document.getElementByUId('viewResult').innerHTML += 'XOX';
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,1 @@
+<% @file = File.open(Dir.pwd + "/public/mail_templates/order_cancel_customer.html.erb") %><% @template = @file.read %><%	@template = @template.gsub("{full_name}", @full_name) %><%	@template = @template.gsub("{order_number}", @order_number) %><%	@template = @template.gsub("{billing_code}", @billing_code) %><%	@template = @template.gsub("{pin}", @pin) %><%= @template %>

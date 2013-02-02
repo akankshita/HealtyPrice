@@ -1,0 +1,41 @@
+<h3 style="margin:2px;">Payment Details for Payment # <%= params[:id] %></h3>
+	<table cellpadding="0" cellspacing="0" class="orderstbl" style="width:830px;">
+			<tr>
+				<th><p>Order #</p></th>
+				<th><p>Order Date</p></th>
+				<th><p>Patient Name</p></th>
+				<th><p>Procedure</p></th>
+				<th><p>Amount</p></th>
+				<th><p></p></th>
+			<tr>
+		<% @RowClass="odd-record"
+		@RowsFound = 0
+		@Total = 0
+		@orders.each do |ss| -%>
+			<tr class="<%=@RowClass %>" xonclick="document.location='/doctor_section/order/<%= ss.id %>';">
+				<td><%=ss.id%></td>
+				<td><%=ss.created_at.strftime("%m/%d/%Y")%></td>
+				<td><%=ss.first_name%> <%=ss.last_name%></td>
+				<td><%=ss.service%> (<%=ss.specialty%>)</td>
+				<td align="right" style="text-align:right;"><%= number_to_currency(ss.doctor_price) %> &nbsp; </td>
+				<td><a href="/doctor_section/order/<%= ss.id %>">View Order</a></td>
+			<tr>
+		<%	if @RowClass == "odd-record"
+				@RowClass = "even-record"
+			else
+				@RowClass = "odd-record"
+			end
+			@RowsFound += 1
+			@Total += ss.doctor_price
+		end
+		if @RowsFound == 0 -%>
+			<tr style="height:40px;">
+				<td colspan="7" style="text-align:center; vertical-align:middle; background-color:#FFFFFF;"><i>No results found</i></td>
+			<tr>
+		<% end -%>
+			<!--tr>
+				<td colspan="4">Total</td>
+				<td>$ <%=@Total%></td>
+				<td> &nbsp;</td>
+			<tr-->
+	</table>

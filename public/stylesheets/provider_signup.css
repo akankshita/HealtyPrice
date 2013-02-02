@@ -1,0 +1,444 @@
+body{
+	font-family: Arial, Helvetica, sans-serif;
+	color:#666666;
+	font-size:0.8em;
+	line-height:1.5;
+}
+
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, code, del, dfn, em, img, q, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td{
+	/*margin:0;
+	padding:0;
+	border:0;
+	font-weight:inherit;
+	font-style:inherit;
+	font-size:100%;
+	vertical-align:middle;*/
+}
+
+table tr td{
+	font-family: Arial, Helvetica, sans-serif;
+	/*padding:2px;
+	font-size:11pt;*/
+}
+
+div.container{
+	font-family:arial;
+}
+
+#body{
+	background-color:#FFFFFF;
+	border:1px solid #888888;
+	width:850px;
+	float:left;
+}
+
+#title1{
+	float:left;
+	font-size:24px;
+	font-weight:bold;
+	margin:12px;
+}
+
+#yield{
+	float:left;
+	margin:12px;
+	width:826px;
+}
+
+#message1{
+	float:right;
+	margin-right:20px;
+	font-size:15px;
+	font-weight:bold;
+}
+
+div.edit_link{
+	float:right;
+}
+
+a{
+	color:#AD5508;
+	text-decoration:none;
+}
+
+a:hover{
+	color:#CD7528;
+	background-color:none;
+}
+
+/* ============================================================ */
+
+table.signup_progress{
+	margin-top:12px;
+	margin-left:10px;
+	margin-right:16px;
+	width:100%;
+}
+
+table.signup_progress tr.bubbles td{
+	font-size:8pt;
+	font-family:arial;
+	font-weight:bold;
+	text-align:center;
+	vertical-align:top;
+	width:128px;
+	height:53px;
+	padding:0px;
+}
+
+table.signup_progress tr.bubbles td div.number{
+	float:left;
+	margin-left:8px;
+	margin-top:3px;
+	text-align:left;
+	width:12px;
+	display:inline;
+	/*border:1px solid black;*/
+}
+
+table.signup_progress tr.bubbles td div.text{
+	float:left;
+	margin-left:4px;
+	margin-top:6px;
+	text-align:left;
+	width:100px;
+	display:inline;
+	line-height:1.5em;
+	/*border:1px solid black;*/
+}
+
+table.signup_progress tr.bubbles td.completed{
+	background-image:url('/images/provider_signup/darkblue.jpg');
+	color:#FFFFFF;
+}
+
+table.signup_progress tr.bubbles td.current{
+	background-image:url('/images/provider_signup/orange.jpg');
+	color:#000000;
+}
+
+table.signup_progress tr.bubbles td.incomplete{
+	background-image:url('/images/provider_signup/lightblue.jpg');
+	color:#444444;
+}
+
+/* ============================================================ */
+
+div.procedures_box{
+	border:1px solid #7eb8dd;
+	margin-top:12px;
+	margin-bottom:16px;
+	margin-left:40px;
+	width:868px;
+	float:left;
+	text-align:left;
+}
+
+div.procedures_scroll{
+	overflow:auto;
+	height:160px;
+	line-height:30px;
+	margin-left:4px;
+}
+
+div.procedures_scroll img{
+	vertical-align:middle;
+}
+
+h5{
+	border-bottom:1px solid #7eb8dd;
+	background-color:#DEEFFF;
+	font-size:13px;
+	font-weight:bold;
+	margin-top:0px;
+	margin-bottom:0px;
+	padding:4px;
+}
+
+/* ============================================================ */
+
+h3{
+	font-size:16px;
+	font-weight:bold;
+	color:#5588BB;
+	margin-left:40px;
+	margin-bottom:8px;
+}
+
+h4{
+	font-size:13px;
+	font-weight:bold;
+	margin-top:18px;
+	margin-bottom:6px;
+	color: #6D9FCF;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	/*margin-left:20px;*/
+}
+
+ul.list_down{
+	margin-top:3px;
+	list-style:url(../images/provider_signup/bullets.jpg);
+}
+
+/* ============================================================ */
+
+table.practice_areas{
+	width:100%;
+}
+
+table.practice_areas tr td{
+	vertical-align:text-top;
+	line-height:30px;
+	font-weight:400;
+	font-family:arial;
+	text-align:left;
+}
+
+table.practice_areas tr td.margin{
+	/*width:20%;*/
+}
+
+table.practice_areas tr td.content{
+	width:40%;
+}
+
+table.practice_areas tr td img{
+	vertical-align:middle;
+}
+
+table.practice_areas tr td input{
+	vertical-align:baseline;
+	margin-top:8px;
+	font-size:11px;
+}
+
+/* ============================================================ */
+
+div.form_section{
+	/*background-color:#FFEFE7;*/
+	/*background-color:#E0F0FD;*/
+	background-color:#dceefa;
+	border:2px solid #CcDeEa;
+	font-size:11pt;
+	padding:8px;
+	width:850px;
+	/*margin-left:8pt;*/
+}
+
+div.form_section hr{
+	color:#CcDeEa;
+	background-color:#CcDeEa;
+	height:2px;
+}
+
+div.form_section table tr td{
+	vertical-align:middle;
+	padding:4px;
+	/*border:1px solid #888888;*/
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:10pt;
+}
+
+div.form_section table tr.leading td{
+	padding-top:3px;
+	padding-bottom:0px;
+}
+
+div.form_section table tr.subscript td{
+	padding-top:0px;
+	padding-bottom:3px;
+}
+
+div.form_section table tr td.rightalign{
+	text-align:right;
+}
+
+div.form_section table tr td.give_space_between_inputs input{
+	margin-top:3px;
+	margin-bottom:3px;
+}
+
+div.form_section table tr td.give_space_between_inputs table tr td input{
+	margin-top:0px;
+	margin-bottom:3px;
+}
+
+.small_text{
+	font-size:8pt;
+}
+
+textarea.Description{
+	font-family:arial;
+	height:130px;
+	width:650px;
+}
+
+img.confirm_photo{
+	background-color:#DDDDDD;
+	border:1px solid #888888;
+	height:100px;
+}
+
+div.form_sectionx{
+	font-size:10pt;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	color:#666666;
+	text-align:left;
+	margin:0px;
+	/*margin-left:40pt;*/
+}
+
+div.form_sectionx hr.confirm_info_box_sep{
+	margin-top:12px;
+	margin-bottom:1px;
+	/*margin-left:20px;*/
+	padding:0px;
+	width:410px;
+	height:1px;
+}
+
+
+/* ============================================================ */
+
+/*form{
+	margin:0px;
+	padding:0px;
+}*/
+
+table.bottom_buttons{
+/*	padding:0px;
+	display:inline;
+	margin-left:20px;*/
+	width:913px;
+	clear:both;
+	/*padding-left:39px;*/
+}
+
+table.bottom_buttons tr td.left_column{
+	width:700px;
+	text-align:left;
+	padding-left:39px;
+}
+
+table.bottom_buttons tr td.right_column{
+	text-align:right;
+}
+
+/* ============================================================ */
+
+.lbl1{
+	width:150px;
+}
+
+.lbl2{
+	width:300px;
+}
+
+.inline{
+	display:inline;
+}
+
+/* ============================================================ */
+
+div.signup_header_text{
+	text-align:left;
+	float:left;
+	margin-left:40px;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+}
+
+#error{
+	clear:both;
+	float:left;
+	/*padding:6px;*/
+	width:600px;
+	border:1px solid #FF0000;
+	background-color:#FFCCCC;
+	margin-top:8px;
+	margin-bottom:12px;
+	text-align:left;
+	margin-left:40px;
+}
+
+#error ul{
+	margin-top:8px;
+	margin-bottom:8px;
+	margin-left:21px;
+}
+
+input[type="submit"]{
+	width:206px;
+	height:26px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+/* ------------------------------------------------------------------------- */
+
+div.file_upload_wrapper{
+	width: 300px;
+	height: 100px;
+	float: left;
+	position: relative;
+	visibility: hidden;
+	display:none;
+}
+
+input.fileinput{
+	/*position: absolute;
+	width:75px; height:26px; top:0; left:0;
+	visibility: hidden;
+	display:none;*/
+}
+
+span.browse{
+	position: absolute;
+	width: 79px;
+	height: 24px;
+	top: 0;
+	left: 0;
+	background: url('/images/provider_signup/browse.jpg') left top no-repeat;
+	cursor:pointer;
+}
+
+span.filename{
+	position: absolute;
+	width: 175px;
+	height: 22px;
+	left: 75px;
+	text-align: left;
+	background-color:white;
+	border:1px solid #666666;
+	/*background: url(filename.png) left top no-repeat;*/
+}
+
+/* ------------------------------------------------------------------------- */
+
+/* blue box */
+div.blue-box {
+  border: 4px #888888 solid;
+  width:400px;
+  position:relative;
+  top:-50px;
+  left:240px;
+}
+
+div.blue-box-header {
+  border-bottom: 1px #9c9c9c solid;
+  background-color:#dceefa;
+  color:#444444;
+}
+
+div.blue-box-header h3 {
+  color:#444444;
+  font-size:16pt;
+  margin-bottom: 0px;
+  padding:0.5em;
+  margin-left:0px;
+}
+
+div.blue-box-body {
+  padding:10px;
+  background-color:white;
+}
+

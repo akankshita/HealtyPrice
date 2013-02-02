@@ -1,0 +1,117 @@
+			<div id="page_header_box">
+				<div id="headerX">Order <%= @order.id %> (<%= @order.orderstatus %>) </div>
+				<div id="help"><span class="help"><a href="javascript:ShowPopUp();">Help</a></span></div>                        
+			</div>
+
+<% if @order.orderstatus == "New" && @order.created_at < Time.new.advance(:days => -30).to_date %>
+<div id="body_text"><div id="b_text">
+<!--img src="/images/question_mark.gif" style="float:right; margin-right:30px;"
+alt="This order is still in the new status for more than a month. You will be paid half the price if this is marked No-Show."
+title="This order is still in the new status for more than a month. You will be paid half the price if this is marked No-Show." /-->
+This order been outstanding for 30 days or more. If you have seen the patient, please enter the billing code.
+<br/>If the patient scheduled an appointment but did not appear, please mark the order a no-show.</div>
+</div></div>
+<% end %>
+
+<% if @error != nil && @error != "" -%>
+	<% if @show_error_as_javascript == true -%>
+<script>alert('<%= @error %>');</script>
+	<% else -%>
+<div id="error"><!--img src="/images/provider_signup/error.gif" style="float:left;" /--><%= @error %></div>
+	<% end -%>
+<% end -%>
+
+<div id="details_1">
+	<span class="subheat_text_style">Procedure: <%= @order.specialty_service.service_name %> (<%= @order.specialty_service.specialty.name %>)</span>
+	<p>Price: <%= number_to_currency(@order.doctor_price) %><br/>Order Date: <%= @order.created_at.strftime("%a, %b %d, %Y") %><br/><br/>
+	<div id="oder">
+		<table border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td>
+<% if @order.orderstatus == "New"
+	@HelpMessage = "A new order that has been placed."
+elsif @order.orderstatus == "Pending"
+	@HelpMessage = "The billing code was accepted, or the patient was a no-show, and the payment is being processed to the provider."
+elsif @order.orderstatus == "Closed"
+	@HelpMessage = "The patient has been seen and funds are being processed to the provider."
+elsif @order.orderstatus == "Unresolved"
+	@HelpMessage = "An issue has developed with the order.  It may be a billing discrepancy, a question about service performance, etc.  HealthyPrice is working expeditiously to resolve the issue."
+end %>
+					<span class="subheat_text_style">Order Status: <%= @order.orderstatus %></span>
+				</td><td>
+					<img src="/images/provider_signup/question_mark.gif" onmouseover="ShowToolTip('<%= @HelpMessage %>', this);" hspace="5" />
+				</td>
+			</tr>
+		</table>
+	</div>
+	<br style="clear:both;" />
+	<%= @order.order_notes %>
+</div>
+
+<% if @order.orderstatus == "New" %>
+	<div id="box">
+		<div id="box_header_1">
+			<div style="height:15px; padding-top:10px;"><span class="box_header_text">Complete the Order</span></div>
+		</div>
+		<div id="white_box">
+			<div style=" float:left; width:378px; padding-left:20px; *padding-left:10px; ">
+				<span class="text_style">Once you have seen the patient and performed the service or procedure, enter the billing code provided by the patient. If you do not have the billing code, please contact <a href="/page/contact_us">customer service</a>.</span>
+			</div>
+			<div id="form_1">
+				<%= form_tag({ :action => "order" }, :method => "post", :style => "margin-bottom:0px; padding-bottom:0px;") %>
+					<table width="388" border="0" cellspacing="0" cellpadding="0">
+						<tr>
+							<td width="100">
+								<span class="text_style"><strong>Billing Code:</strong></span>
+							</td><td width="140">
+								<input type="text" name="billing_code" value="<%= session[:billing_code] %>" size="23" />
+								<% session[:billing_code] = nil %>
+								<input type="hidden" name="order_id" value="<%= @order.id %>" />
+							</td><td width="140">
+								<input type="submit" value="" style="background-image:url('/images/provider_signup/submit_button_18.jpg');width:72px;height:21px;border:0px;" name="complete_order" /><!--img src="" width="72" height="21" /-->
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+	</div> 
+	<div id="box_2">
+		<div id="box_header_2">
+			<div style="height:15px; padding-top:10px;"><span class="box_header_text">Patient is a No-Show</span></div>
+		</div>
+		<div id="white_box_2">
+			<div style=" float:left; width:378px; padding-left:20px; *padding-left:10px; ">
+				<span class="text_style">Patient did not appear for scheduled appointment</span>
+			</div>
+			<div id="form_1">
+				<%= form_tag({ :action => "order" }, :method => "post", :style => "margin-bottom:0px; padding-bottom:0px;", :onsubmit => "return confirm('Are you sure you wish to mark this order a no-show?');") %>
+					<table width="388" border="0" cellspacing="0" cellpadding="0">
+						<tr>
+							<td width="100" style="padding-top:66px;">
+								<input type="hidden" name="order_id" value="<%= @order.id %>" />
+								<input type="submit" value="" style="background-image:url('/images/provider_signup/patient_not_shoe.jpg');width:177px;height:22px;border:0px;" name="order_no_show" />
+							</td>
+							<td></td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
+<% else %><br/><br/><% end %>
+
+<div id="patient_information">
+	<table cellspacing="0" cellpadding="0" border="0"><tr><td valign="top">
+		<span class="subheat_text_style">Patient Information</span><br/>
+		<br/>Name: <%= @order.patient_name %>
+	</td>
+	<td valign="top" style="width:70px;"></td>
+	<td valign="top">
+		<span class="subheat_text_style">Billing Information</span><br/>
+		<br/>Name: <%= @order.first_name %> <%= @order.last_name %>
+		<br/>Phone: <%= @order.phone %>
+		<br/>Email: <a href="mailto:<%= @order.email %>"><%= @order.email %></a>
+		<br/>Address: <%= @order.address %><br/><%= @order.city %><br/><%= @order.state %>, <%= @order.zipcode %>
+	</td></tr></table>
+</div>

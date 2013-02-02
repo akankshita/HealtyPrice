@@ -1,0 +1,42 @@
+<table cellpadding=0 cellspacing=0 border="0" width="905">
+	<!--<%# if @specialty_services.empty? -%>
+	<tr>
+		<td>No matching services found</td>
+	</tr>
+	<%# end -%>
+	<%# @specialty_services.each do |ss| -%>
+	<tr id="<%#=ss.id%>" class="service_tr">
+		<td>$<%#=ss.price%></td>
+		<td><%#=ss.service.name%><span title="<%#=ss.service.description%>" class="ss_sprite ss_help">&nbsp;</span></td>
+		<td><%#=ss.specialty.name%></td>
+	</tr>
+	<%# end -%>-->
+	<% if @specialty_services.empty? -%>
+	<tr>
+		<td>No matching services found</td>
+	</tr>
+	<% end -%>
+	<% @RowClass = "service_tr" %>
+	<% @specialty_services.each do |ss| -%>
+	<tr id="<%=ss.id%>" class="<%= @RowClass %>" onclick="document.location='/specialty_services/<%=ss.id%>';">
+		<td width="050" align="right"><%= number_to_currency(ss.customer_price) %></td>
+		<td width="025" bgcolor="red">
+			<img src="/images/provider_signup/question_mark.gif" onmousemove="ShowToolTip('<%= ss.description.gsub("'", "`").gsub("\n", "<br/>").gsub("\r", "") %>', this);" style="vertical-align:-4px;" />
+		</td>
+		<td width="490">
+			<!--table border="0" cellspacing="0" cellpadding="0"><tr><td-->
+				<%= ss.srv_name %>
+			<!--/td><td-->
+			<!--/td></tr></table-->
+		</td>
+		<td width="340"><%= ss.sp_name %></td>
+		<!--span title="<%= ss.description %>" class="ss_sprite ss_help">&nbsp;<%#= shorten(ss.srv_name, 45) %></span-->
+	</tr><%
+		if @RowClass == "service_tr"
+			@RowClass = "service_tr_alternative"
+		else
+			@RowClass = "service_tr"
+		end %>
+	<% end -%>
+</table>
+<%#= @sql %>

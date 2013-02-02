@@ -1,0 +1,181 @@
+<% content_for :head do %>
+	<%#= stylesheet_link_tag 'doctor_service' %>
+	<%= javascript_include_tag 'doctor_service' %>
+	<title>HealthyPrice, Inc. - <%= @doctor.name %> - <%= @specialty_service.service_name %> (<%= @specialty.name %>)</title>
+	<meta name="description" content="<%= @specialty_service.service_description %>" />
+<% end %>
+
+	<div style="float:left; width:450px;">
+	<% blue_box 'HealthyPrice Procedure / Service Order' do -%>
+	<div style="height:560px;">
+
+		<table width="415" class="inner_content">
+			<tr>
+				<td colspan="2"><strong>Procedure / Service:</strong></td>
+			</tr><tr>
+				<td colspan="2"><strong><%= @specialty_service.service_name %> (<%= @specialty.name %>)</strong></td>
+			</tr><tr>
+				<td colspan="2"></td>
+			</tr><tr>
+				<td colspan="2">
+					<p style="text-align:left;" align="left">
+						<div style="height:135px; width:415px; overflow:auto;">
+							<%= @specialty_service.service_description %>
+						</div>
+					</p>
+				</td>
+			</tr><tr>
+				<td colspan="2"></td>
+			</tr><tr>
+				<td><strong>HealthyPrice: <%= number_to_currency(@specialty_service.customer_price) %></strong></td>
+			</tr><tr>
+				<td colspan="2">&nbsp;</td>
+			</tr><tr>
+				<td><strong>Accepted Payment Methods:</strong></td>
+			</tr><tr>
+				<td><%=image_tag 'payment_methods.png', :style => "border:0px;" %></td>
+			</tr>
+		</table>
+
+		<% if @specialty_service.note_id != -1
+		@note = Note.find_by_sql("SELECT content FROM notes WHERE id = " + @specialty_service.note_id.inspect)
+		if @note.size > 0 %>
+		<div style="height:140px; width:415px; overflow:auto;">
+			<span style="font-weight:bold; color:#FF0000; display:block;">
+				<%= @note[0].content %>
+			</span>
+		</div>
+		<% end %><% end %><br/>
+
+		<% if @doctor.enabled == 0 || @doctor.onhold == 1 %>
+			<p class="inner_content" style="font-weight:bold; color:#FF0000;">This doctor/provider has temporarily stopped accepting orders.<br/>Please <a href="/specialty_services/<%= @specialty_service.id %>">select another doctor/provider</a>.</p>
+		<% else %>
+			<div id="order_button">
+				<%#= submit_tag 'ORDER THIS PROCEDURE', :id => 'order_service', :style => 'height:40px;' %>
+				<input id="order_service" name="commit" style="background-image:url('/images/btn_order.jpg'); height:22px; width:200px; border:0px;" type="submit" value="" />
+			</div>
+		<% end %>
+		<div style="height:12px;"></div>
+
+	</div>
+	<% end -%>
+	</div>
+
+
+
+<!-- ====================================================================================== -->
+	<div style="float:left; width:450px; margin-left:20px;">
+	<% blue_box 'Provider Information' do -%>
+	<div style="height:560px;">
+
+		<table width="415" class="inner_content">
+			<tr>
+				<td><strong><span id="doctorName"><%= @doctor.name %></span></strong></td>
+				<td><span class="blue_box_big_link">
+					<!--a href="/doctors/<%= @doctor.id.inspect %>" style="float:right; vertical-align:baseline;">View Profile</a-->
+					<a href="javascript:showMoreInfop(<%= @doctor.id.inspect %>);" style="float:right; vertical-align:baseline;">View Profile</a>
+				</span></td>
+			</tr><tr>
+				<td colspan="2">
+					<%= @doctor.company %><br/>
+					<span id="address"><%= @doctor.address %><% if @doctor.address2 != nil && @doctor.address2 != "" %>, <%= @doctor.address2 %><% end %>,</span><br/>
+					<span id="citystate"><%= @doctor.city %>, <%= @doctor.state %> <%= @doctor.zipcode %></span><br/>
+					<span class="blue_box_big_link"><%=link_to 'Map', {}, {:class => 'dr_map'} %></span><br/>
+					<%= @doctor.public_phone %>
+				</td>
+			</tr><tr>
+				<td>&nbsp;</td>
+			</tr><tr>
+				<td colspan="2">
+
+
+	<% @path = Dir.pwd + '/public/images/uploads/' %>
+	<table border="0" cellspacing="0" cellpadding="0">
+		<tr>
+			<td valign="top">
+	<% if File::exists?(@path + @doctor.id.inspect + '_headshot.jpg') %>
+		<div style="border:1px solid #CCCCCC; padding:3px; float:left; margin-right:10px; margin-bottom:25px;">
+			<img src="/images/uploads/<%= @doctor.id.inspect %>_headshot.jpg" height="150" Xstyle="max-width:200px; width: expression(this.width > 200px ? 200px: true);" />
+		</div>
+	<% end %>
+			</td><td valign="top">
+	<% if File::exists?(@path + @doctor.id.inspect + '_practice.jpg')
+		@TotalWidth = 380
+		if File::exists?(@path + @doctor.id.inspect + '_headshot.jpg')
+			jpeg1 = JPEG.new(Dir.pwd + "/public/images/uploads/"+@doctor.id.inspect+"_headshot.jpg")
+			@width1 = jpeg1.width
+			@height1 = jpeg1.height
+			@ratio1 = Float.induced_from(@height1 / @width1)
+			@ratio_1 = Float.induced_from(@width1 / @height1)
+			@ratioWidth1 = Float.induced_from(150 * @width1 / @height1)
+		else
+			@width1 = 0
+			@height1 = 0
+			@ratio1 = 1
+			@ratio_1 = 1
+			@ratioWidth1 = 0
+		end
+		jpeg2 = JPEG.new(Dir.pwd + "/public/images/uploads/"+@doctor.id.inspect+"_practice.jpg")
+		@width2 = jpeg2.width
+		@height2 = jpeg2.height
+		@ratio2 = Float.induced_from(@height2 / @width2)
+		@ratio_2 = Float.induced_from(@width2 / @height2)
+		@ratioWidth2 = Float.induced_from(150 * @width2 / @height2)
+		@calcMaxWidth = @TotalWidth - @ratioWidth1 %>
+		<div style="border:1px solid #CCCCCC; padding:3px; float:left; margin-left:10px; margin-bottom:25px;">
+			<img src="/images/uploads/<%= @doctor.id.inspect %>_practice.jpg"
+			<% if @ratioWidth1 + @ratioWidth2 > @TotalWidth %>
+				height="<%= (@calcMaxWidth * @height2 / @width2).inspect %>"
+				width="<%= @calcMaxWidth.inspect %>"
+			<% else %>
+				height="150"
+			<% end %>
+			Xstyle="max-width:200px; width: expression(this.width > 200px ? 200px: true);" />
+		</div>
+	<% end %>
+			</td>
+		</tr>
+	</table>
+
+
+				<!--<%# @path = Dir.pwd + '/public/images/uploads/' %>
+				<%# if File::exists?(@path + @doctor.id.inspect + '_headshot.jpg') %>
+				<td><img src="/images/uploads/<%#= @doctor.id.inspect %>_headshot.jpg" class="headshot" height="150" /></td>
+				<%# end %>
+				<%# if File::exists?(@path + @doctor.id.inspect + '_practice.jpg') %>
+				<td><img src="/images/uploads/<%#= @doctor.id.inspect %>_practice.jpg" class="clinic_photo" height="150" /></td>
+				<%# end %>-->
+				</td>
+			</tr>
+		</table>
+		<!--div style="height:50px;">&nbsp;</div-->&nbsp;<br/>
+		<p class="inner_content"><span class="blue_box_big_link"><%=link_to 'Find a different doctor/provider', "/search/doctors" %></span><br/>
+		<span class="blue_box_big_link"><%=link_to 'Find a different procedure/service',"/search/services" %></span></p>
+	</div>
+	<% end %>
+	</div>
+<!-- ====================================================================================== -->
+
+
+<script type="text/javascript" charset="utf-8">
+$(function(){
+
+	$('a.dr_map').click(showDrMap);
+	
+});
+
+function showMoreInfop(doctor_id){
+	url = Routing.doctor_path({id: doctor_id, format: 'js'});
+	$.fn.healthybox({href: url, open:true});
+}
+
+showDrMap = function() {
+	var address = $("span#address").text() + ", " + $("span#citystate").text();;
+	var drname = $("span#doctorName").text();
+	//alert(address+":"+drname);
+	showMap(address,drname);
+	return false;
+}
+
+doctor_service_id = <%=@doctor_service.id%>
+</script>

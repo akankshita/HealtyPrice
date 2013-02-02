@@ -1,0 +1,24 @@
+########################################################################33
+########################################################################33
+=begin
+      if params[:doctor][:video_code] != nil
+        upload = params[:doctor][:video_code]
+        if !(upload.content_type == "image/jpe" || upload.content_type == "image/jpeg" || upload.content_type == "image/jpg" || upload.content_type == "image/pjpeg")
+          @errors += upload.content_type+"<br/>"
+        else
+          name =  upload.original_filename
+          filename = params[:id]+ "_video.flv"
+          path = File.join("public/images/uploads", filename)
+          File.open(path, "wb") { |f| f.write(upload.read) }
+          #filesize = File.size(path)
+          #if filesize > 2097152*10
+            #File.unlink(path)
+            #@errors += "The file you have selected is too large. (Larger than 20MB). <br/>"
+          #else
+            #
+          #end
+        end
+      end
+=end
+########################################################################33
+########################################################################33

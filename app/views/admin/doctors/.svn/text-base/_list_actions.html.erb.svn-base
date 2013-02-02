@@ -1,0 +1,30 @@
+<table cellpadding="0" cellspacing="0">
+  <tr>
+    <td class="indicator-container">
+      <%= loading_indicator_tag(:action => :record, :id => record.id) %>
+    </td>
+    <% active_scaffold_config.action_links.each :record do |link| -%>
+      <% next if controller.respond_to? link.security_method and !controller.send(link.security_method) -%>
+      <td>
+	<% if link.label == "Delete" && params[:nested] != true
+sql = "FROM orders o, doctor_services ds "
+sql += "WHERE o.doctor_service_id = ds.id AND submitted = 1 AND (orderstatus = 'Pending' OR orderstatus = 'New') AND ds.doctor_id = " + record.id.inspect
+@orders = Order.find_by_sql("SELECT COUNT(*) AS RowCount " + sql)
+		if @orders[0].RowCount.to_i > 0 %>
+		<a href="javascript:alert('The provider you attempted to delete has <%= @orders[0].RowCount %> orders in the system and cannot be deleted.\nYou may disable the provider account to de-list and deny access to this provider.');">Delete</a>
+		<% else %>
+        <%#= record.authorized_for?(:action => link.crud_type) ? render_action_link(link, url_options) : "<a class='disabled'>#{link.label}</a>" -%>
+		<a href="/admin/doctors/delete_doctor/<%= record.id.inspect %>" onclick="return confirm('Are you sure you want to delete this provider profile?\n\nThis action cannot be undone. Click OK to delete this provider profile.');">Delete</a>
+		<% end %>
+	<%# elsif link.label != "xShow" && params[:nested] == true %>
+	<% elsif link.label == "Practice Areas" %>
+        <a href="/admin/doctors/<%= record.id.inspect %>/nested?&associations=specialties">Practice Areas</a>
+	<% elsif link.label == "Edit" %>
+        <a href="/admin/doctors/edit_details/<%= record.id.inspect %>">Edit</a>
+	<% else %>
+        <%= record.authorized_for?(:action => link.crud_type) ? render_action_link(link, url_options) : "<a class='disabled'>#{link.label}</a>" -%>
+	<% end %>
+      </td>
+    <% end -%>
+  </tr>
+</table>

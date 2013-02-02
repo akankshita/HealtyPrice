@@ -1,0 +1,305 @@
+<% content_for :head do %>
+	<%= javascript_tag 'currentSection = SiteSections.Home;' %>
+	<%= javascript_include_tag 'auto_fill', 'slider' %>
+	<%= javascript_include_tag 'home','jquery.cycle.all.min','doctors_search_tabs' %>
+	<%= stylesheet_link_tag 'hp_slider' %>
+	<title>HealthyPrice, Inc. - Better Prices. Quality Care.</title>
+	<meta name="description" content="HealthyPrice is a service that enables a user to purchase healthcare services, procedures and tests from doctors and other healthcare providers who offer their Services on our Website. You are receiving excellent and favorably low prices through HealthyPrice because we have created exclusive arrangements with the doctors and providers who are part of the HealthyPrice family. If you are a doctor or healthcare provider, we invite you to join the HealthyPrice family. It’s free and simple to join." />
+<% end %>
+    	<div class="top_banner">
+	<div class="top_banner_left">
+	<!-- Slider Start -->
+	<script>window.onload = initialize_imgrotate;</script>
+	<div class="Slider">
+		<div id="Slide3" class="SliderImage">
+			<div class="slider_3">
+				<div class="click_here_3"><a href="/page/healthyprice"><img src="images/slider_3_click.jpg" width="226" height="17" border="0" /></a></div>
+			</div>
+			<!--div class="slider_3">
+				<div class="slider_main_head">The true cost of healthcare is less than you think.</div>
+				<div class="text_main_1">
+					<div class="slider_main_text">Our team of doctors and healthcare providers has agreed to offer the best prices when you pay online through our service.</div>
+					<div class="click_here">
+						<span class="click_here_link">
+							<a href="#">Click here to see your savings!</a>
+						</span>
+					</div>
+				</div>
+			</div-->
+		</div>
+		<div id="Slide2" class="SliderImage">
+			<div class="slider_2">
+				<div class="click_here_2"><a href="/page/healthyprice"><img src="images/slider_2_click.jpg" width="204" height="17" border="0" /></a></div>
+			</div>
+			<!--div class="slider_2">
+				<div class="slider_main_head">Search. Pick. Pay. Go!</div>
+				<div class="text_main">
+					<div class="slider_main_text">In 4 easy steps we guarantee you will get your service or medical procedure at the best price from the high quality provider you choose. It's truly as easy as 1-2-3-4.</div>
+					<div class="click_here">
+						<span class="click_here_link">
+							<a href="#">Click here to find out how!</a>
+						</span>
+					</div>
+				</div>
+			</div-->
+		</div>
+		<div id="Slide1" class="SliderImage">
+			<div class="slider_1">
+				<div class="click_here_1"><a href="/page/healthyprice"><img src="images/slider_1_click.jpg" width="167" height="17" border="0" /></a></div>
+			</div>
+			<!--div class="slider_1">
+				<div class="slider_main_head">Smart Doctors Charging Less...</div>
+				<div class="text_main">
+					<div class="slider_main_text">No insurance? Deductible too high? Now you can get the services you need with a top quality provider and youâ€™ll know the costs up front.</div>
+					<div class="click_here">
+						<span class="click_here_link">
+							<a href="#">Click here for details.</a>
+						</span>
+					</div>
+				</div>
+			</div-->
+		</div>
+			<!--div style="position:absolute; top:25px; left 28px; font-size:20pt; font-weight:bold;">The True Cost Of<br/>Healthcare Is Less<br/>Than You Think.</div>
+			<div style="position:absolute; top:135px; left 28px; font-size:13pt; font-weight:bold;">Our doctors have agreed to<br/>offer the best prices when you<br/>pay online through our service.</div>
+			<img src="/images/banner_img_1.jpg" style="position:absolute; top:0px; left:250px;" /-->
+		<div class="jump_links">
+			<div onclick="GotoSlide(1);" class="jump_link" id="jump_link1" style="left:00px;"><!--img src="/images/transparent.gif"--> &nbsp; </div> &nbsp;&nbsp; 
+			<div onclick="GotoSlide(2);" class="jump_link" id="jump_link2" style="left:26px;"><!--img src="/images/transparent.gif"--> &nbsp; </div> &nbsp;&nbsp; 
+			<div onclick="GotoSlide(3);" class="jump_link" id="jump_link3" style="left:52px;"><!--img src="/images/transparent.gif"--> &nbsp; </div>
+		</div>
+	</div>
+	<br style="clear:both;" />
+	<!-- Slider End -->
+	</div>
+            <div class="top_banner_right">
+           	  <div class="top_banner_right_1">
+               	<div class="get_started"><img src="/images/get_started.jpg" /></div>
+                    <div class="tell_us">Tell Us What You Need!</div>
+              </div>
+              <div class="top_banner_right_search">
+                	<table width="380" border="0" cellspacing="0" cellpadding="0">
+			<!--form id="form1" name="form1" method="post" action=""-->
+			<tr>
+				<td width="306"><input type="text" name="services-query" id="services-query" class="top_banner_search_field" onkeyup="GetSugesstions(this, event); SubmitIfReturn(this, event);" onblur="HideSuggestions();" /></td>
+				<td width="74"><input type="image" src="/images/btn_go.jpg" width="46" height="36" style="margin-left:10px;" name="button" id="go" value="Submit" /></td>
+			</tr>
+			<!--/form-->
+			<script>
+				function SubmitIfReturn(elem, evt){
+					if (GetKeycode(evt) == 13){
+						document.location = "/search/services/all/"+elem.value.replace("/", "");
+					}
+				}
+			</script>
+                      <tr>
+                        <td height="5" colspan="2"></td>
+                      </tr>
+                      <tr>
+                        <td colspan="2"><span class="top_banner_eg_text"><b><em>Example:</em> General Doctor Visit, MRI, Pediatrics, etc.</b></span></td>
+                      </tr>
+                    </table>
+              </div>
+              <div class="doctors_pro_img"><a href="/doctor_section/signup/step1"><img src="/images/doctors_pro_1.jpg" width="65" height="83" /></a></div>
+            </div>
+        </div>
+
+        <div class="blue_box">
+        	<div class="blue_box_top_bg">Popular Services &amp; Procedures:</div>
+            <div class="blue_box_content">
+              <table width="897" border="0" cellspacing="0" cellpadding="0">
+                  <tr><%
+		@ColCount = 0
+		(0..(@specialty_services_popular.length-1)).each do |i|
+			ss = @specialty_services_popular[i] %>
+		<td width="275" valign="top" style="padding-left:12px; padding-right:12px;">
+			<span class="blue_box_item_big"><%= ss.service_name %></span><br />
+			<span class="blue_box_item_small">(<%= ss.specialty_name %>)<br /><%= number_to_currency(ss.customer_price) %> - </span>
+			<span class="blue_box_link"><%= link_to 'Choose Doctor',specialty_service_path(:id => ss.id) %></span>
+		</td><%
+			@ColCount += 1
+			if @ColCount == 3
+				@ColCount = 0 %>
+                  </tr>
+                  <tr><td height="5" colspan="3" valign="top">&nbsp;</td></tr>
+                  <tr><%
+			end
+		end %>
+                    <!--td height="5" colspan="3" valign="top"></td>
+                  </tr>
+                  <tr-->
+                    <td valign="top">&nbsp;</td>
+                    <td valign="top">&nbsp;</td>
+                    <td align="right" valign="top"><a href="/search/services"><img src="/images/btn_more.jpg" width="49" height="21" /></a></td>
+                  </tr>
+              </table>
+            </div>
+        </div>
+
+        <div class="blue_box_clear"></div>
+
+        <div class="blue_box">
+        	<div class="blue_box_top_bg">Search by Practice Areas:</div>
+              <div class="blue_box_content">
+                <table width="897" border="0" cellspacing="0" cellpadding="1">
+                  <tr><%
+		@ColCount = 0
+		@specialties.in_groups_of(6).each do |group|
+			group.each do |s| %>
+                    <td height="30" width="149" valign="top" align="left"><span class="blue_box_link"><%=link_to shorten(s.name, 18), search_services_path(:specialty_id => s.id)%></span></td>
+		<%		@ColCount += 1
+				if @ColCount == 6
+					@ColCount = 0 %>
+                  </tr>
+                  <tr><td height="5" colspan="6"></td></tr>
+                  <tr><%
+				end
+			end
+		end %>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td align="right"><a href="/search/practice_areas"><img src="/images/btn_more.jpg" width="49" height="21" /></a></td>
+                  </tr>
+                </table>
+          </div>
+        </div>
+
+        <div class="bottom_btn_navi">
+        	<table width="924" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td width="218" valign="top"><a href="/page/quality" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('Image9','','/images/btn_learn_about_over.jpg',1)"><img src="/images/btn_learn_about.jpg" name="Image9" width="218" height="99" border="0" id="Image9" /></a></td>
+                <td width="17" valign="top">&nbsp;</td>
+                <td width="218" valign="top"><a href="/page/doctor" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('Image10','','/images/btn_health_care_over.jpg',1)"><img src="/images/btn_health_care.jpg" name="Image10" width="218" height="99" border="0" id="Image10" /></a></td>
+                <td width="17" valign="top">&nbsp;</td>
+                <td width="218" valign="top"><a href="/page/business" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('Image11','','/images/btn_business_over.jpg',1)"><img src="/images/btn_business.jpg" name="Image11" width="218" height="99" border="0" id="Image11" /></a></td>
+                <td width="17" valign="top">&nbsp;</td>
+                <td width="218" valign="top"><a href="/page/hsa" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('Image12','','/images/btn_health_saving_over.jpg',1)"><img src="/images/btn_health_saving.jpg" name="Image12" width="218" height="99" border="0" id="Image12" /></a></td>
+              </tr>
+          </table>
+        </div>
+
+	<!-- *** -->
+	<div id="Sugesstions" style="display:none;" onfocus="CancelHideSuggestions();" onblur="HideSuggestions();"></div>
+	<style>
+		div#Sugesstions{border:1px solid #666666; background-color:#FFFFFF; overflow:auto; position:absolute;}
+		div.Suggestion{cursor:pointer; height:20px; overflow:hidden; background-color:#FFFFFF; font-size:10pt; line-height:21px;;}
+	</style>
+	<!-- *** -->
+
+        <div class="bottom_boxes">
+       	  <div class="contact_box">
+       	    <table width="214" border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td colspan="3" valign="top" class="contact_box_heading"><b>Contact</b></td>
+                  </tr>
+                  <tr>
+                    <td height="10" colspan="3" valign="middle"></td>
+                  </tr>
+                  <tr>
+                    <td width="5"></td>
+                    <td valign="middle"><img src="/images/icon_telephone.jpg" width="31" height="21" /></td>
+                    <td valign="middle" class="contact_box_content_1">(800) 455-2797</td>
+                  </tr>
+                  <tr>
+                    <td height="8" colspan="3" valign="middle"></td>
+                  </tr>
+                  <tr>
+                    <td width="5"></td>
+                    <td valign="middle"><img src="/images/icon_form.jpg" width="31" height="21" /></td>
+                    <td valign="middle" class="contact_box_content_2"><a style="font-size:14px;" href="/contact/form">Web Contact Form</a></td>
+                  </tr>
+                </table>
+            </div>
+            <div class="signup_box">
+	     <%= form_tag({ :action => "subscribe" }, :method => "post", :name => "subscribe_email", :onsubmit => "return SubscribeEmailValidate();") %>
+	     <!--form name="subscribe_email" onsubmit="return false;"-->
+                <table width="352" border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td colspan="3"><span class="contact_box_heading"><b>Sign-Up</b></span> <span class="signup_sub_head">for our e-newsletter and special discounts</span></td>
+                  </tr>
+                  <tr>
+                    <td height="20" colspan="3"></td>
+                  </tr>
+                  <tr>
+                    <td class="signup_field_small" width="160">name: <input type="text" name="textfield2" id="textfield2" class="signup_field" /></td>
+                    <td class="signup_field_small" width="160">email: <input type="text" name="textfield3" id="textfield3" class="signup_field" /></td>
+                    <td width="24"><input xonclick="SubscribeEmail();" type="image" src="/images/btn_go_small.jpg" style="cursor:pointer;" width="27px" height="19px" name="button2" id="button2" value="Submit" /></td>
+                  </tr>
+                </table>
+                <script>
+			var newsletter_subscribe_get_url = '<%= get_config("newsletter_subscribe_get_url") %>';
+			function SubscribeEmailValidate(){
+				//alert('Validating');
+				var RequestURL = newsletter_subscribe_get_url;
+				var EmailAddress = document.subscribe_email.textfield3.value;
+				var FullName = document.subscribe_email.textfield2.value;
+				if(FullName == ""){
+					alert('Please enter your name');
+					document.subscribe_email.textfield2.focus();
+					return false;
+				}
+				else if(EmailAddress == ""){
+					alert('Please enter your email address');
+					document.subscribe_email.textfield3.focus();
+					return false;
+				}
+				else if(!(EmailAddress.indexOf(".") > 2) || !(EmailAddress.indexOf("@") > 0)){
+					alert('Please enter a valid email address');
+					document.subscribe_email.textfield3.focus();
+					return false;
+				}
+				else{
+					return true;
+					/*RequestURL = RequestURL.replace('{email}', EmailAddress);
+					RequestURL = RequestURL.replace('{name}', FullName);
+					window.open(RequestURL, 'subscribe');*/
+				}
+			}
+                </script>
+	     </form>
+            </div>
+            <div class="share_box">
+                <table width="257" border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td colspan="7" class="contact_box_heading" align="center"><b>Share HealthyPrice</b></td>
+                  </tr>
+                  <tr>
+                    <td height="4" colspan="7"></td>
+                  </tr>
+                  <tr style="height:34px;">
+                    <td width="57"></td>
+                    <td width="42" height="32" align="center"><img src="/images/icon_fb.jpg" width="32" height="32" style="cursor:pointer;" onclick="window.open('http://www.facebook.com/share.php?u='+encodeURI(document.location)+'')" /></td>
+                    <td width="8"></td>
+                    <td width="42" height="32" align="center"><img src="/images/icon_twt.jpg" width="32" height="32" style="cursor:pointer;" onclick="window.open('http://twitthis.com/twit?url='+encodeURI(document.location)+'&amp;title='+encodeURI(document.title)+'')" /></td>
+                    <td width="8"></td>
+                    <td width="42" height="32" align="center"><img src="/images/icon_digg.jpg" width="32" height="32" style="cursor:pointer;" onclick="window.open('http://digg.com/submit?phase=2&amp;url='+encodeURI(document.location)+'&amp;title='+encodeURI(document.title)+'')" /></td>
+                    <!--td width="63" height="44" align="center"><img src="/images/icon_you_tube.jpg" width="40" height="40" style="cursor:pointer;" onclick="window.open('', '_blank');" /></td-->
+                    <td width="57"></td>
+                  </tr>
+                  <tr>
+                    <td height="3" colspan="7"></td>
+                  </tr>
+                  <tr>
+                    <td colspan="7">
+			<a href="http://www.twitter.com/healthyprice" target="_blank">
+				<img src="/images/follow_us_on_twitter.jpg" alt="Follow Us On Twitter" title="Follow Us On Twitter" />
+			</a>
+		</td>
+                  </tr>
+                </table>
+            </div>
+        </div>
+
+<style>
+.footer_link{
+	font-weight:bold;
+}
+.footer_link A{
+	font-weight:bold;
+}
+.inner_footer_link A{
+	font-weight:bold;
+}
+</style>

@@ -1,0 +1,9 @@
+<div class="message_body">
+<p align="justify">
+From: {name} &lt;<a style="text-decoration:none;" href="mailto:{from_email}">{from_email}</a>&gt;<br/>
+Phone: {phone}<br/>
+Subject Category: {subjectcat}<br/>
+Subject: {subjectx}<br/><br/>
+Message: {inquiry}
+</p>
+</div>

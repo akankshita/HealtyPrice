@@ -1,0 +1,57 @@
+<% content_for :head do %>
+	<title>HealthyPrice, Inc. - Providers</title>
+<% end %>
+<%= stylesheet_link_tag 'act_scaf_sppliment' %>
+
+<h2 id="nesting_title">Providers</h2>
+
+<table id="nesting">
+	<tr class="header">
+		<td>Id</td>
+		<td>Name</td>
+		<td>Company</td>
+		<td>City</td>
+		<td>State</td>
+		<td>Zip</td>
+		<td>Phone</td>
+		<td>Hold?</td>
+		<td>Actv?</td>
+		<td>Modified</td>
+		<td width="225"></td>
+	</tr>
+<%	@row_class = "odd"
+	@row_count = 0
+	@doctors.each do |doctor| %>
+	<tr class="<%= @row_class %>">
+		<td><%= doctor.id %></td>
+		<td><%= doctor.name %></td>
+		<td><%= doctor.company %></td>
+		<td><%= doctor.city %></td>
+		<td><%= doctor.state %></td>
+		<td><%= doctor.zip %></td>
+		<td><%= doctor.phone %></td>
+		<td><%= doctor.Hold? %></td>
+		<td><%= doctor.Actv? %></td>
+		<td><%= doctor.modified %></td>
+		<td>
+			&nbsp;<a href="javascript:AjaxLoad_AndShow('/admin/providers/provider_specialities/<%= doctor.id %>', 'nested_load_<%= doctor.id %>', 'nested_<%= doctor.id %>')">Practice Areas</a>
+			&nbsp;<a href="/admin/doctors/edit_details/<%= doctor.id %>">Edit</a>
+			&nbsp;<a href="">Delete</a>
+			&nbsp;<a href="">Show</a>
+		</td>
+	</tr>
+	<tr id="nested_<%= doctor.id %>" style="display:none;" class="nested">
+		<td colspan="99">
+			<a href="javascript:HideElem('nested_<%= doctor.id %>');" class="nested_close">Close</a>
+			<div id="nested_load_<%= doctor.id %>"></div>
+		</td>
+	</tr>
+<%		if @row_class == "even"
+			@row_class = "odd"
+		else
+			@row_class = "even"
+		end
+		@row_count += 1
+	end %>
+</table>
+<div class="footer"><%= @row_count %> Found</div>

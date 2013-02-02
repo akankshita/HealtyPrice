@@ -1,0 +1,72 @@
+<div class="signup_header_text" style="display:inline;">
+	<span class="subheat_text_style">
+		Select Your Practice Area(s)
+	</span>
+	<br/>
+	<br/><a href="mailto:providersupport@healthyprice.com" style="font-family:Verdana,Arial,Helvetica,sans-serif;">Don't see your practice area?  Request it!</a>
+</div>
+
+<% if @error != nil && @error != "" -%>
+	<% if @show_error_as_javascript == true -%>
+<script>alert('<%= @error %>');</script>
+	<% else -%>
+<div id="error"><!--img src="/images/provider_signup/error.gif" style="float:left;" /--><%= @error %></div>
+	<% end -%>
+<% else -%>
+<div id="error" style="display:none;"></div>
+<% end -%>
+
+<br style="clear:both;" />
+
+<%= form_tag({ :action => "index" }, :method => "post", :name=>"form1") %>
+	<table border="0" class="practice_areas" style="margin-left:37px;">
+		<tr><!--td class="margin"></td-->
+		<td class="content">
+		<%	@RowCount = 0
+			@specialties.each do |ss| %>
+				<label><input type="checkbox" name="doctor[chk<%= ss.id %>]"
+				<% if @selected_specialties.include?(ss) %>checked<% end %> /> &nbsp; <%= ss.name %></label>&nbsp;
+				<img src="/images/provider_signup/question_mark.gif" onmousemove="ShowToolTip('<%= ss.description %>', this);" /><br/>
+			<%	@RowCount += 1
+				if @RowCount == 12
+					%></td><td class="content"><% 
+					@RowCount = 0
+				end
+			end %>
+		</td></tr>
+	</table>
+	<input type="hidden" name="doctor[id]" value="<%= session[:doctor].id.inspect %>">
+	<div style="float:left;clear:both;width:800px;"> 	
+		<table class="bottom_buttons">
+			<tr>
+				<td height="5"></td>
+			</tr><tr>
+				<td class="left_column">
+					&nbsp;
+				</td><td class="right_column">
+					<input name="continue" type="submit" value="" style="background-image:url('/images/provider_signup/continue_3.jpg');height:26px;width:206px;border:0px;" />
+				</td>
+			</tr><tr>
+				<td height="8"></td>
+			</tr><tr>
+				<td></td>
+				<td class="right_column">
+					<input name="save" type="submit" value="" style="background-image:url('/images/provider_signup/saveandcompleate.jpg');height:26px;width:206px;border:0px;" />
+				</td>
+			</tr>
+		</table>
+	</div>
+</form>
+
+<script>
+/*function Validate(){
+	var Form = document.form1;
+	var ElemCou = Form.elements.length;
+	for(var i = 0; i < ElemCou; i++){
+		if(Form.elements[i].checked){
+			return true;
+		}
+	}
+	return false;
+}//*/
+</script>

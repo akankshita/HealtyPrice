@@ -1,0 +1,204 @@
+# This file is auto-generated from the current state of the database. Instead of editing this file, 
+# please use the migrations feature of Active Record to incrementally modify your database, and
+# then regenerate this schema definition.
+#
+# Note that this schema.rb definition is the authoritative source for your database schema. If you need
+# to create the application database on another system, you should be using db:schema:load, not running
+# all the migrations from scratch. The latter is a flawed and unsustainable approach (the more migrations
+# you'll amass, the slower it'll run and the greater likelihood for issues).
+#
+# It's strongly recommended to check this file into your version control system.
+
+ActiveRecord::Schema.define(:version => 20091208163045) do
+
+  create_table "configurations", :force => true do |t|
+    t.string  "config_name"
+    t.string  "config_value"
+    t.string  "description"
+  end
+
+  create_table "doctor_payments", :force => true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.float  "total_amount"
+    t.integer  "doctor_id"
+    t.text     "notes"
+  end
+
+  create_table "doctor_references", :force => true do |t|
+    t.integer "doctor_id"
+    t.string  "first_name"
+    t.string  "last_name"
+    t.string  "phone"
+  end
+
+  create_table "doctor_services", :force => true do |t|
+    t.integer  "doctor_id"
+    t.integer  "specialty_service_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "doctor_specialties", :force => true do |t|
+    t.integer  "specialty_id"
+    t.integer  "doctor_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "doctors", :force => true do |t|
+    t.string   "title"
+    t.string   "first_name"
+    t.string   "middle_name"
+    t.string   "last_name"
+    t.string   "date_of_birth"
+    t.string   "address"
+    t.string   "address2"
+    t.string   "city"
+    t.string   "state"
+    t.string   "zipcode"
+    t.string   "mailing_address"
+    t.string   "mailing_address2"
+    t.string   "mailing_city"
+    t.string   "mailing_state"
+    t.string   "mailing_zipcode"
+    t.string   "public_phone"
+    t.string   "phone"
+    t.string   "fax"
+    t.string   "email"
+    t.string   "company"
+    t.string   "tax_id"
+    t.string   "tax_id_type",           :default => "SSN"
+    t.string   "website"
+    t.string   "medical_school"
+    t.string   "type_of_degree"
+    t.string   "graduated_year"
+    t.string   "medical_license_state"
+    t.string   "license_no"
+    t.string   "medical_license_type"
+    t.integer "spanish",               :default => "0"
+    t.string   "other_languages"
+    t.string   "insurance_carrier"
+    t.string   "insurance_policy_no"
+    t.string   "insurance_expiry_date"
+    t.text   "description"
+    t.string   "show_video",            :default => "0"
+    t.string   "crypted_password"
+    t.string   "password_salt"
+    t.string   "persistence_token"
+    t.string   "single_access_token"
+    t.string   "perishable_token"
+    t.integer  "login_count",           :default => 0
+    t.integer  "failed_login_count",    :default => 0
+    t.datetime "last_request_at"
+    t.datetime "current_login_at"
+    t.datetime "last_login_at"
+    t.string   "current_login_ip"
+    t.string   "last_login_ip"
+    t.float    "lat"
+    t.float    "lng"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "enabled",               :default => 0
+    t.string   "enabled_note"
+    t.datetime "enabled_date"
+    t.integer  "onhold",                :default => 0
+    t.string   "onhold_note"
+    t.datetime "onhold_date"
+    t.integer  "signup_step",           :default => 0
+    t.integer  "current_signup_step",           :default => 0
+    t.string   "payment_method"
+    t.string   "paypal_email"
+    t.string   "user_type",           :default => "Doctor"
+    t.text   "video_code"
+  end
+
+  create_table "hospital_affiliations", :force => true do |t|
+    t.integer "doctor_id"
+    t.string  "hospital"
+    t.integer "usage_percentage"
+  end
+
+  create_table "insurance_carriers", :force => true do |t|
+    t.integer "doctor_id"
+    t.string  "insurance_company_name"
+  end
+
+  create_table "orders", :force => true do |t|
+    t.integer  "doctor_service_id"
+    t.integer  "specialty_service_id"
+    t.integer  "doctor_id"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "patient_name"
+    t.string   "address"
+    t.string   "address2"
+    t.string   "city"
+    t.string   "state"
+    t.string   "zipcode"
+    t.string   "phone"
+    t.string   "email"
+    t.string   "credit_card"
+    t.datetime "expiration"
+    t.integer  "ccv"
+    t.string   "paymentmethod"
+    t.float  "customer_price"
+    t.float  "doctor_price"
+    t.string   "number"
+    t.string   "pin"
+    t.string   "billing_code"
+    t.integer  "submitted",         :default => 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "orderstatus",       :default => "New"
+    t.integer  "cronstatus",        :default => 0
+    t.integer  "doctor_payments_id", :default => -1
+    t.text     "order_notes"
+  end
+
+  create_table "pages", :force => true do |t|
+    t.string   "title"
+    t.string   "slug"
+    t.text     "body"
+    t.string   "nav_item"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "services", :force => true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "sessions", :force => true do |t|
+    t.string   "session_id"
+    t.text     "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "specialties", :force => true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "specialty_services", :force => true do |t|
+    t.integer  "specialty_id"
+    t.integer  "service_id"
+    t.float  "doctor_price"
+    t.float  "customer_price"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "subscribers", :force => true do |t|
+    t.string  "full_name"
+    t.string  "email"
+    t.string  "created_at"
+  end
+
+end

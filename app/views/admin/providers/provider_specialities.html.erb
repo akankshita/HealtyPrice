@@ -1,0 +1,51 @@
+<h2 id="nesting_title">Practice Areas for <%= @doc_name %></h2>
+
+<div class="actions">
+	<a href="javascript:ShowElem('add_specialty_form_<%= params[:doc_id] %>');">Enable a Practice Area for this Provider</a>
+</div>
+
+<form onsubmit="" id="add_specialty_form_<%= params[:doc_id] %>" style="display:none;">
+	<h4>Add a Practice Area</h4>
+	Specialty
+	<select>
+		<option value="-1"> - select - </option>
+		<% @all_specialities.each do |spc| %>
+		<option value="<%= spc.id %>"><%= spc.name %></option>
+		<% end %>
+	</select>
+	<br/><input type="submit" value="Add" /><a href="javascript:">Cancel</a>
+</form>
+
+<table id="nesting">
+	<tr class="header">
+		<td>Name</td>
+		<td>Description</td>
+		<td width="360"></td>
+	</tr>
+<%	@row_class = "odd"
+	@row_count = 0
+	@provider_specialities.each do |specialty| %>
+	<tr class="<%= @row_class %>">
+		<td><%= specialty.name %></td>
+		<td><%= specialty.description %></td>
+		<td>
+			&nbsp;<a href="javascript:AjaxLoad_AndShow('/admin/providers/provider_services/<%= specialty.id %>', 'nested_load_<%= specialty.id %>', 'nested_<%= specialty.id %>')">Procedures &amp; Services</a>
+			&nbsp;<a href="">Disable for this Provider</a>
+			&nbsp;<a href="http://localhost:3000/admin/specialties/<%= specialty.id %>">Show</a>
+		</td>
+	</tr>
+	<tr id="nested_<%= specialty.id %>" style="display:none;" class="nested">
+		<td colspan="99">
+			<a href="javascript:HideElem('nested_<%= specialty.id %>');" class="nested_close">Close</a>
+			<div id="nested_load_<%= specialty.id %>"></div>
+		</td>
+	</tr>
+<%		if @row_class == "even"
+			@row_class = "odd"
+		else
+			@row_class = "even"
+		end
+		@row_count += 1
+	end %>
+</table>
+<div class="footer"><%= @row_count %> Found</div>

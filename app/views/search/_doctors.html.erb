@@ -1,0 +1,36 @@
+<ul>
+	<% @found = "false" %>
+	<% @RowClass = "odd_row" %>
+	<% @doctors.each do |d| -%>
+		<% if d.enabled == 1 && d.onhold == 0 && d.user_type == "Doctor" -%>
+		<li class="<%= @RowClass %>" onclick="document.location='/doctors/<%= d.id.inspect %>';" style="cursor:pointer; padding-left:10px;">
+			<% if d.respond_to?('distance') -%>(<%=d.distance.to_f.round(1)%> miles)<% end -%>
+			<a href="/doctors/<%= d.id.inspect %>"></a>
+			<!--img src="/images/uploads/<%= d.id.inspect %>_headshot.jpg" style="float:left; width:30px; margin-right:5px;"/-->
+			<strong class="dr_name"><%=d.name%>: </strong><% 
+			@buffer = ""
+			d.specialties.each do |specialty|
+				@buffer += ", " if @buffer != ""
+				@buffer += specialty.name
+			end %><%= @buffer %>
+			<br/>
+			<%=d.company%><%=d.company.blank? ? '' : ', '%>
+			<%= d.city %>, <%= d.state_code %> <%= d.zipcode %>
+			<span class="address" style="display:none;"><%= d.full_address %></span>
+			(<%=link_to 'more info', {}, {:class => 'dr_more_info', :rel => d.id} %>)
+			(<%=link_to 'map', {}, {:class => 'dr_map'} %>)
+			(<%=link_to 'select this doctor/provider', '/doctors/'+d.id.inspect, {:class => 'dr_select'} %>)<!--doctor_path(d.id)-->
+		</li>
+			<% @found = "true"
+			if @RowClass == "odd_row"
+				@RowClass = "even_row"
+			else
+				@RowClass = "odd_row"
+			end %>
+		<% end -%>
+	<% end -%>
+	<% if @found != "true" -%><!--#@doctors.empty?-->
+		<li><span id="no_results">No Doctors found matching your search.</span></li>
+	<% end -%>
+		<li><%#= params[:city] + ":" + params[:state] + ":" + params[:zipcode] %></li>
+</ul>

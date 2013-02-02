@@ -1,0 +1,99 @@
+<style>
+	table.heading_font tr.record td{
+		border-bottom:1px solid #C5DBF7;
+		border-left:1px solid #C5DBF7;
+		color:#333333;
+		font-family:Verdana,sans-serif;
+		font-size:11px;
+		padding:5px 4px;
+	}
+	table.heading_font tr.record td.foottd{
+		border-right:1px solid #C5DBF7;
+	}
+	table.heading_font tr.record td input{
+		margin:5px;
+		margin-top:-2px;
+	}
+	table.heading_font tr.record td input.text_boxx{
+		margin:0px;
+		text-align:right;
+	}
+</style>
+
+<%#*class="headtd_font" class="headtr"%>
+	<table cellpadding="0" cellspacing="0" style="margin:0">
+		<tr class="headtr" >
+			<td class="headtd">
+				<div style="width:100%;">
+					<div style="background-image:url('/images/top_l.jpg');height:31px;width:3px;border:0px; float:left;"></div>
+					<div class="headmiddiv"><div class="headmidtext">Payments </div>
+				</div>
+				<div style="background-image:url('/images/top_r.jpg');height:31px;width:3px;border:0px; float:left;"></div>
+			</td>
+		</tr>
+	</table>
+
+	<table style="margin-top:0px; margin-bottom:6px;">
+		<tr>
+			<td class="tdsearch">
+				<div class="search_by_keyword">
+					<%= form_tag( { :action => "search" },:method => "post") %>
+						<span style="vertical-align:middle;"> <input  id="search" type="text" name="search[query]" value="<%=  @search_text %>" /></span>
+						<span style="vertical-align:middle;">	<input class="subhead_font" name="find" type="submit" value=" Search " /> </span>
+						<span style="vertical-align:middle;">  <input class="subhead_font" name="clear" type="submit" value=" Clear " /> </span>
+						<span class="small_text" style="vertical-align:middle;">(To search by date, enter the date in the following format: MM/DD/YYYY)</span>
+					</form>
+				</div>
+			</td>
+			<td class="tdsearch">
+				<div><%= link_to "New Payment", :controller => "admin/doctor_payments", :action => "new_payment" %></div>
+			</td>
+		</tr>
+	</table>
+
+	<table cellpadding="0" cellspacing="0" class="heading_font" style="margin-bottom:0; margin-top:0;">
+		<tr bgcolor="#555555" style="color:buttonface">
+			<th class="headth">Payment Ref</th>
+			<th class="headth">Date</th>
+			<th class="headth">Total</th>
+			<th class="headth">Provider</th>
+			<th class="headth">Practice</th>
+			<th class="headth"></th>
+		</tr>
+<%	name=['#ffffff','#E6F2FF']
+	name1=['#E6F2FF','#AFD0F5']
+	j=0
+	m=0
+	rows = 0
+	@payment_records.each do |pay|
+		@docdetails= Doctor.find_by_id(pay.doctor_id)
+		j=1-j
+		m=1-m %>
+		<tr bgcolor="<%= name[j] %>" class="record">
+			<td class="tdfont" bgcolor="<%= name1[m] %>"><%= pay.id %> </td>
+			<td class="tdfont"><%= pay.created_at.strftime("%m/%d/%Y")%></td>
+			<td class="tdfont1" style="padding-right:15px;"><%= number_to_currency(pay.total_amount) %></td>
+		<% if @docdetails == nil %>
+			<td class="tdfont"> &nbsp; </td>
+			<td class="tdfont"> &nbsp; </td>
+		<% else %>
+			<td class="tdfont"><%=  @docdetails.name %> (<%=  @docdetails.id %>) </td>
+			<td class="tdfont"><%= @docdetails.company %> </td>
+		<% end %>
+			<td class="tdfontr" class="foottd" width="120">
+				<span class="ass"><%= link_to "Edit", :controller => "admin/doctor_payments", :action => "edit_details", :id=> pay.id %> </span> &nbsp; 
+				<span class="ass"><%= link_to "Show", :controller => "admin/doctor_payments", :action => "show_details", :id=> pay.id %> </span>
+			</td>
+		</tr>
+	<% rows += 1
+	end
+	if rows == 0 %>
+		<tr bgcolor="#EEEEEE" class="record">
+			<td class="foottd"><i>There are no orders in this payment</i></td>
+		</tr>
+	<% end %>
+	</table>
+
+	<div class="paginationfoter">
+		<span class="paginationfoter1"><%= will_paginate @payment_records,  :inner_window => 1, :outer_window => 0%></span>
+	</div>

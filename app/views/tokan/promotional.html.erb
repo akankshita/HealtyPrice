@@ -1,0 +1,98 @@
+   <%= javascript_include_tag 'jquery.min','jquery-ui.min','jqueryCal'%>
+
+  <div class="blue_boxes1">
+    <% form_tag({:as=>:promo, :action => 'create', :controller => "tokan"},:onSubmit=>"return FormValidations(this);", :method => "post" ) do -%>
+
+  <div id = "service_id"><label>Select Service</label></div> 
+    <%= select(:promo, :service_id, @tservice.collect {|p| [p.service_name,p.service_id]  }, {:prompt => 'Select Service'})%>
+
+  <div id = "dis"><label>Discount  </label></div>
+    <%= text_field_tag(:discount) %>
+  <div class="field">
+    <div id="date_form"><label>Discount date from</label></div>
+      <%= text_field :date_from, :id=>"date"%>
+    <div id= "date_to"><label>Discount date to</label></div>
+      <%= text_field :date_to, :id=>"lastdate"%>
+ </div>
+   <%= submit_tag "Submit"%>
+ <% end %>
+  
+</div>
+
+<div id="body" class="span-24">
+  <div id="admin__configurations-active-scaffold" class="active-scaffold active-scaffold-admin__configurations admin/configurations-view blue-theme">
+    <div class="active-scaffold-header">
+      <div class="actions">
+        <%= flash[:notice]%>
+      </div>
+      <h2>Promotional Code</h2>
+    </div>
+    <table cellpadding="0" cellspacing="0">
+      <tbody class="before-header" id="admin__configurations-search-container">
+      </tbody>
+    </table>
+    <div id="admin__configurations-content">
+      <table cellpadding="0" cellspacing="0">
+        <thead>
+          <tr>
+            <th>Service Name</th>
+            <th>Token name</th>
+            <th>Discount </th>
+            <th>Offer Start Date</th>
+            <th>Offer End Date</th>
+            <th>Delete</th>
+           </tr>
+        </thead>
+        <tbody class="messages">
+          <tr>
+            <td colspan="3" class="messages-container">
+              <div id="admin__configurations-messages">
+              </div>
+              <p class="filtered-message"  style="display:none;" >(Filtered)</p>
+              <p id="admin__configurations-empty-message" class="empty-message"  style="display:none;" >No Entries</p>
+            </td>
+          </tr>
+        </tbody>
+        <tbody class="records" id="admin__configurations-tbody">
+          <% @row_class = ""
+          @count = 1
+          @tokan.each do |tokan| %>
+          <tr class="record <%= @row_class %>" id="admin__configurations-list-<%=tokan.id  %>-row">
+           <td class="config_name-column " ><%= getDoctorNamebyId(tokan.service_id)-%></td>
+            <td class="config_value-column " ><%=tokan.tokan_name -%></td>
+            <td class="config_name-column " ><%= tokan.discount -%>%</td>
+            <td class="config_name-column " ><%= tokan.date_from -%></td>
+            <td class="config_name-column " ><%= tokan.date_to -%></td>
+             
+             
+               <td class="config_name-column " ><%= link_to 'delete' ,tokan_promotional_path(tokan.id) ,:confirm => "Are you sure?"-%></td>
+            
+             </tr>
+         
+          <%  if @row_class == ""
+              @row_class = "even-record"
+            else
+              @row_class = ""
+            end
+            @count += 1
+          end %>
+        </tbody>
+      </table>
+        <div class="active-scaffold-footer">
+        <div class="active-scaffold-found"><span class="active-scaffold-records"><%= @count-1 %></span> Found</div>
+        <div class="active-scaffold-pagination"> 
+          <%= will_paginate @tokan -%>
+        </div>
+        <br clear="both" />
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+

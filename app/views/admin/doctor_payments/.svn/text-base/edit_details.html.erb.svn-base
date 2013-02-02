@@ -1,0 +1,320 @@
+<script type="text/javascript">
+	function change_required(oChk, sName){
+		var oField = oChk.form.elements[sName];
+		var tField = document.getElementById('tamount_id');
+		var tField_value = tField.value.replace(",", "");
+		var oField_value = oField.value.replace(",", "");
+		//alert(tField_value + ":" + oField_value);
+		//oField.value = (oChk.checked) ? parseInt(oField.value, 10) / 2 : oField.value * 2;
+		oField.value = currency_format((oChk.checked) ? oField_value / 2 : oField_value * 2);
+		//tField.value = (oChk.checked) ? parseFloat(tField.value) - parseFloat((oField.value)) : parseFloat(tField.value) + parseFloat(oField.value)/2;
+		tField.value = currency_format((oChk.checked) ? parseFloat(tField_value) - (parseFloat(oField_value) / 2) : parseFloat(tField_value) + parseFloat(oField_value));
+	}
+
+	function calculate_form(){
+		var form = document.temp;
+		var total_sum = 0;
+		var changed_amounts = "";
+		var sel_chk, hid_amt, pay_amt, no_show;
+		for (var i = 0; i < ids.length; i++){
+			//sel_chk = form.elements["order[chk" + ids[i] + "]"];
+			hid_amt = form.elements["hidden[amt" + ids[i] + "]"];
+			pay_amt = form.elements["amount[" + ids[i] + "]"];
+			no_show = form.elements["no_show[chk" + ids[i] + "]"];
+			if (no_show.checked){
+				pay_amt.value = currency_format(hid_amt.value * 0.5);
+			}
+			else if (pay_amt.value == currency_format(hid_amt.value * 0.5)){
+				pay_amt.value = currency_format(hid_amt.value);
+			}
+			//if (sel_chk.checked){
+				if (!IsPosNumeric(pay_amt.value.replace(",", ""))){
+					alert("Please enter a valid currency amount");
+					pay_amt.value = "0.00";
+				}
+				else{
+					total_sum += (pay_amt.value.replace(",", "") - 0);
+				}
+			//}
+			//else{
+				//pay_amt.value = "0.00";
+			//}
+			// ----------------------------------------------
+			if (changed_amounts != "")
+				changed_amounts = changed_amounts + "|";
+			changed_amounts = changed_amounts + ids[i]+":"+(pay_amt.value.replace(",", "") - 0)+":"+(no_show.checked?"1":"0");
+			// ----------------------------------------------
+		}
+		form.elements["tamount[id]"].value = currency_format(total_sum);
+		document.save_order_details.elements["doctor_payment[total_amount]"].value = total_sum;
+		document.save_order_details.elements["doctor_payment[changed_amounts]"].value = changed_amounts;
+		//alert(changed_amounts);
+	}
+
+	function currency_format(curr_value){
+		var cents = parseInt(curr_value * 100).toString();
+		var formatted = cents.substr(0, cents.length-2) + "." + cents.substr(cents.length-2);
+		if (formatted == ".0"){
+			return "0.00";
+		}
+		else{
+			return formatted;
+		}
+	}
+
+	function IsPosNumeric(input){
+	   return (input - 0) == input && input.length > 0 && !(input < 0);
+	}
+
+	function add_this_order(id){
+		//alert(id);
+		var elem = document.add_an_order_form.elements['orders[order_no]'];
+		elem.value = id;
+		document.add_an_order_form.submit();
+		//elem.focus();
+	}
+</script>
+
+<style>
+	table.heading_font tr.record td{
+		border-bottom:1px solid #C5DBF7;
+		border-left:1px solid #C5DBF7;
+		color:#333333;
+		font-family:Verdana,sans-serif;
+		font-size:11px;
+		padding:5px 4px;
+	}
+	table.heading_font tr.record td.foottd{
+		border-right:1px solid #C5DBF7;
+	}
+	table.heading_font tr.record td input{
+		margin:5px;
+		margin-top:-2px;
+	}
+	table.heading_font tr.record td input.text_boxx{
+		margin:0px;
+		text-align:right;
+	}
+</style>
+
+<%	@constraints = Order.find_by_sql("SELECT o.id,o.doctor_service_id,o.created_at,o.first_name, o.last_name,o.doctor_price FROM orders o, doctor_services ds WHERE o.doctor_service_id = ds.id And o.orderstatus='Pending' AND o.submitted='1' AND ds.doctor_id = " + @doctor_id.to_s)
+	@doctor_details = Doctor.find_by_id(@doctor_id)
+	if @doctor_details == nil
+		@docname=""
+	else
+		@docname = @doctor_details.first_name << " " << @doctor_details.last_name
+	end
+	@docid = @doctor_id
+	if !@error.nil? %>
+	<div class="error"><%= @error %></div>
+<%	end %>
+	<br>
+<%	if @constraints == nil %>
+	</table>
+<%	else
+		@constraints.each do |orderpay|
+			@doctor_price=Doctor.find_by_sql("SELECT * " +
+				"FROM specialty_services " +
+				"JOIN doctor_services " +
+				"ON specialty_services.id = doctor_services.specialty_service_id AND doctor_services.id = " + "#{orderpay.doctor_service_id}")
+			@doctor_price.each do |drprice|
+			#@services = Service.find(drprice.service_id)
+			@practices = Specialty.find(drprice.specialty_id)
+			@practice=@practices.name
+		end
+	end
+end %>
+	<table cellpadding="0" cellspacing="0" style="margin-bottom:0;">
+		<tr>
+			<td class="headtd">
+				<div style="background-image:url('/images/top_l.jpg');height:31px;width:3px;border:0px; float:left;"></div>
+				<div class="headmiddiv">
+					<div class="headmidtext">Update Payment </div>
+				</div>
+				<div style="background-image:url('/images/top_r.jpg');height:31px;width:3px;border:0px; float:left;"></div>
+			</td>
+		</tr><tr>
+			<td>
+				<div align="right" onclick="ShowHideSubFields('PayPal');"><a href="#" > Show Pending Orders</a></div>
+			</td>
+		</tr><tr>
+			<td>
+				<b> Provider :</b> &nbsp; <%= @docname %> (<%= @doctor_id %>)  <br>
+				<b> Payment Reference:</b> &nbsp; <%= @doctor_payment.id %> <br>
+				<b> Date: </b>&nbsp; <%= @doctor_payment.created_at.strftime("%m/%d/%Y") %> <br>
+				<b> Total Amount:</b> &nbsp;<%= number_to_currency(@doctor_payment.total_amount) %> <br>
+				<b> Practice:</b> &nbsp; <%= @practice %>
+			</td>
+		</tr>
+	</table>
+	<div id="PayPalSub" style="display:none;">
+		<table width="870"  cellpadding="0" cellspacing="0" class="heading_font" style="margin-bottom:0;">
+			<tr>
+				<td><h4>Pending Orders </h4></td>
+				<td style="vertical-align:bottom;">
+					<div style="float:right;" onclick="ShowHideSubFields('Ins');"><a href="#"> Close </a></div>
+				</td>
+			</tr>
+		</table>
+		<table width="870"  cellpadding="0" cellspacing="0" class="heading_font" style="margin-bottom:0;">
+			<tr bgcolor="#555555" style="color:buttonface">
+				<th class="headth" xwidth="30">Order#</th>
+				<th class="headth" xwidth="140">Date</th>
+				<th class="headth" xwidth="195">Patient Name</th>
+				<th class="headth" xwidth="270">Procedure</th>
+				<th class="headth" xwidth="135">Std Amt</th>
+				<th></th>
+			</tr>
+<%	name=['#ffffff','#E6F2FF']
+	j=0
+	if @constraints == nil %>
+		</table>
+<%	else
+		@constraints.each do |orderpay|
+			@doctor_price=Doctor.find_by_sql("SELECT * " +
+				"FROM specialty_services " +
+				"JOIN doctor_services " +
+				"ON specialty_services.id = doctor_services.specialty_service_id AND doctor_services.id = " + "#{orderpay.doctor_service_id}")
+			@doctor_price.each do |drprice|
+				#@services = Service.find(drprice.service_id)
+				@practices = Specialty.find(drprice.specialty_id)
+				j=1-j %>
+	<tr bgcolor="<%= name[j] %>" class="record">
+		<td><%= orderpay.id %></td>
+		<td><%= orderpay.created_at.strftime("%B %d, %Y")%></td>
+		<td><%= orderpay.first_name << " " << orderpay.last_name %> </td>
+		<td><%= drprice.service_name << " " %> (<%=  @practices.name %> ) </td>
+		<td align="right" style="text-align:right;"><%= number_to_currency(orderpay.doctor_price) %> </td>
+		<td class="foottd">
+			<%#= link_to "Edit", :controller => "admin/doctor_payments", :action => "payments" %> &nbsp;<%#= link_to "Show", :controller => "admin/doctor_payments", :action => "show_details" %>
+			<a href="javascript:add_this_order('<%= orderpay.id %>');">Add this</a>
+		</td>
+	</tr>
+<%			end
+		end
+	end %>
+</table>
+<div class="paginationfoter" ></div>
+</div>
+
+<script>
+	function ShowHideSubFields(controller){
+		if(controller == 'PayPal'){
+			document.getElementById('PayPalSub').style.display = '';
+		}
+		else{
+			document.getElementById('PayPalSub').style.display = 'none';
+		}
+	}
+
+        function popup(){
+          alert("acfafcacf");
+        }
+</script>
+
+<form name='temp'>
+<table cellpadding="0" cellspacing="0" class="heading_font" style="margin-bottom:0;">
+	<tr>
+		<td>
+			<h4>Orders</h4>
+			<%#= link_to_remote_redbox 'Click Here',:link_to_remote_options => {:link_to_close_redbox=>('name')},:url => { :controller => 'admin/doctor_payments', :action => 'new_payment'},:autosize => false, :width => 500, :height => 200, :link_to_close_redbox=> "Cancel"  %>
+		</td>
+	</tr>
+	<tr bgcolor="#555555" style="color:buttonface">
+		<th class="headth">Order #</th>
+		<th class="headth">Date</th>
+		<th class="headth">Patient Name</th>
+		<th class="headth">Procedure</th>
+		<th class="headth">Std Amt</th>
+		<th class="headth">Pay</th>
+		<th class="headth">No Show</th>
+		<th class="headth"></th>
+	</tr>
+<%	name=['#ffffff','#E6F2FF']
+	j = 0
+	rows = 0
+	@jsarray = "";
+	@payment_edit.each do |orderpay|
+		@doctor_price=Doctor.find_by_sql("SELECT * " +
+			"FROM specialty_services " +
+			"JOIN doctor_services " +
+			"ON specialty_services.id = doctor_services.specialty_service_id AND doctor_services.id = " + "#{orderpay.doctor_service_id}")
+		@doctor_price.each do |drprice|
+			#@services = Service.find(drprice.service_id)
+			@practices = Specialty.find(drprice.specialty_id)
+			@jsarray += "," if @jsarray != ""
+			@jsarray += orderpay.id.inspect
+			rows += 1
+			j = 1 - j %>
+	<tr bgcolor="<%= name[j] %>" class="record">
+		<td class="headtd"><%= orderpay.id %> </td>
+		<td><%= orderpay.created_at.strftime("%B %d, %Y")%></td>
+		<td><%= orderpay.first_name << " " << orderpay.last_name %> </td>
+		<td><%= shorten(drprice.service_name ,25) << " "%> (<%= @practices.name %>)</td>
+		<td align="right" style="text-align:right;"><%= number_to_currency(orderpay.doctor_price) %> </td>
+		<td>
+			<span style="vertical-align:middle;"> $</span>
+			<input id="amount_id" name="amount[<%= orderpay.id %>]" onkeyup="calculate_form();" size="5" style="text-align:right;" type="text" value="<%= number_to_currency(orderpay.doctor_pay_amount, :unit => "") %>" />
+			<input type="hidden" name="hidden[amt<%= orderpay.id %>]" value="<%= orderpay.doctor_price %>" />
+		</td>
+		<td><input type="checkbox" id="ma_check" name="no_show[chk<%= orderpay.id %>]" onclick="calculate_form();" x="change_required(this, 'amount[id]')" <%= (orderpay.no_show==1)?"checked=\"true\"":""; %> /></td>
+		<td class="foottd"><%= link_to "Remove",{ :controller => "admin/doctor_payments", :action => "remove_payments", :id=>orderpay.id}, :confirm=>"Are you sure?" %><%#= link_to "Remove", :controller => "admin/doctor_payments", :action => "remove_payments", :id=>orderpay.id, :onclick => 'popup();' %> &nbsp;<%= link_to "Show", :controller => "admin/doctor_payments", :action => "show_one_order" ,:id=>orderpay.id %></td>
+	</tr>
+<%		end
+	end
+	if rows == 0 %>
+	<tr bgcolor="#EEEEEE" class="record">
+		<td colspan="99" class="foottd" align="center"><i>There are no orders in this payment</i></td>
+	</tr>
+<%	end %>
+	<tr bgcolor="#DDDDDD" class="record">
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td><b> Total  </b></td>
+		<td><span style="vertical-align:middle;"> $ </span><%= text_field(:tamount,:id,:value=> number_to_currency(@doctor_payment.total_amount, :unit => ""),:size=>5, :style => "text-align:right;", :readonly => true) %> <%#= " <b> Total $ </b>" << "#{@doctor_payment.total_amount}" %></td>
+		<td></td>
+		<td></td>
+	</tr>
+</table>
+</form>
+
+<script>
+	var ids = [<%= @jsarray %>];
+</script>
+
+<div class="paginationfoter"></div>
+<br>
+
+<%= form_tag({ :action => "add_orders" }, :method => "post", :name => "add_an_order_form" ) %>
+	<table>
+		<tr>
+			<td>
+				<span style="vertical-align:middle;"> Add an Order: </span>
+				<span style="vertical-align:middle;">
+					<input type="text" name="orders[order_no]"  />
+					<input class="heading_font" style="margin:0px;" name="continue" type="submit" value=" Add" />
+				</span>
+			</td>
+		</tr>
+		<input type="hidden" name="orders[hide_no]" value="<%= @doctor_payment.id %>"  />
+		<input type="hidden" name="orders[doc_no]" value="<%= @doctor_payment.doctor_id %>"  />
+	</table>
+</form>
+
+<% form_for :doctor_payment, @doctor_payment, :url =>{:action => "update_details",:id => @doctor_payment.id}, :html => {:name => "save_order_details"} do |f| -%>
+	<table>
+		<tr>
+			<td class="subhead_font"><%=  " <b>Notes: (this is not visible to the provider) </b> <br>" <<  f.text_area(:notes,:value=> @doctor_payment.notes ) %></td>
+		</tr>
+	</table>
+	<input type="hidden" name="doctor_payment[total_amount]" value="<%= @doctor_payment.total_amount %>" />
+	<input type="hidden" name="doctor_payment[changed_amounts]" value="not_changed" />
+	<table>
+		<tr>
+			<td><%= f.submit "Save Changes" ,:confirm => 'Save Changes?',:class=>"heading_font" %></td>
+			<td class="tdbutton"><INPUT class="heading_font" TYPE="button" VALUE="<< Back" onclick="document.location='/admin/doctor_payments';"><!--history.go(-1);--></td>
+		</tr>
+	</table>
+<% end %>

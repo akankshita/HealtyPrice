@@ -1,0 +1,18 @@
+<div class="message_body">
+<p align="justify">
+Dear {full_name},<br/>
+<br/>
+The following HealthyPrice order has been cancelled by the customer.<br/>
+<br/>
+Order #: {order_number}<br/>
+Patient: {patient_name}<br/>
+Procedure: {procedure}<br/>
+<br/>
+For further details, please <a style="text-decoration:none;" href="http://www.healthyprice.com/login">login to your HealthyPrice account</a>.<br/>
+<br/>
+HealthyPrice<br/>
+1-800-455-2797<br/>
+<a style="text-decoration:none;" href="mailto:providersupport@healthyprice.com">providersupport@healthyprice.com</a><br/>
+<a style="text-decoration:none;" href="http://www.healthyprice.com/">http://www.healthyprice.com</a>
+</p>
+<div>

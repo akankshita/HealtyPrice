@@ -1,0 +1,28 @@
+<style></style>
+<table>
+<% columns.each :for => @record do |column| %>
+  <% if column.is_a? ActiveScaffold::DataStructures::ActionColumns -%>
+    <tr>
+    <td width="100"><dt style="width:90px;"><%= column.label -%>: </dt></td>
+    <td style="color:#555555; font-family:verdana,sans-serif; font-size:11px; font-weight:normal; line-height:16px;"><%= render :partial => 'show_columns', :locals => {:columns => column} %></dd></td>
+    </tr>
+  <% else -%>
+    <tr>
+    <td width="100"><dt style="width:90px;"><%= column.label -%>: </dt></td>
+    <td style="color:#555555; font-family:verdana,sans-serif; font-size:11px; font-weight:normal; line-height:16px;"><%= show_column_value(@record, column) -%> &nbsp;</dd></td>
+    </tr>
+  <% end -%>
+<% end -%>
+    <tr>
+ <% @path = Dir.pwd + '/public/download/practice_area_documents/' %>
+    <td width="100"><dt style="width:90px;">PDF Document: </dt></td>
+ <% if File::exists?(@path + @record.id.inspect + '_document.pdf') %>
+    <td style="color:#555555; font-family:verdana,sans-serif; font-size:11px; font-weight:normal; line-height:16px;">
+	<a href="/download/practice_area_documents/<%= params[:id] %>_document.pdf" target="blank_">
+		https://www.healthyprice.com/download/practice_area_documents/<%= params[:id] %>_document.pdf
+	</a> &nbsp;
+    </dd></td>
+ <% else %>
+    <td style="color:#555555; font-family:verdana,sans-serif; font-size:11px; font-weight:normal; line-height:16px;">Not Available &nbsp;</dd></td>
+ <% end %>
+</table>

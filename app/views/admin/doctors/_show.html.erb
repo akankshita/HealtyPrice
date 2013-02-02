@@ -1,0 +1,170 @@
+<%@orders = Doctor.find_by_id(params[:id])%>
+<% @insurance_carriers = InsuranceCarrier.find_all_by_doctor_id(params[:id]) %>
+<% @hospital_affiliations = HospitalAffiliation.find_all_by_doctor_id(params[:id])  %>
+<% @doctor_references = DoctorReference.find_all_by_doctor_id(params[:id]) %>
+
+<% 	@selected_specialties = Specialty.find_by_sql("SELECT id, name, description FROM specialties, doctor_specialties " +
+													"WHERE specialties.id = doctor_specialties.specialty_id " +
+													"AND doctor_id = " + params[:id])
+	@services = Doctor.find_by_sql("SELECT ss.specialty_id, ss.service_name, ss.service_description, ss.customer_price, ds.id AS ds_id, sort_order " +
+									"FROM specialty_services ss, doctor_services ds " +
+									"WHERE ss.id = ds.specialty_service_id " +
+									"AND ds.doctor_id = " + params[:id] + 
+									" ORDER BY sort_order, ss.service_name")
+				#@services = Service.find_by_sql("SELECT specialty_services.id AS specialty_service_id, specialty_services.specialty_id, services.id, services.name, services.description, doctor_price " +
+											#"FROM services, specialty_services, doctor_specialties " +
+											#"WHERE services.id = specialty_services.service_id " +
+											#"AND specialty_services.specialty_id = doctor_specialties.specialty_id " +
+											#"AND doctor_specialties.doctor_id = " + params[:id])
+				sel_services = Doctor.find_by_sql("SELECT specialty_service_id FROM doctor_services WHERE doctor_id = " + params[:id])
+				@selected_services = Array.new
+				sel_services.each do |sel_srv|
+					@selected_services << sel_srv.specialty_service_id
+				end %>
+
+<h4><%= @orders.title %> <%= @orders.first_name %> <%= @orders.middle_name %> <%= @orders.last_name %><%#= active_scaffold_config.show.label -%></h4>
+
+<div class="show">
+	<table style="width:350px;">
+		<tr>
+			<td>Created Date:</td><td><%= @orders.c_date %></td>
+		</tr><tr>
+			<td>Last Modified Date:</td><td><%= @orders.m_date %></td>
+		</tr>
+	</table>
+	<br/>
+</div>
+
+<table width="100%" style="clear:both;"><tr><td width="49%" style="vertical-align:top;">
+
+	<h4>Personal Information</h4>
+        <div class="show">
+		
+<%= @orders.title %> <%= @orders.first_name %> <%= @orders.middle_name %> <%= @orders.last_name %><br/>
+<a href="mailto:<%= @orders.email %>"><%= @orders.email %></a><br/>
+<% if @orders.notification_email != nil && @orders.notification_email != "" %>
+	<a href="mailto:<%= @orders.notification_email %>"><%= @orders.notification_email %></a> (notification email)<br/>
+<% end %>
+DOB: <%= @orders.date_of_birth %><br/>
+<br/>
+ Phone:<%= @orders.phone %><br/>
+ Fax:<%= @orders.fax %><br/>
+<br/>
+<%= @orders.tax_id_type %> :<%= @orders.tax_id %>
+	</div>
+        <br><br>
+
+  <h4>Practice</h4>
+  <div class="show" >
+		
+<%= @orders.company %><br/>
+<%= @orders.address %><br/>
+<% if @orders.address2 != nil && @orders.address2 != "" %><%= @orders.address2 %><br/><% end %>
+<%= @orders.city %>, <%= @orders.state %> <%= @orders.zipcode %><br/>
+<br/>
+<% if @orders.website != nil %>
+<a href="<% if @orders.website[0, 4] == "http" %><%= @orders.website %><% else %>http://<%= @orders.website %><% end %>" target ="_blank"><%= @orders.website %></a><br/>
+<% end %>
+<br/>
+Mailing Address:<br/>
+<%= @orders.mailing_address %><br/>
+<% if @orders.mailing_address2 != nil && @orders.mailing_address2 != "" %><%= @orders.mailing_address2 %><br/><% end %>
+<%= @orders.mailing_city %>, <%= @orders.mailing_state %> <%= @orders.mailing_zipcode %><br/>
+<br/>
+Description (visible to the public):<br/>
+<%= @orders.description %><br/>
+<br/>
+Photos:<br/>
+<table width="100%"><tr><td width="50%" valign="top">
+	Doctor Photo<br/><img src="/images/uploads/<%= params[:id] %>_headshot.jpg" height="100" />
+</td><td width="50%" valign="top">
+	 Practice<br/><img src="/images/uploads/<%= params[:id] %>_practice.jpg" height="100" />
+</td></tr></table>
+
+        </div>
+</td><td width="1%"></td><td width="49%" style="vertical-align:top;">
+  <h4>Qualifications</h4>
+	<div class="show" >
+		
+Medical School: <%= @orders.medical_school %><br/>
+Type of Degree: <%= @orders.type_of_degree %><br/>
+Year Graduated: <%= @orders.graduated_year %><br/>
+Medical License Currently Issued In: <%= @orders.medical_license_state %><br/>
+License #: <%= @orders.license_no %><br/>
+License Type: <%= @orders.medical_license_type %><br/>
+Languages Spoken: <% if @orders.spanish == 1 %>Spanish<% if @orders.other_languages != "" %>, <% end %><% end %><%= @orders.other_languages %><br/>
+Residency Training: <%= @orders.residency_training %><br/>
+Fellowship Training: <%= @orders.fellowship_training %>
+	</div>
+  <br><br>
+  <h4>Insurance Information</h4>
+	<div class="show" >
+		
+Insurance Carriers You're an Approved Member of:<ul class="list_down">
+<% @insurance_carriers.each do |ic| %>
+	<li><%= ic.insurance_company_name %></li>
+<% end %>
+</ul>
+Malpractice Insurance:<br/>
+Carrier: <%= @orders.insurance_carrier %><br/>
+Policy #: <%= @orders.insurance_policy_no %><br/>
+Expires: <%= @orders.insurance_expiry_date %>
+	</div>
+  <br><br>
+
+  <h4>Other Information</h4>
+	<div class="show" >
+		
+Hospital Affiliations:<ul class="list_down">
+<% @hospital_affiliations.each do |ha| %>
+	<li><%= ha.hospital %> (<%= ha.usage_percentage %>%)</li>
+<% end %>
+</ul>
+Doctor References:<ul class="list_down">
+<% @doctor_references.each do |dr| %>
+	<li><%= dr.first_name %> <%= dr.last_name %> (<%= dr.phone %>)</li>
+<% end %>
+</ul>
+	</div>
+
+
+  <h4>Practice Areas and Procedures</h4>
+	<div  class="show">
+		
+<% @selected_specialties.each do |ss| %>
+	<%= ss.name %><ul class="list_down">
+	<% @services.each do |ssrv| %>
+		<% if ssrv.specialty_id == ss.id.inspect %>
+			<li><%= ssrv.service_name %></li>
+		<% end %>
+	<% end %></ul>
+<% end %>
+	</div>
+
+  <h4>How Do We Pay You</h4>
+	<div class="show" >
+		Payment Method: <%= @orders.payment_method %>
+	   <% if @orders.payment_method == "PayPal" %>
+		<br/>PayPal Email: <%= @orders.paypal_email %>
+	   <% end %>
+		<br/>Payee Name: <%= @orders.payee_name %>
+		<br/>Payee Phone Number: <%= @orders.payee_phone_number %>
+		<br/>Payee Email Address: <%= @orders.payee_email_address %>
+		<br/>Payee Address: <%= @orders.payee_address1 %>
+	   <% if @orders.payee_address2 != nil && @orders.payee_address2 != "" %>
+		<br/> &nbsp; &nbsp; <%= @orders.payee_address2 %>
+	   <% end %>
+		<br/>City :<%= @orders.payee_city %>
+		<br/>State: <%= @orders.payee_state %>
+		<br/>Zip: <%= @orders.payee_zip %>
+		<br/>Payee Tax ID: <%= @orders.payee_tax_id_type %> <%= @orders.payee_tax_id %>
+	</div>
+
+
+</td></table>
+<%#= render :partial => 'show_columns', :locals => {:columns => active_scaffold_config.show.columns} -%>
+
+<p class="form-footer">
+  <%= link_to as_(:close), params_for(:controller => params[:parent_controller] ? params[:parent_controller] : params[:controller], :action => 'list'), :class => 'cancel' %>
+  <%= loading_indicator_tag(:action => :create, :id => params[:id]) %>
+</p>

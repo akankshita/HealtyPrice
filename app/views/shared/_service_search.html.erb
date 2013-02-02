@@ -1,0 +1,13 @@
+<%#= select_tag 'specialty_id',options_for_select(@specialties,@specialty_id),{:id => :specialty_filter} %><!--, :onchange=>"updateResultsNow(document.query.value);"-->
+<select name="specialty_id" id="specialty_filter">
+	<option value="all">All Practice Areas</option>
+	<% @specialties.each do |specialty| %>
+	<option value="<%= specialty.id %>"<% if params[:specialty_id] == specialty.id.inspect %> selected<% end %>><%= specialty.name %></option>
+	<% end %>
+</select>
+
+<div id="search">
+	<%=text_field_tag 'query',@query %>
+	<div id="results">
+	</div>
+</div>

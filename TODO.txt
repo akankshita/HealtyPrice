@@ -1,0 +1,4 @@
+- prevent back button / order resubmit 
+- order lookup
+- test in IE6
+- make state a dropdown

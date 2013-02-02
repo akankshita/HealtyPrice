@@ -1,0 +1,35 @@
+<% content_for :head do %>
+	<%= stylesheet_link_tag 'search' %>
+	<%= javascript_include_tag 'search' %>
+	<%= javascript_include_tag 'auto_fill' %>
+	<%= javascript_tag 'currentSection = SiteSections.ServicesProcedures;' %>
+	<title>HealthyPrice, Inc. - Search Services.</title>
+<% end %>
+
+<div class="tell_us" style="width:400px; float:left; margin-top:0px;">Search Services</div>
+<br style="clear:both;" />
+
+<div style="float:right; margin-top:-5px;">
+	<span style="font-size:10pt;">More search options: </span>
+	<%=link_to 'Search by Practice Area',search_specialties_path %> | 
+	<%=link_to 'Search by Doctor / Provider',search_doctors_path %>
+</div>
+	
+<%= render :partial => 'shared/service_search' %>
+		<!-- *** -->
+		<div id="Sugesstions" style="display:none;" onfocus="CancelHideSuggestions();" onblur="HideSuggestions();"></div>
+		<style>
+		div#Sugesstions{
+			border:1px solid #666666;
+			background-color:#FFFFFF;
+			overflow:auto;
+			position:absolute;
+		}
+		div.Suggestion{
+			cursor:pointer;
+			height:20px;
+			overflow:hidden;
+			background-color:#FFFFFF;
+		}
+		</style>
+		<!-- *** -->

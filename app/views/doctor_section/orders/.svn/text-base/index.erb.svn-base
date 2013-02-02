@@ -1,0 +1,194 @@
+<%= stylesheet_link_tag 'doctor_orders' %>
+			<div id="page_header_box">
+				<div id="headerX">Manage Orders </div>
+				<div id="help"><span class="help"><a href="javascript:ShowPopUp();">Help</a></span></div>                        
+			</div>
+
+			<div id="details_2">
+				<!--table width="950" border="0" cellspacing="5" cellpadding="2">
+					<tr>
+						<td width="475"-->
+<div class="search_by_keyword">
+	<%= form_tag({ :action => "index" }, :method => "post") %>
+		<input type="text" name="search[query]" value="<%= session[:query] %>" style="vertical-align:middle;" />
+		<input name="find" type="submit" value="" style="background-image:url('/images/doctor_section/search.jpg'); width:69px; height:21px; border:0px; vertical-align:middle;" />
+		<input name="clear" type="submit" value="" style="background-image:url('/images/doctor_section/clear.jpg'); width:69px; height:21px; border:0px; vertical-align:middle;" />
+	</form>
+</div>
+						<!--/td><td width="475"-->
+<br style="clear:both;" /><br/>
+<table class="search_by_status_and_practice_area" style="width:900px;" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td style="padding-left:0px; width:135px;">View Practice Area:</td>
+		<td><select onchange="document.location='/doctor_section/orders/practice_area/'+this.value+'/page1';" style="width:705px;">
+			<option value="all" <% if params[:practice_area] == "all" %>selected<% end %>>All Practice Areas</option>
+		<% @practice_areas.each do |pa| -%>
+			<option value="<%= pa.id %>" <% if params[:practice_area] == pa.id.inspect %>selected<% end %>><%= pa.name %> <%= pa.name %></option>
+		<% end %>
+		</select></td>
+	</tr>
+	<tr>
+		<td style="padding-left:0px;">View orders that are:</td>
+		<td><select onchange="document.location='/doctor_section/orders/context/'+this.value+'/page1';" style="width:200px;">
+			<option value="all" <% if params[:context] == "all" %>selected<% end %>>All Orders</option>
+			<option value="new" <% if params[:context] == "new" %>selected<% end %>>New Orders</option>
+			<option value="pending" <% if params[:context] == "pending" %>selected<% end %>>Pending Orders</option>
+			<!--option value="fulfilled" <% if params[:context] == "fulfilled" %>selected<% end %>>Fulfilled Orders</option-->
+			<!--option value="paid" <% if params[:context] == "paid" %>selected<% end %>>Paid Orders</option-->
+			<option value="unresolved" <% if params[:context] == "unresolved" %>selected<% end %>>Unresolved Orders</option>
+			<option value="cancelled" <% if params[:context] == "cancelled" %>selected<% end %>>Cancelled Orders</option>
+			<option value="closed" <% if params[:context] == "closed" %>selected<% end %>>Closed Orders</option>
+		</select></td>
+	</tr>
+</table>
+						<!--/td>
+					</tr>
+				</table-->
+<br style="clear:left;"/>
+<!--span class="subheat_text_style"><%= @title %></span-->
+<br/>
+
+<form name="form0" method="post">
+	<% if @pagination_code != "" %><div class="pagination" style="margin-bottom:10px;"><%= @pagination_code %></div><% end %>
+	<br style="clear:left;"/>
+	<table cellpadding="0" cellspacing="0" class="orderstbl">
+			<tr>
+				<th><p>Order #</p></th>
+				<th><p>Status</p></th>
+				<th><p>Order Date</p></th>
+				<th><p>Patient&nbsp;Name</p></th>
+				<th><p>Procedure</p></th>
+				<th><p>Pay.&nbsp;Ref.</p></th>
+				<!--th><p>Select</p></th-->
+			<tr>
+		<% @RowClass="odd-record"
+		@RowsFound = 0
+		@Ago30days = Time.new.advance(:days => -30).to_date
+		@orders.each do |ss| -%>
+		<% 	if ss.orderstatus == "New" && ss.created_at < @Ago30days %>
+			<tr class="highlight-row" onclick="document.location='/doctor_section/order/<%= ss.id %>';">
+		<% 	else %>
+			<tr class="<%= @RowClass %>" onclick="document.location='/doctor_section/order/<%= ss.id %>';">
+		<% 	end %>
+				<td><%= ss.id %></td>
+				<td onmouseover="ShowToolTip(HelpTextForStatus('<%= ss.orderstatus %>'), this);"><%= ss.orderstatus %></td>
+				<td><%= ss.created_at.strftime("%m/%d/%Y") %></td>
+				<td><%= ss.first_name %> <%= ss.last_name %></td>
+				<td><%= shorten(ss.service + " (" + ss.specialty + ")", 65) %></td>
+				<td><% if ss.doctor_payments_id != -1 %><a href="/doctor_section/payments/page1#<%= ss.doctor_payments_id %>"><%= ss.doctor_payments_id %></a><% end %>&nbsp;</td>
+				<!--td><input type="checkbox" name="chk<%= ss.id %>" onclick="CheckChkBox(this);"></td-->
+			<tr>
+		<%	if @RowClass == "odd-record"
+				@RowClass = "even-record"
+			else
+				@RowClass = "odd-record"
+			end
+			@RowsFound += 1
+		end
+		if @RowsFound == 0 -%>
+			<tr style="height:40px;">
+				<td colspan="7" style="text-align:center;"><i>No results found</i></td>
+			<tr>
+		<% end -%>
+	</table>
+	<% if @pagination_code != "" %><div class="pagination" style="margin-top:10px;"><%= @pagination_code %></div><% end %>
+</form>
+<br style="clear:both;" />
+<div style="clear:both; margin-top:12px;">If an order has been highlighted in yellow, it has been outstanding for 30 days or more.</div>
+
+<!--form name="form1" method="get" onsubmit="return ValidateOnSubmit();">
+	<p align="right">
+		<input type="hidden" name="CheckedBoxes" value="" />
+		Select <a href="javascript:SelectAll()">All</a>, <a href="javascript:SelectNone()">None</a>
+		<select name="doaction">
+			<option value="">Select Action</option>
+			<option value="Pending">Pending</option>
+			<option value="Fulfilled">Fulfilled</option>
+			<option value="Paid">Paid</option>
+			<option value="Unresolved">Unresolved</option>
+			<option value="Cancel">Cancel</option>
+		</select>
+		<input type="submit" value=" GO " />
+	</p>
+	<%=@echo%>
+</form-->
+
+<%#=@sql %>
+			</div>
+
+<script>
+	function HelpTextForStatus(Status){
+		if(Status == "New"){
+			return "A new order that has been placed.";
+		}
+		else if(Status == "Pending"){
+			return "The billing code was accepted, or the patient was a no-show, and the payment is being processed to the provider.";
+		}
+		else if(Status == "Closed"){
+			return "The patient has been seen and funds are being processed to the provider.";
+		}
+		else if(Status == "Unresolved"){
+			return "An issue has developed with the order.  It may be a billing discrepancy, a question about service performance, etc.  HealthyPrice is working expeditiously to resolve the issue.";
+		}
+	}
+
+	function CheckChkBox(ChkBox){
+		var id = ChkBox.name.replace("chk", "");
+		if(ChkBox.checked){
+			document.form1.CheckedBoxes.value += id + ":";
+		}
+		else{
+			document.form1.CheckedBoxes.value = document.form1.CheckedBoxes.value.replace(id + ":", "");
+		}
+	}
+
+	function SelectAll(){
+		for(var i = 0; i <= document.form0.elements.length-1; i++){
+			if(document.form0.elements[i].name.substring(0, 3) == "chk"){
+				document.form0.elements[i].checked = true;
+				document.form1.CheckedBoxes.value += document.form0.elements[i].name.substring(3) + ":";
+			}
+		}
+	}
+
+	function SelectNone(){
+		for(var i = 0; i <= document.form0.elements.length-1; i++){
+			if(document.form0.elements[i].name.substring(0, 3) == "chk"){
+				document.form0.elements[i].checked = false;
+			}
+		}
+		document.form1.CheckedBoxes.value = "";
+	}
+
+	function HighlightOnMouseover(row){
+		//row.style.background-color = "";
+	}
+
+	function RemoveHighlightOnMouseover(row){
+		//row.style.background-color = "";
+	}
+
+	function CheckOnRowClick(id, row){
+		var Elem = document.form0.elements[id]
+		if(Elem.checked == true){
+			Elem.checked = false;
+		}
+		else{
+			Elem.checked = true;
+		}
+	}
+
+	function ValidateOnSubmit(){
+		if(document.form1.CheckedBoxes.value == ""){
+			alert("Please select orders");
+			return false;
+		}
+		else if(document.form1.doaction.value == ""){
+			alert("Please select an option");
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
+</script>

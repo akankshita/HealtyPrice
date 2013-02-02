@@ -1,0 +1,15 @@
+class DoctorPayments < ActiveRecord::Migration
+  def self.up
+	create_table :doctor_payments do |t|
+		t.datetime	:created_at
+		t.datetime	:updated_at
+		t.integer	:total_amount
+		t.integer	:doctor_id
+		t.text	:notes
+	end
+  end
+
+  def self.down
+	drop_table :doctor_payments
+  end
+end
