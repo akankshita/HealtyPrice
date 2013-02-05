@@ -206,7 +206,7 @@ You can feel secure ordering a procedure or service from HealthyPrice.  All of o
 						<option value="-"> - select - </option>
 					<% @survey_options = get_config("market_survey_options")
 						@survey_options.split(",").each do |option| %>
-						<option value="<%= option %>"<%# if option == @order.market_survey %> selected<%# end %>><%= option %></option>
+						<option value="<%= option %>"<% if option == @order.market_survey %> selected<% end %>><%= option %></option>
 					<% 	end %>
 					</select>
 				</li>
